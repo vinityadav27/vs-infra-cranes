@@ -1589,12 +1589,12 @@
             }
 
             if (elSmtpBadge) {
-              const smSt = hData.smtp?.status || "HEALTHY";
+              const smSt = hData.smtp?.status || (hData.smtp?.configured ? "Connected" : "Not Configured");
               elSmtpBadge.textContent = smSt;
-              if (smSt === "HEALTHY") {
+              if (smSt === "Connected" || smSt === "HEALTHY" || smSt === "ONLINE" || smSt === "UP") {
                 elSmtpBadge.style.background = "rgba(16,185,129,0.15)";
                 elSmtpBadge.style.color = "var(--admin-success)";
-              } else if (smSt === "DEGRADED") {
+              } else if (smSt === "DEGRADED" || smSt.includes("Error")) {
                 elSmtpBadge.style.background = "rgba(245,158,11,0.15)";
                 elSmtpBadge.style.color = "#f59e0b";
               } else {
@@ -1603,7 +1603,12 @@
               }
             }
             if (elSmtpStatus) {
-              elSmtpStatus.textContent = hData.smtp?.host ? (hData.smtp.host + ":" + (hData.smtp.port || 587)) : "Not Configured";
+              const smtpCfg = hData.smtp;
+              if (smtpCfg && smtpCfg.configured !== false && (smtpCfg.host || smtpCfg.status === "Connected")) {
+                elSmtpStatus.textContent = (smtpCfg.host || "smtp.gmail.com") + ":" + (smtpCfg.port || 587);
+              } else {
+                elSmtpStatus.textContent = "Not Configured";
+              }
             }
 
             const activeAlerts = hData.active_alerts_count || 0;
@@ -1632,28 +1637,33 @@
             const elBrowsers = document.getElementById("analytics-browsers");
             const elGeo = document.getElementById("analytics-geo");
 
-            if (elTotal) elTotal.textContent = data.total_views ?? 0;
-            if (elUniq) elUniq.textContent = data.unique_visitors ?? 0;
-            if (elActive) elActive.textContent = data.active_visitors_15m ?? 0;
-            if (elBounce) elBounce.textContent = (data.bounce_rate_pct ?? 0) + "%";
+            if (elTotal) elTotal.textContent = data.total_views ?? data.metrics?.total_page_views ?? data.total_page_views ?? 0;
+            if (elUniq) elUniq.textContent = data.unique_visitors ?? data.metrics?.unique_visitors ?? 0;
+            if (elActive) elActive.textContent = data.active_visitors_15m ?? data.active_visitors ?? data.metrics?.active_visitors ?? 0;
+            if (elBounce) elBounce.textContent = (data.bounce_rate_pct ?? data.bounce_rate ?? 0) + "%";
 
             // Top Pages
             if (elPages) {
-              if (!data.top_pages || data.top_pages.length === 0) {
+              const pages = data.top_pages || data.pages || [];
+              if (!pages || pages.length === 0) {
                 elPages.innerHTML = '<div style="color:var(--admin-text-muted);">No page views recorded in this period.</div>';
               } else {
-                elPages.innerHTML = data.top_pages.map(p => `
-                  <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 10px; background:rgba(255,255,255,0.03); border-radius:6px;">
-                    <span style="color:#fff; font-family:monospace; font-size:12px;">${escapeHtml(p.path)}</span>
-                    <span class="badge" style="background:rgba(232,99,10,0.15); color:var(--admin-primary);">${p.views} views</span>
-                  </div>
-                `).join("");
+                elPages.innerHTML = pages.map(p => {
+                  const pPath = p.path || p.page || p.url || "/";
+                  const pViews = p.views != null ? p.views : (p.count != null ? p.count : (p.hits != null ? p.hits : 0));
+                  return `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 10px; background:rgba(255,255,255,0.03); border-radius:6px;">
+                      <span style="color:#fff; font-family:monospace; font-size:12px;">${escapeHtml(pPath)}</span>
+                      <span class="badge" style="background:rgba(232,99,10,0.15); color:var(--admin-primary);">${pViews} views</span>
+                    </div>
+                  `;
+                }).join("");
               }
             }
 
             // Devices
             if (elDev) {
-              const devEntries = Object.entries(data.devices || {});
+              const devEntries = Object.entries(data.devices || data.breakdown?.devices || {});
               if (devEntries.length === 0) {
                 elDev.innerHTML = '<span style="color:var(--admin-text-muted); font-size:12px;">No device data yet</span>';
               } else {
@@ -1667,8 +1677,8 @@
 
             // Browsers & OS
             if (elBrowsers) {
-              const brEntries = Object.entries(data.browsers || {});
-              const osEntries = Object.entries(data.operating_systems || {});
+              const brEntries = Object.entries(data.browsers || data.breakdown?.browsers || {});
+              const osEntries = Object.entries(data.operating_systems || data.os || data.breakdown?.os || {});
               let brHtml = "";
               if (brEntries.length > 0) {
                 brHtml += brEntries.map(([br, count]) => `
@@ -1689,38 +1699,48 @@
 
             // Approx Geo
             if (elGeo) {
-              const geoList = data.approx_geo || [];
+              let geoList = data.approx_geo || data.geo || [];
+              if (!Array.isArray(geoList) && typeof geoList === "object") {
+                geoList = Object.entries(geoList).map(([location, views]) => ({ location, views }));
+              }
+              if (geoList.length === 0 && data.breakdown?.countries) {
+                geoList = Object.entries(data.breakdown.countries).map(([location, views]) => ({ location, views }));
+              }
               if (geoList.length === 0) {
                 elGeo.innerHTML = '<span style="color:var(--admin-text-muted); font-size:12px;">No approximate location telemetry recorded yet</span>';
               } else {
-                elGeo.innerHTML = geoList.map(g => `
-                  <div style="display:flex; justify-content:space-between; align-items:center; padding:4px 8px; background:rgba(255,255,255,0.02); border-radius:4px;">
-                    <span style="color:#fff;">📍 ${escapeHtml(g.location)}</span>
-                    <span class="badge" style="background:rgba(255,255,255,0.06); color:var(--admin-text-muted);">${g.views} hits</span>
-                  </div>
-                `).join("");
+                elGeo.innerHTML = geoList.map(g => {
+                  const gLoc = g.location || g.country || "Unknown / Not Available";
+                  const gViews = g.views != null ? g.views : (g.hits != null ? g.hits : (g.count != null ? g.count : 0));
+                  return `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:4px 8px; background:rgba(255,255,255,0.02); border-radius:4px;">
+                      <span style="color:#fff;">📍 ${escapeHtml(gLoc)}</span>
+                      <span class="badge" style="background:rgba(255,255,255,0.06); color:var(--admin-text-muted);">${gViews} hits</span>
+                    </div>
+                  `;
+                }).join("");
               }
             }
 
             // Section 3: Product Interest & Engagement
             const prodTbody = document.getElementById("analytics-products-tbody");
             if (prodTbody) {
-              const prods = data.product_engagement || [];
+              const prods = data.product_engagement || data.products || [];
               if (prods.length === 0) {
                 prodTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--admin-text-muted);">No product interactions recorded in this period.</td></tr>';
               } else {
                 prodTbody.innerHTML = prods.map(p => `
                   <tr>
                     <td>
-                      <strong style="color:#fff;">${escapeHtml(p.product_name || p.product_id)}</strong><br>
-                      <span style="font-size:11px; color:var(--admin-text-muted); font-family:monospace;">ID: ${escapeHtml(p.product_id)}</span>
+                      <strong style="color:#fff;">${escapeHtml(p.product_name || p.name || p.product_id || p.id)}</strong><br>
+                      <span style="font-size:11px; color:var(--admin-text-muted); font-family:monospace;">ID: ${escapeHtml(p.product_id || p.id)}</span>
                     </td>
-                    <td><span class="badge" style="background:rgba(255,255,255,0.06); color:#fff;">${p.page_views || 0}</span></td>
-                    <td><span class="badge" style="background:rgba(96,165,250,0.15); color:#60a5fa;">${p.viewer_opens || 0}</span></td>
-                    <td><span class="badge" style="background:rgba(245,158,11,0.15); color:#f59e0b;">${p.brochure_downloads || 0}</span></td>
-                    <td><span class="badge" style="background:rgba(232,99,10,0.15); color:var(--admin-primary);">${p.quote_cta_clicks || 0}</span></td>
-                    <td><span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">${p.inquiries_generated || 0}</span></td>
-                    <td><strong style="color:var(--admin-success);">${p.conversion_rate_pct || 0}%</strong></td>
+                    <td><span class="badge" style="background:rgba(255,255,255,0.06); color:#fff;">${p.page_views ?? p.views ?? p.count ?? 0}</span></td>
+                    <td><span class="badge" style="background:rgba(96,165,250,0.15); color:#60a5fa;">${p.viewer_opens ?? p.viewers ?? 0}</span></td>
+                    <td><span class="badge" style="background:rgba(245,158,11,0.15); color:#f59e0b;">${p.brochure_downloads ?? p.brochures ?? 0}</span></td>
+                    <td><span class="badge" style="background:rgba(232,99,10,0.15); color:var(--admin-primary);">${p.quote_cta_clicks ?? p.quotes ?? 0}</span></td>
+                    <td><span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">${p.inquiries_generated ?? p.inquiries ?? 0}</span></td>
+                    <td><strong style="color:var(--admin-success);">${p.conversion_rate_pct ?? p.conversion_rate ?? 0}%</strong></td>
                   </tr>
                 `).join("");
               }
@@ -1729,19 +1749,19 @@
             // Section 4: Service Interest & Engagement
             const srvTbody = document.getElementById("analytics-services-tbody");
             if (srvTbody) {
-              const srvs = data.service_interest || [];
+              const srvs = data.service_interest || data.services || [];
               if (srvs.length === 0) {
                 srvTbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--admin-text-muted);">No service interactions recorded in this period.</td></tr>';
               } else {
                 srvTbody.innerHTML = srvs.map(s => `
                   <tr>
                     <td>
-                      <strong style="color:#fff;">${escapeHtml(s.service_name || s.service_id)}</strong><br>
-                      <span style="font-size:11px; color:var(--admin-text-muted); font-family:monospace;">ID: ${escapeHtml(s.service_id)}</span>
+                      <strong style="color:#fff;">${escapeHtml(s.service_name || s.name || s.service_id || s.id)}</strong><br>
+                      <span style="font-size:11px; color:var(--admin-text-muted); font-family:monospace;">ID: ${escapeHtml(s.service_id || s.id)}</span>
                     </td>
-                    <td><span class="badge" style="background:rgba(255,255,255,0.06); color:#fff;">${s.views || 0}</span></td>
-                    <td><span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">${s.inquiries_generated || 0}</span></td>
-                    <td><strong style="color:var(--admin-success);">${s.conversion_rate_pct || 0}%</strong></td>
+                    <td><span class="badge" style="background:rgba(255,255,255,0.06); color:#fff;">${s.views ?? s.page_views ?? s.count ?? 0}</span></td>
+                    <td><span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">${s.inquiries_generated ?? s.inquiries ?? 0}</span></td>
+                    <td><strong style="color:var(--admin-success);">${s.conversion_rate_pct ?? s.conversion_rate ?? 0}%</strong></td>
                   </tr>
                 `).join("");
               }
@@ -1750,17 +1770,27 @@
             // Section 5: Lead Sources & Attribution
             const leadTbody = document.getElementById("analytics-leads-tbody");
             if (leadTbody) {
-              const leads = data.lead_sources || [];
+              let leads = data.lead_sources || data.leads || [];
+              if (leads.length === 0 && data.breakdown?.referrers) {
+                const totalRefVisits = Object.values(data.breakdown.referrers).reduce((a, b) => a + b, 0);
+                leads = Object.entries(data.breakdown.referrers).map(([source, visits]) => ({
+                  source,
+                  visits,
+                  pct_of_total: totalRefVisits > 0 ? Math.round((visits / totalRefVisits) * 1000) / 10 : 0,
+                  inquiries: 0,
+                  conversion_rate_pct: 0
+                }));
+              }
               if (leads.length === 0) {
                 leadTbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--admin-text-muted);">No lead attribution recorded in this period.</td></tr>';
               } else {
                 leadTbody.innerHTML = leads.map(l => `
                   <tr>
-                    <td><strong style="color:#fff;">${escapeHtml(l.source)}</strong></td>
-                    <td><span class="badge" style="background:rgba(255,255,255,0.06); color:#fff;">${l.visits || 0}</span></td>
-                    <td>${l.pct_of_total || 0}%</td>
-                    <td><span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">${l.inquiries || 0}</span></td>
-                    <td><strong style="color:var(--admin-success);">${l.conversion_rate_pct || 0}%</strong></td>
+                    <td><strong style="color:#fff;">${escapeHtml(l.source || l.name || l.channel)}</strong></td>
+                    <td><span class="badge" style="background:rgba(255,255,255,0.06); color:#fff;">${l.visits ?? l.views ?? l.count ?? 0}</span></td>
+                    <td>${l.pct_of_total ?? l.pct ?? 0}%</td>
+                    <td><span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">${l.inquiries ?? 0}</span></td>
+                    <td><strong style="color:var(--admin-success);">${l.conversion_rate_pct ?? l.conversion_rate ?? 0}%</strong></td>
                   </tr>
                 `).join("");
               }
@@ -1769,22 +1799,26 @@
             // Section 6: 9-Stage Inquiry & Conversion Funnel
             const funnelGrid = document.getElementById("analytics-funnel-grid");
             if (funnelGrid) {
-              const stages = data.funnel?.stages || [];
+              const stages = data.funnel?.stages || data.funnel_stages || (Array.isArray(data.funnel) ? data.funnel : []);
               if (stages.length === 0) {
                 funnelGrid.innerHTML = '<div style="color:var(--admin-text-muted); padding:20px;">No funnel data available for this period.</div>';
               } else {
-                funnelGrid.innerHTML = stages.map(st => `
-                  <div class="funnel-stage-card">
-                    <div class="stage-num">Stage ${st.stage}</div>
-                    <div class="stage-name">${escapeHtml(st.name)}</div>
-                    <div class="stage-count">${st.count}</div>
-                    <div class="stage-pct">${st.pct_of_top}% of top</div>
-                    <div class="stage-bar-wrap">
-                      <div class="stage-bar-fill" style="width: ${Math.max(4, Math.min(100, st.pct_of_top))}%;"></div>
+                funnelGrid.innerHTML = stages.map(st => {
+                  const pctVal = st.pct_of_top ?? st.pct_of_visitors ?? st.pct ?? 0;
+                  const dropVal = st.dropoff_pct ?? st.drop_off_pct ?? 0;
+                  return `
+                    <div class="funnel-stage-card">
+                      <div class="stage-num">Stage ${st.stage}</div>
+                      <div class="stage-name">${escapeHtml(st.name || ('Stage ' + st.stage))}</div>
+                      <div class="stage-count">${st.count ?? 0}</div>
+                      <div class="stage-pct">${pctVal}% of top</div>
+                      <div class="stage-bar-wrap">
+                        <div class="stage-bar-fill" style="width: ${Math.max(4, Math.min(100, pctVal))}%;"></div>
+                      </div>
+                      ${st.stage > 1 ? `<div class="stage-dropoff" style="margin-top:6px; font-size:10px; color:${dropVal > 50 ? '#ef4444' : 'var(--admin-text-muted)'};">Drop: ${dropVal}%</div>` : '<div style="height:15px;"></div>'}
                     </div>
-                    ${st.stage > 1 ? `<div class="stage-dropoff" style="margin-top:6px; font-size:10px; color:${st.dropoff_pct > 50 ? '#ef4444' : 'var(--admin-text-muted)'};">Drop: ${st.dropoff_pct}%</div>` : '<div style="height:15px;"></div>'}
-                  </div>
-                `).join("");
+                  `;
+                }).join("");
               }
             }
           }
@@ -1902,24 +1936,90 @@
       refreshAllBtn.addEventListener("click", loadAllData);
       refreshInqBtn.addEventListener("click", fetchInquiries);
 
+      function updateStatCounters(stats) {
+        if (!stats) return;
+        const total = stats.total ?? stats.total_records ?? stats.total_inquiries ?? stats.count ?? 0;
+        const countNew = stats.new ?? stats.by_status?.New ?? stats.by_status?.new ?? 0;
+        const countContacted = stats.contacted ?? stats.by_status?.Contacted ?? stats.by_status?.contacted ?? 0;
+        const countQuoted = stats.quoted ?? stats.by_status?.Quoted ?? stats.by_status?.quoted ?? 0;
+        const countInProgress = stats.in_progress ?? stats.inprogress ?? stats.by_status?.["In Progress"] ?? stats.by_status?.in_progress ?? stats.by_status?.["In Review"] ?? 0;
+        const countCompleted = stats.completed ?? stats.by_status?.Completed ?? stats.by_status?.completed ?? 0;
+        const countClosed = stats.closed ?? stats.by_status?.Closed ?? stats.by_status?.closed ?? 0;
+        const countUrgent = stats.urgent ?? stats.by_priority?.Urgent ?? stats.by_priority?.urgent ?? 0;
+
+        const elTotal = document.getElementById("stat-total");
+        const elNew = document.getElementById("stat-new");
+        const elContacted = document.getElementById("stat-contacted");
+        const elQuoted = document.getElementById("stat-quoted");
+        const elInProgress = document.getElementById("stat-inprogress");
+        const elCompleted = document.getElementById("stat-completed");
+        const elClosed = document.getElementById("stat-closed");
+        const elUrgent = document.getElementById("stat-urgent");
+        const elBadge = document.getElementById("badge-inquiries-count");
+
+        if (elTotal) elTotal.textContent = total;
+        if (elNew) elNew.textContent = countNew;
+        if (elContacted) elContacted.textContent = countContacted;
+        if (elQuoted) elQuoted.textContent = countQuoted;
+        if (elInProgress) elInProgress.textContent = countInProgress;
+        if (elCompleted) elCompleted.textContent = countCompleted;
+        if (elClosed) elClosed.textContent = countClosed;
+        if (elUrgent) elUrgent.textContent = countUrgent;
+        if (elBadge) elBadge.textContent = countNew;
+      }
+
+      function updateStatCountersFromList(inquiries) {
+        if (!Array.isArray(inquiries)) return;
+        let countNew = 0, countContacted = 0, countQuoted = 0, countInProgress = 0, countCompleted = 0, countClosed = 0, countUrgent = 0;
+        for (const inq of inquiries) {
+          const s = String(inq.status || "New").trim().toLowerCase();
+          if (s === "new" || s === "unread") countNew++;
+          else if (s === "contacted") countContacted++;
+          else if (s === "quoted") countQuoted++;
+          else if (s === "in progress" || s === "in_progress" || s === "in review" || s === "in-progress") countInProgress++;
+          else if (s === "completed") countCompleted++;
+          else if (s === "closed") countClosed++;
+          else countNew++;
+
+          const p = String(inq.priority || "Normal").trim().toLowerCase();
+          if (p === "urgent") countUrgent++;
+        }
+
+        updateStatCounters({
+          total: inquiries.length,
+          new: countNew,
+          contacted: countContacted,
+          quoted: countQuoted,
+          in_progress: countInProgress,
+          completed: countCompleted,
+          closed: countClosed,
+          urgent: countUrgent
+        });
+      }
+
       async function fetchStats() {
         try {
-          const res = await fetch(`${API_BASE}/api/admin/stats`, {
+          const search = inqSearch ? inqSearch.value.trim() : "";
+          const type = inqType ? inqType.value : "all";
+          const status = inqStatus ? inqStatus.value : "all";
+          const priority = inqPriority ? inqPriority.value : "all";
+          const params = new URLSearchParams({ search, type, status, priority });
+
+          const res = await fetch(`${API_BASE}/api/admin/stats?` + params.toString(), {
             headers: { "Authorization": "Bearer " + getToken() }
           });
           if (res.ok) {
             const stats = await res.json();
-            document.getElementById("stat-total").textContent = stats.total || 0;
-            document.getElementById("stat-new").textContent = stats.new || 0;
-            document.getElementById("stat-contacted").textContent = stats.contacted || 0;
-            document.getElementById("stat-quoted").textContent = stats.quoted || 0;
-            document.getElementById("stat-inprogress").textContent = stats.in_progress || 0;
-            document.getElementById("stat-completed").textContent = stats.completed || 0;
-            document.getElementById("stat-closed").textContent = stats.closed || 0;
-            document.getElementById("stat-urgent").textContent = stats.urgent || 0;
-            document.getElementById("badge-inquiries-count").textContent = stats.new || 0;
+            updateStatCounters(stats);
+          } else if (allInquiries && allInquiries.length >= 0) {
+            updateStatCountersFromList(allInquiries);
           }
-        } catch (e) {}
+        } catch (e) {
+          console.warn("fetchStats error:", e);
+          if (allInquiries && allInquiries.length >= 0) {
+            updateStatCountersFromList(allInquiries);
+          }
+        }
       }
 
       async function fetchInquiries() {
@@ -1966,6 +2066,7 @@
 
       function renderInquiriesTable(inquiries) {
         const inqTbody = document.getElementById("inquiries-tbody");
+        updateStatCountersFromList(inquiries);
         if (!inquiries || inquiries.length === 0) {
           inqTbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 40px; color: var(--admin-text-muted);">No inquiries match the active filters.</td></tr>`;
           return;
@@ -2068,6 +2169,9 @@
           });
           if (res.ok) {
             showToast(`Status updated to "${newStatus}"`);
+            const item = allInquiries.find(i => i.id === id);
+            if (item) item.status = newStatus;
+            updateStatCountersFromList(allInquiries);
             fetchStats();
           } else {
             showToast("Failed to update status", true);

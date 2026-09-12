@@ -86,6 +86,11 @@ const VSAnalytics = {
 
       // 7. Track initial page view via beacon / fetch
       this.trackEvent('page_view');
+      if (this.lastProduct) {
+        this.trackEvent('product_view', { productId: this.lastProduct.id, productName: this.lastProduct.name });
+      } else if (this.lastService) {
+        this.trackEvent('service_view', { serviceId: this.lastService.id, serviceName: this.lastService.name });
+      }
 
       // 8. Bind interaction listeners
       this.bindListeners();
@@ -117,10 +122,16 @@ const VSAnalytics = {
       this.lastProduct = { id: 'single-girder-eot', name: 'Single Girder EOT Crane' };
     } else if (path.includes('double-girder')) {
       this.lastProduct = { id: 'double-girder-eot', name: 'Double Girder EOT Crane' };
+    } else if (path.includes('semi-gantry')) {
+      this.lastProduct = { id: 'semi-gantry-crane', name: 'Semi-Gantry Crane' };
+    } else if (path.includes('goliath')) {
+      this.lastProduct = { id: 'goliath-crane', name: 'Goliath Crane' };
     } else if (path.includes('gantry')) {
       this.lastProduct = { id: 'gantry-crane', name: 'Gantry Crane' };
     } else if (path.includes('jib')) {
       this.lastProduct = { id: 'jib-crane', name: 'Jib Crane' };
+    } else if (path.includes('chain-hoist')) {
+      this.lastProduct = { id: 'chain-hoist', name: 'Electric Chain Hoist' };
     } else if (path.includes('hoist')) {
       this.lastProduct = { id: 'electric-hoist', name: 'Electric Wire Rope Hoist' };
     } else if (path.includes('component')) {
@@ -140,9 +151,6 @@ const VSAnalytics = {
 
   trackEvent(eventType, data = {}) {
     try {
-      // Do not send analytics events from localhost/development
-      if (this._isDev) return;
-
       const apiBase = typeof getVsApiBase === 'function' ? getVsApiBase() : '';
       const payload = {
         event_type: eventType,
@@ -154,13 +162,16 @@ const VSAnalytics = {
         utm_source: this.utmParams.utm_source || '',
         utm_medium: this.utmParams.utm_medium || '',
         utm_campaign: this.utmParams.utm_campaign || '',
+        utm_term: this.utmParams.utm_term || '',
+        utm_content: this.utmParams.utm_content || '',
         product_id: data.productId || this.lastProduct?.id || '',
         product_name: data.productName || this.lastProduct?.name || '',
         service_id: data.serviceId || this.lastService?.id || '',
         service_name: data.serviceName || this.lastService?.name || '',
         country: '',
         city: '',
-        timezone: Intl.DateTimeFormat ? Intl.DateTimeFormat().resolvedOptions().timeZone : ''
+        timezone: Intl.DateTimeFormat ? Intl.DateTimeFormat().resolvedOptions().timeZone : '',
+        source: this._isDev ? 'dev_local' : (this.leadSource || '')
       };
 
       const url = `${apiBase}/api/analytics/event`;
@@ -273,15 +284,10 @@ window.VSAnalytics = VSAnalytics;
 const ThemeManager = {
   init() {
     const saved = localStorage.getItem('vs-theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = saved || (prefersDark ? 'dark' : 'light');
+    // Fresh visits / when no preference is saved must ALWAYS open in LIGHT / WHITE theme.
+    // Never auto-switch to dark mode based on OS prefers-color-scheme.
+    const theme = (saved === 'dark') ? 'dark' : 'light';
     this.set(theme);
-
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      if (!localStorage.getItem('vs-theme')) {
-        this.set(e.matches ? 'dark' : 'light');
-      }
-    });
   },
 
   set(theme) {
@@ -290,7 +296,7 @@ const ThemeManager = {
   },
 
   toggle() {
-    const current = document.documentElement.getAttribute('data-theme');
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'dark' ? 'light' : 'dark';
     localStorage.setItem('vs-theme', next);
     this.set(next);
@@ -650,6 +656,12 @@ const FormHandler = {
     }
 
     if (saved) {
+      if (window.VSAnalytics && typeof window.VSAnalytics.trackEvent === 'function') {
+        window.VSAnalytics.trackEvent('inquiry_submitted', {
+          productName: payload.equipment_type || payload.subject || '',
+          productId: payload.equipment_type || ''
+        });
+      }
       const successMsg = form.parentElement.querySelector('.form-success-message');
       if (successMsg) {
         form.style.display = 'none';

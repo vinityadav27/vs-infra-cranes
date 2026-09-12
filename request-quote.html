@@ -547,6 +547,13 @@
             body: JSON.stringify(payload)
           }).catch(err => console.warn('Backend sync notice:', err));
 
+          if (window.VSAnalytics && typeof window.VSAnalytics.trackEvent === 'function') {
+            window.VSAnalytics.trackEvent('inquiry_submitted', {
+              productName: formData.get('equipment_type') || '',
+              productId: formData.get('equipment_type') || ''
+            });
+          }
+
           const summaryEl = document.getElementById('success-summary');
           summaryEl.innerHTML = '';
           const items = [
