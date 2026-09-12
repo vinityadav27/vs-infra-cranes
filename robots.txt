@@ -1,8 +1,9 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
-Disallow: /api/admin/
-Disallow: /api/analytics/
+Disallow: /api/
 Disallow: /data/
+Disallow: /404.html
+Disallow: /thank-you.html
 
 Sitemap: https://vsinfracranes.com/sitemap.xml
