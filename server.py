@@ -77,6 +77,7 @@ def load_env_file(filepath=None):
 load_env_file()
 
 PORT = int(os.environ.get("PORT", 8080))
+HOST = os.environ.get("HOST", "0.0.0.0").strip() or "0.0.0.0"
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(ROOT_DIR, "data")
 CERTIFICATES_DIR = os.path.join(ROOT_DIR, "assets", "documents", "certificates")
@@ -88,11 +89,10 @@ MONGODB_DB_NAME = os.environ.get("MONGODB_DB_NAME", "vs_infra_cranes").strip()
 
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "vsinfracranes@gmail.com").strip()
 ADMIN_PASS = os.environ.get("ADMIN_PASS", "").strip()
-if not ADMIN_PASS:
-    ADMIN_PASS = "HR29AK6751"  # Default fallback credential
 SECRET_KEY = os.environ.get("SECRET_KEY", "").strip()
 if not SECRET_KEY:
-    SECRET_KEY = "vs_infra_cranes_secure_session_key_2026"
+    import secrets
+    SECRET_KEY = secrets.token_hex(32)
 
 # Hosting-Agnostic Portable Configuration
 BASE_URL = os.environ.get("BASE_URL", f"http://localhost:{PORT}").rstrip("/")
@@ -326,7 +326,9 @@ def verify_password(password: str, hashed_str: str) -> bool:
         return False
 
 # Initialize Admin Password Hash
-ADMIN_PASS_HASH = hash_password(ADMIN_PASS)
+ADMIN_PASS_HASH = hash_password(ADMIN_PASS) if ADMIN_PASS else ""
+if not ADMIN_PASS:
+    print("[SECURITY WARNING] ADMIN_PASS is not set in environment. Admin portal login will remain locked until ADMIN_PASS is provided.", flush=True)
 
 # Brute-force Login Rate Limiter (IP -> [timestamps])
 LOGIN_ATTEMPTS = {}
@@ -2625,6 +2627,13 @@ class AppRequestHandler(SimpleHTTPRequestHandler):
             email = str(payload.get("email", "")).strip().lower()
             password = str(payload.get("password", "")).strip()
 
+            if not ADMIN_PASS or not ADMIN_PASS_HASH:
+                self.send_json(503, {
+                    "success": False,
+                    "error": "Admin portal authentication is not configured. Set ADMIN_PASS in server environment."
+                })
+                return
+
             valid_email = hmac.compare_digest(email, ADMIN_EMAIL.lower())
             if valid_email:
                 valid_pass = verify_password(password, ADMIN_PASS_HASH)
@@ -3135,12 +3144,12 @@ if __name__ == "__main__":
     print("============================================================", flush=True)
     print("VS INFRA & CRANES — PRODUCTION BACKEND API SERVER", flush=True)
     print("============================================================", flush=True)
-    print(f"Server Status:     RUNNING on http://0.0.0.0:{PORT}", flush=True)
+    print(f"Server Status:     RUNNING on http://{HOST}:{PORT}", flush=True)
     print(f"MongoDB Primary:   {db_status['database']} (Target DB: '{MONGODB_DB_NAME}')", flush=True)
     print(f"SMTP Service:      {smtp_status['status']} ({SMTP_HOST}:{SMTP_PORT})", flush=True)
     print(f"Admin Security:    ACTIVE (PBKDF2-HMAC-SHA256 Auth & Rate Limiting)", flush=True)
     print("============================================================", flush=True)
-    server_address = ("", PORT)
+    server_address = (HOST, PORT)
     httpd = HTTPServer(server_address, AppRequestHandler)
 
     def sig_handler(signum, frame):
