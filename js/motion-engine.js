@@ -114,24 +114,42 @@
   //    for butter-smooth, staggered entrances.
   // =========================================
   function initSectionReveals() {
+    const isMobile = window.innerWidth < 768;
+
     // Upgrade section labels with clip/slide reveal
     document.querySelectorAll('.section-label').forEach(label => {
       gsap.from(label, {
-        x: -30,
+        x: isMobile ? 0 : -30,
+        y: isMobile ? 15 : 0,
         opacity: 0,
         duration: 0.6,
         ease: 'power2.out',
         scrollTrigger: {
           trigger: label,
-          start: 'top 88%',
+          start: 'top 92%',
           toggleActions: 'play none none none',
         }
       });
     });
 
-    // Upgrade section titles with split-word reveal
+    // Upgrade section titles with split-word reveal on desktop, gentle fade on mobile
     document.querySelectorAll('.section-title').forEach(title => {
-      // Split into words
+      if (isMobile) {
+        gsap.from(title, {
+          y: 25,
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: title,
+            start: 'top 90%',
+            toggleActions: 'play none none none',
+          }
+        });
+        return;
+      }
+
+      // Split into words on desktop
       const text = title.textContent;
       const words = text.split(' ');
       title.innerHTML = words.map(w => `<span style="display:inline-block;overflow:hidden;"><span class="word-inner" style="display:inline-block;">${w}</span></span>`).join(' ');
@@ -154,14 +172,14 @@
     // Section subtitles: smooth fade up
     document.querySelectorAll('.section-subtitle').forEach(sub => {
       gsap.from(sub, {
-        y: 30,
+        y: isMobile ? 15 : 30,
         opacity: 0,
         duration: 0.8,
-        delay: 0.3,
+        delay: isMobile ? 0.1 : 0.3,
         ease: 'power2.out',
         scrollTrigger: {
           trigger: sub,
-          start: 'top 88%',
+          start: 'top 90%',
           toggleActions: 'play none none none',
         }
       });
@@ -520,16 +538,17 @@
       const children = grid.children;
       if (children.length < 2) return;
 
+      const isMobile = window.innerWidth < 768;
       gsap.from(children, {
-        y: 50,
+        y: isMobile ? 20 : 50,
         opacity: 0,
-        scale: 0.97,
+        scale: isMobile ? 1 : 0.97,
         duration: 0.6,
-        stagger: 0.1,
+        stagger: isMobile ? 0.05 : 0.1,
         ease: 'power2.out',
         scrollTrigger: {
           trigger: grid,
-          start: 'top 85%',
+          start: isMobile ? 'top 92%' : 'top 85%',
           toggleActions: 'play none none none',
         }
       });

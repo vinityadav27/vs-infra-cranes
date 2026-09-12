@@ -112,10 +112,16 @@
     .cert-badge:hover{border-color:var(--color-primary);}
     .cert-icon{width:56px;height:56px;border-radius:var(--radius-md);background:var(--color-primary-light);display:flex;align-items:center;justify-content:center;color:var(--color-primary);flex-shrink:0;}
 
+    @media(max-width:992px), (orientation: portrait) and (max-width: 1024px){
+      .timeline::before{left:20px!important;}
+      .timeline-item{padding-right:0!important;padding-left:50px!important;justify-content:flex-start!important;width:100%!important;}
+      .timeline-dot{left:20px!important;}
+    }
+
     @media(max-width:768px){
       .two-col{grid-template-columns:1fr;gap:var(--space-8);}
-      .timeline::before{left:20px;}
-      .timeline-item{padding-right:0!important;padding-left:50px!important;justify-content:flex-start!important;}
+      .timeline::before{left:20px!important;}
+      .timeline-item{padding-right:0!important;padding-left:50px!important;justify-content:flex-start!important;width:100%!important;}
       .timeline-dot{left:20px!important;}
       .director-section{padding:var(--space-10) var(--space-6);}
       .director-quote-mark{font-size:4rem;left:var(--space-4);top:var(--space-4);}
