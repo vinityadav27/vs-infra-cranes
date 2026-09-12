@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Industrial Crane Installations & Projects — VS Infra & Cranes</title>
+  <meta name="description" content="Explore heavy-duty crane installations and engineering case studies by VS Infra & Cranes across India and global industrial sectors including steel, manufacturing, power, and precast yards."/>
+  <link rel="canonical" href="https://vsinfracranes.com/projects.html"/>
+  <link rel="icon" type="image/png" href="assets/images/logo.png"/>
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Industrial Crane Installations & Projects — VS Infra & Cranes"/>
+  <meta property="og:description" content="Explore heavy-duty crane installations and engineering case studies by VS Infra & Cranes across steel, infrastructure, precast, and heavy engineering."/>
+  <meta property="og:url" content="https://vsinfracranes.com/projects.html"/>
+  <meta property="og:site_name" content="VS Infra & Cranes"/>
+  <meta property="og:image" content="https://vsinfracranes.com/assets/images/logo.png"/>
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Industrial Crane Installations & Projects — VS Infra & Cranes"/>
+  <meta name="twitter:description" content="Explore heavy-duty crane installations and engineering case studies by VS Infra & Cranes across steel, infrastructure, precast, and heavy engineering."/>
+  <meta name="twitter:image" content="https://vsinfracranes.com/assets/images/logo.png"/>
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": "https://vsinfracranes.com/projects.html",
+        "url": "https://vsinfracranes.com/projects.html",
+        "name": "Industrial Crane Projects & Installations",
+        "description": "Showcase of turnkey crane installations and material handling projects by VS Infra & Cranes.",
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://vsinfracranes.com/#website",
+          "url": "https://vsinfracranes.com/",
+          "name": "VS Infra & Cranes"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://vsinfracranes.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Projects",
+            "item": "https://vsinfracranes.com/projects.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="css/design-system.css"/>
+  <style>
+    .page-hero { min-height: 45vh; display: flex; align-items: center; position: relative; overflow: hidden; padding-top: calc(var(--header-height) + var(--space-8)); }
+    .page-hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #1A1A2E, #0f0f1a); z-index: 0; }
+    .page-hero-pattern { position: absolute; inset: 0; opacity: 0.05; background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(232,99,10,0.15) 35px, rgba(232,99,10,0.15) 36px); }
+    .page-hero-content { position: relative; z-index: 2; }
+    .breadcrumb { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: rgba(255,255,255,0.5); margin-bottom: var(--space-6); }
+    .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--color-primary); }
+    .page-hero h1 { color: white; font-size: clamp(2.5rem, 5vw, 3.75rem); margin-bottom: var(--space-4); font-family: "Space Grotesk", sans-serif; }
+    .page-hero p { color: rgba(255,255,255,0.7); font-size: var(--text-xl); max-width: 680px; line-height: 1.6; }
+
+    /* Split Section Layout */
+    .project-split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+      align-items: stretch;
+    }
+
+    /* Map Box */
+    .map-wrapper {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-md);
+      background: var(--color-surface);
+      min-height: 540px;
+      display: flex;
+      flex-direction: column;
+    }
+    #project-map {
+      width: 100%;
+      height: 100%;
+      min-height: 540px;
+      flex: 1;
+      z-index: 1;
+    }
+
+    /* Map Top Controls Overlay */
+    .map-overlay-bar {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+    .map-status-badge {
+      pointer-events: auto;
+      background: rgba(26, 26, 46, 0.88);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: var(--shadow-sm);
+    }
+    .map-status-badge span.pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 6px #22c55e;
+    }
+    .map-reset-btn {
+      pointer-events: auto;
+      background: rgba(255, 255, 255, 0.95);
+      color: #1a1a2e;
+      border: 1px solid rgba(0,0,0,0.12);
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+    .map-reset-btn:hover {
+      background: #fff;
+      color: var(--color-primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Project Detail Panel */
+    .project-detail-panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      min-height: 540px;
+    }
+    .panel-image-container {
+      position: relative;
+      height: 250px;
+      background: #111;
+      overflow: hidden;
+    }
+    .panel-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease, opacity 0.3s ease;
+    }
+    .panel-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%);
+    }
+    .panel-badge-group {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      display: flex;
+      gap: 8px;
+      z-index: 2;
+    }
+    .panel-loc-tag {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      color: #fff;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      z-index: 2;
+    }
+    .panel-body {
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+    .panel-header-title {
+      font-size: var(--text-2xl);
+      font-family: "Space Grotesk", sans-serif;
+      margin-bottom: var(--space-3);
+      color: var(--color-text);
+    }
+    .specs-pill-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+    .spec-pill {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      padding: var(--space-3);
+      border-radius: var(--radius-md);
+    }
+    .spec-pill-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--color-text-tertiary);
+      margin-bottom: 2px;
+      font-weight: 600;
+    }
+    .spec-pill-val {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--color-primary);
+      font-family: "Space Grotesk", sans-serif;
+    }
+    .panel-desc {
+      color: var(--color-text-secondary);
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      margin-bottom: var(--space-6);
+    }
+    .panel-actions {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    /* Completed Project Cards Grid */
+    .project-card-interactive {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card-interactive:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--color-primary);
+    }
+    .project-card-interactive.active-card {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px var(--color-primary), var(--shadow-lg);
+    }
+    .card-img-wrap {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #111;
+    }
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .project-card-interactive:hover .card-img-wrap img {
+      transform: scale(1.05);
+    }
+    .card-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(232, 99, 10, 0.9);
+      backdrop-filter: blur(4px);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-capacity-tag {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(26, 26, 46, 0.85);
+      backdrop-filter: blur(4px);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .card-content-body {
+      padding: var(--space-5);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-loc-header {
+      font-size: var(--text-xs);
+      color: var(--color-primary);
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card-title-text {
+      font-size: var(--text-lg);
+      font-family: "Space Grotesk", sans-serif;
+      color: var(--color-text);
+      margin-bottom: var(--space-2);
+    }
+    .card-desc-text {
+      font-size: var(--text-xs);
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      margin-bottom: var(--space-4);
+      flex: 1;
+    }
+    .card-footer-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--color-primary);
+      border-top: 1px solid var(--color-border);
+      padding-top: var(--space-3);
+    }
+
+    /* Custom Leaflet Marker Styling */
+    .custom-leaflet-marker {
+      background: none;
+      border: none;
+    }
+    .marker-pin-wrap {
+      position: relative;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .marker-pin-glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(232, 99, 10, 0.4);
+      animation: markerPulse 2s infinite ease-out;
+    }
+    .marker-pin-core {
+      width: 20px;
+      height: 20px;
+      background: #E8630A;
+      border: 3px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+      transition: transform 0.2s ease, background 0.2s ease;
+      z-index: 2;
+    }
+    .marker-pin-wrap:hover .marker-pin-core,
+    .marker-pin-wrap.selected .marker-pin-core {
+      transform: scale(1.3);
+      background: #ff7700;
+      border-color: #1A1A2E;
+      box-shadow: 0 0 15px rgba(232, 99, 10, 0.9);
+    }
+    @keyframes markerPulse {
+      0% { transform: scale(0.8); opacity: 0.8; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+
+    /* Leaflet popup customization */
+    .leaflet-popup-content-wrapper {
+      background: var(--color-bg-elevated, #ffffff);
+      color: var(--color-text, #111111);
+      border: 1px solid var(--color-border, #e2e8f0);
+      border-radius: var(--radius-lg) !important;
+      box-shadow: var(--shadow-xl);
+      padding: 4px;
+    }
+    .leaflet-popup-tip {
+      background: var(--color-bg-elevated, #ffffff);
+    }
+    .leaflet-popup-content {
+      margin: 12px 14px;
+      line-height: 1.4;
+    }
+    .popup-title {
+      font-size: 13px;
+      font-weight: 700;
+      font-family: "Space Grotesk", sans-serif;
+      color: var(--color-primary);
+      margin-bottom: 3px;
+    }
+    .popup-loc {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      margin-bottom: 3px;
+    }
+    .popup-spec {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    @media (max-width: 992px) {
+      .project-split-grid {
+        grid-template-columns: 1fr;
+      }
+      .map-wrapper {
+        min-height: 420px;
+      }
+      #project-map {
+        min-height: 420px;
+      }
+      .project-detail-panel {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .map-wrapper, #project-map {
+        min-height: 350px;
+      }
+      .panel-image-container {
+        height: 200px;
+      }
+      .specs-pill-grid {
+        grid-template-columns: 1fr;
+      }
+      .panel-header-title {
+        font-size: var(--text-xl);
+      }
+      .panel-actions .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      .map-status-badge {
+        font-size: 11px;
+        padding: 4px 10px;
+      }
+      .map-reset-btn {
+        font-size: 11px;
+        padding: 4px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header"><div class="header-inner">
+    <a href="index.html"><img src="assets/images/logo.png" alt="VS Infra & Cranes" class="logo"/></a>
+    <nav class="nav-desktop"><a href="index.html" class="nav-link">Home</a><a href="about.html" class="nav-link">About</a><a href="products.html" class="nav-link">Products</a>
+        <a href="catalog.html" class="nav-link">Catalog</a><a href="services.html" class="nav-link">Services</a><a href="projects.html" class="nav-link active">Projects</a><a href="gallery.html" class="nav-link">Gallery</a><a href="blog.html" class="nav-link">Blog</a><a href="contact.html" class="nav-link">Contact</a></nav>
+    <div class="nav-actions">
+<a href="admin.html" class="admin-link" aria-label="Admin Panel" title="Admin Panel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></a>
+<button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme"></button>
+        <a href="request-quote.html" class="btn btn-primary btn-sm">Request Quote</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div></header>
+  
+  <main>
+    <!-- Hero Section -->
+    <section class="page-hero">
+      <div class="page-hero-bg"><div class="page-hero-pattern"></div></div>
+      <div class="container page-hero-content">
+        <div class="breadcrumb"><a href="index.html">Home</a><span>›</span><span style="color:rgba(255,255,255,.8);">Projects</span></div>
+        <h1>Our Installations Across the Globe</h1>
+        <p>From heavy steel plants to precision assembly lines, explore our successful crane installations driving industrial growth across India and international facilities.</p>
+      </div>
+    </section>
+
+    <!-- Split Map & Project Detail Section -->
+    <section class="section" id="project-showcase-section" style="padding-top: var(--space-10); padding-bottom: var(--space-10);">
+      <div class="container">
+        
+        <div style="margin-bottom: var(--space-8);">
+          <div class="section-label">Interactive Portfolio</div>
+          <h2 class="section-title">Explore Project Locations</h2>
+          <p class="section-subtitle" style="max-width: 680px;">Select any marker on the map or click a project card below to view specifications, equipment delivered, and installation details.</p>
+        </div>
+
+        <div class="project-split-grid">
+          
+          <!-- Left Column: Real Interactive Leaflet + OpenStreetMap Map -->
+          <div class="map-wrapper">
+            <div class="map-overlay-bar">
+              <div class="map-status-badge">
+                <span class="pulse-dot"></span>
+                <span>6 Active Installations</span>
+              </div>
+              <button class="map-reset-btn" id="reset-map-view" title="Reset map to fit all locations">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                <span>Reset View</span>
+              </button>
+            </div>
+            <div id="project-map"></div>
+          </div>
+
+          <!-- Right Column: Active Project Details Panel -->
+          <div class="project-detail-panel" id="project-detail-panel">
+            <div class="panel-image-container">
+              <img id="detail-image" class="panel-image" src="assets/images/crane/08-project-install.jpg" alt="Selected Project Crane"/>
+              <div class="panel-image-overlay"></div>
+              <div class="panel-badge-group">
+                <span id="detail-category-badge" class="badge badge-primary">Export Project</span>
+              </div>
+              <div class="panel-loc-tag">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8630A" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span id="detail-location-text">South Africa</span>
+              </div>
+            </div>
+
+            <div class="panel-body">
+              <div>
+                <h3 id="detail-title" class="panel-header-title">Industrial Facility, South Africa</h3>
+                
+                <div class="specs-pill-grid">
+                  <div class="spec-pill">
+                    <div class="spec-pill-label">Equipment Supplied</div>
+                    <div id="detail-crane-type" class="spec-pill-val">Double Girder EOT Crane</div>
+                  </div>
+                  <div class="spec-pill">
+                    <div class="spec-pill-label">Lifting Capacity</div>
+                    <div id="detail-capacity" class="spec-pill-val">30 Ton</div>
+                  </div>
+                  <div class="spec-pill">
+                    <div class="spec-pill-label">Application</div>
+                    <div id="detail-industry" class="spec-pill-val" style="color: var(--color-text);">Heavy Manufacturing</div>
+                  </div>
+                  <div class="spec-pill">
+                    <div class="spec-pill-label">Project Status</div>
+                    <div class="spec-pill-val" style="color: #22c55e;">Commissioned & Active</div>
+                  </div>
+                </div>
+
+                <p id="detail-description" class="panel-desc">Heavy-duty Double Girder EOT crane (30 Ton) successfully manufactured, exported, and commissioned to international standards for continuous heavy fabrication operations.</p>
+              </div>
+
+              <div class="panel-actions">
+                <a href="request-quote.html" class="btn btn-primary btn-sm">Request Similar Crane</a>
+                <a href="contact.html" class="btn btn-outline btn-sm">Contact Project Engineers</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Completed Projects Grid Section -->
+    <section class="section section-alt" id="completed-projects" style="padding-top: var(--space-12); padding-bottom: var(--space-16);">
+      <div class="container">
+        
+        <div class="text-center" style="margin-bottom: var(--space-10);">
+          <div class="section-label" style="justify-content: center;">Our Work</div>
+          <h2 class="section-title">Completed Projects</h2>
+          <p class="section-subtitle" style="margin: 0 auto; max-width: 600px;">A showcase of our engineered crane systems delivered across major manufacturing, metallurgy, and workshop hubs.</p>
+        </div>
+
+        <div class="grid grid-3" id="projects-card-grid" style="gap: var(--space-6);">
+          
+          <!-- Card 1: South Africa -->
+          <div class="project-card-interactive active-card" data-project-id="south-africa">
+            <div class="card-img-wrap">
+              <img src="assets/images/crane/08-project-install.jpg" alt="Industrial Facility, South Africa" loading="lazy"/>
+              <span class="card-badge">Export Project</span>
+              <span class="card-capacity-tag">30 Ton</span>
+            </div>
+            <div class="card-content-body">
+              <div>
+                <div class="card-loc-header">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>South Africa (International)</span>
+                </div>
+                <h4 class="card-title-text">Industrial Facility</h4>
+                <p class="card-desc-text">Heavy-duty Double Girder EOT crane successfully exported and commissioned to strict international standards.</p>
+              </div>
+              <div class="card-footer-btn">
+                <span>Double Girder EOT</span>
+                <span>View on Map ↗</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Raipur -->
+          <div class="project-card-interactive" data-project-id="raipur">
+            <div class="card-img-wrap">
+              <img src="assets/images/crane/07-product-site.jpg" alt="Manufacturing Plant, Raipur" loading="lazy"/>
+              <span class="card-badge">Manufacturing</span>
+              <span class="card-capacity-tag">5 Ton</span>
+            </div>
+            <div class="card-content-body">
+              <div>
+                <div class="card-loc-header">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Raipur, Chhattisgarh</span>
+                </div>
+                <h4 class="card-title-text">Manufacturing Plant</h4>
+                <p class="card-desc-text">High-performance Electric Wire Rope Hoists installed for round-the-clock continuous production line operations.</p>
+              </div>
+              <div class="card-footer-btn">
+                <span>Electric Hoist</span>
+                <span>View on Map ↗</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Pali -->
+          <div class="project-card-interactive" data-project-id="pali">
+            <div class="card-img-wrap">
+              <img src="assets/images/crane/04-product-angle.jpg" alt="Workshop Facility, Pali" loading="lazy"/>
+              <span class="card-badge">Workshop</span>
+              <span class="card-capacity-tag">10 Ton</span>
+            </div>
+            <div class="card-content-body">
+              <div>
+                <div class="card-loc-header">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Pali, Rajasthan</span>
+                </div>
+                <h4 class="card-title-text">Workshop Facility</h4>
+                <p class="card-desc-text">Cost-effective Single Girder EOT Crane built for demanding fabrication and workshop material movements.</p>
+              </div>
+              <div class="card-footer-btn">
+                <span>Single Girder EOT</span>
+                <span>View on Map ↗</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Odisha -->
+          <div class="project-card-interactive" data-project-id="odisha">
+            <div class="card-img-wrap">
+              <img src="assets/images/crane/03-product-side.jpg" alt="Heavy Industries, Odisha" loading="lazy"/>
+              <span class="card-badge">Heavy Duty</span>
+              <span class="card-capacity-tag">50 Ton</span>
+            </div>
+            <div class="card-content-body">
+              <div>
+                <div class="card-loc-header">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Odisha</span>
+                </div>
+                <h4 class="card-title-text">Heavy Metallurgy & Steel</h4>
+                <p class="card-desc-text">Heavy 50T Double Girder EOT crane with responsive electro-hydraulic thruster brakes for intense molten and raw load handling.</p>
+              </div>
+              <div class="card-footer-btn">
+                <span>Double Girder EOT</span>
+                <span>View on Map ↗</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5: Rohtak -->
+          <div class="project-card-interactive" data-project-id="rohtak">
+            <div class="card-img-wrap">
+              <img src="assets/images/crane/05-product-hoist.jpg" alt="Assembly Unit, Rohtak" loading="lazy"/>
+              <span class="card-badge">Assembly</span>
+              <span class="card-capacity-tag">3 Ton × 4</span>
+            </div>
+            <div class="card-content-body">
+              <div>
+                <div class="card-loc-header">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Rohtak, Haryana</span>
+                </div>
+                <h4 class="card-title-text">Precision Assembly Unit</h4>
+                <p class="card-desc-text">Multiple high-precision Electric Hoists installed across sub-assembly stations, engineered for continuous duty.</p>
+              </div>
+              <div class="card-footer-btn">
+                <span>Electric Hoist</span>
+                <span>View on Map ↗</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6: Indore -->
+          <div class="project-card-interactive" data-project-id="indore">
+            <div class="card-img-wrap">
+              <img src="assets/images/crane/06-product-panel.jpg" alt="Automotive Parts, Indore" loading="lazy"/>
+              <span class="card-badge">Automotive</span>
+              <span class="card-capacity-tag">20 Ton</span>
+            </div>
+            <div class="card-content-body">
+              <div>
+                <div class="card-loc-header">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Indore, Madhya Pradesh</span>
+                </div>
+                <h4 class="card-title-text">Automotive Parts Plant</h4>
+                <p class="card-desc-text">Precision-engineered 20T Double Girder EOT crane with custom lifting attachments and smooth VFD acceleration.</p>
+              </div>
+              <div class="card-footer-btn">
+                <span>Double Girder EOT</span>
+                <span>View on Map ↗</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Project CTA Section -->
+    <section class="section" style="background: linear-gradient(135deg, #1A1A2E, #161623); color: white; border-top: 1px solid rgba(255,255,255,0.1);">
+      <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-8); flex-wrap: wrap;">
+          <div>
+            <div class="badge badge-primary" style="margin-bottom: var(--space-3);">Custom Engineering</div>
+            <h2 style="color: white; font-family: "Space Grotesk", sans-serif; margin-bottom: var(--space-2); font-size: var(--text-3xl);">Planning a Crane Installation?</h2>
+            <p style="color: rgba(255,255,255,0.7); max-width: 600px; font-size: var(--text-base); margin: 0;">Our engineering team conducts structural site audits, design optimization, and turnkey manufacturing tailored to your factory layout.</p>
+          </div>
+          <div style="display: flex; gap: var(--space-4); flex-wrap: wrap;">
+            <a href="request-quote.html" class="btn btn-primary btn-lg">Request a Project Quote</a>
+            <a href="contact.html" class="btn btn-outline btn-lg" style="color: white; border-color: rgba(255,255,255,0.3);">Talk to an Engineer</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container"><div class="footer-grid">
+    <div><img src="assets/images/logo.png" alt="VS Infra & Cranes" style="height:48px;margin-bottom:var(--space-2);"/><p class="footer-brand-desc">Leading manufacturer of industrial cranes and material handling equipment since 2021.</p><div class="footer-social"><a href="https://www.facebook.com/people/VS-Infra-Cranes/100085546544517/?name=xhp_nt__fb__action__open_user" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a><a href="https://wa.me/919990191859" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div></div>
+    <div><h6 class="footer-heading">Quick Links</h6><a href="about.html" class="footer-link">About</a><a href="products.html" class="footer-link">Products</a>
+    <a href="catalog.html" class="footer-link">3D Company Catalog</a><a href="services.html" class="footer-link">Services</a><a href="contact.html" class="footer-link">Contact</a></div>
+    <div><h6 class="footer-heading">Products</h6><a href="products/single-girder-eot-crane.html" class="footer-link">Single Girder EOT</a><a href="products/double-girder-eot-crane.html" class="footer-link">Double Girder EOT</a><a href="products/gantry-crane.html" class="footer-link">Gantry Crane</a></div>
+    <div><h6 class="footer-heading">Contact</h6><a href="contact.html" class="footer-link">📍 Bhankri Industrial Area, Faridabad, Haryana – 121005</a><a href="tel:+919990191859" class="footer-link">📞 +91 99901 91859</a><a href="mailto:vsinfracranes@gmail.com" class="footer-link">✉️ vsinfracranes@gmail.com</a></div>
+  </div><div class="footer-bottom"><p class="footer-copyright">© 2026 VS Infra & Cranes. All rights reserved. <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+        <p class="footer-credit" style="font-size: var(--text-xs); color: rgba(255,255,255,0.3); margin-top: var(--space-2);">Made by <a href="https://wa.me/917042271859" target="_blank" style="color: inherit; text-decoration: underline;">Vinit Yadav</a></p></div></div></footer>
+
+  <!-- Floating CTAs -->
+  <div class="floating-cta">
+    <a href="https://wa.me/919990191859" target="_blank" class="floating-btn floating-whatsapp" aria-label="WhatsApp">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+    <a href="tel:+919990191859" class="floating-btn floating-phone" aria-label="Call us">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    </a>
+    <button class="floating-btn floating-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+    </button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/motion-engine.js"></script>
+  <script src="js/ai-consultant.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Projects Data Array
+      const projectsData = [
+        {
+          id: "south-africa",
+          title: "Industrial Facility, South Africa",
+          locationName: "South Africa (International Export)",
+          category: "Export Project",
+          craneType: "Double Girder EOT Crane",
+          capacity: "30 Ton",
+          industry: "Heavy Manufacturing",
+          status: "Commissioned & Operational",
+          image: "assets/images/crane/08-project-install.jpg",
+          description: "Heavy-duty 30-ton Double Girder EOT crane custom designed, exported, and commissioned to international standards for continuous heavy fabrication operations.",
+          lat: -28.4792,
+          lng: 24.6727
+        },
+        {
+          id: "raipur",
+          title: "Manufacturing Plant, Raipur",
+          locationName: "Raipur, Chhattisgarh",
+          category: "Manufacturing",
+          craneType: "Electric Wire Rope Hoist",
+          capacity: "5 Ton",
+          industry: "Continuous Assembly",
+          status: "Commissioned & Active",
+          image: "assets/images/crane/07-product-site.jpg",
+          description: "High-performance 5-ton electric wire rope hoists installed for round-the-clock continuous production line assembly and material transfer.",
+          lat: 21.2514,
+          lng: 81.6296
+        },
+        {
+          id: "pali",
+          title: "Workshop Facility, Pali",
+          locationName: "Pali, Rajasthan",
+          category: "Workshop",
+          craneType: "Single Girder EOT Crane",
+          capacity: "10 Ton",
+          industry: "Fabrication & Machining",
+          status: "Commissioned & Active",
+          image: "assets/images/crane/04-product-angle.jpg",
+          description: "Cost-effective 10-ton Single Girder EOT Crane built for demanding workshop requirements with optimized headroom and low wheel loads.",
+          lat: 25.7713,
+          lng: 73.3234
+        },
+        {
+          id: "odisha",
+          title: "Heavy Metallurgy Plant, Odisha",
+          locationName: "Odisha",
+          category: "Heavy Duty",
+          craneType: "Double Girder EOT Crane",
+          capacity: "50 Ton",
+          industry: "Metallurgy & Heavy Engineering",
+          status: "Commissioned & Active",
+          image: "assets/images/crane/03-product-side.jpg",
+          description: "Heavy 50-ton Double Girder EOT crane equipped with highly responsive electro-hydraulic thruster brakes and heavy-duty box girder design for metallurgical loads.",
+          lat: 20.9517,
+          lng: 85.0985
+        },
+        {
+          id: "rohtak",
+          title: "Precision Assembly Unit, Rohtak",
+          locationName: "Rohtak, Haryana",
+          category: "Assembly",
+          craneType: "Electric Hoists (4 Units)",
+          capacity: "3 Ton × 4 Units",
+          industry: "Automotive Sub-Assembly",
+          status: "Commissioned & Active",
+          image: "assets/images/crane/05-product-hoist.jpg",
+          description: "Multiple 3-ton precision electric hoists installed across high-speed assembly bays, engineered for continuous duty and precision positioning.",
+          lat: 28.8955,
+          lng: 76.6066
+        },
+        {
+          id: "indore",
+          title: "Automotive Parts Plant, Indore",
+          locationName: "Indore, Madhya Pradesh",
+          category: "Automotive",
+          craneType: "Double Girder EOT Crane",
+          capacity: "20 Ton",
+          industry: "Automotive Engineering",
+          status: "Commissioned & Active",
+          image: "assets/images/crane/06-product-panel.jpg",
+          description: "Precision-engineered 20-ton Double Girder EOT crane with custom lifting attachments, variable frequency drive (VFD) controls, and comprehensive after-sales AMC support.",
+          lat: 22.7196,
+          lng: 75.8577
+        }
+      ];
+
+      // 2. Initialize Leaflet Map
+      const mapContainer = document.getElementById("project-map");
+      if (!mapContainer) return;
+
+      // Create Leaflet map centered between Africa and India to show whole project span
+      const map = L.map("project-map", {
+        center: [15.0, 55.0],
+        zoom: 3,
+        minZoom: 2,
+        maxZoom: 18,
+        scrollWheelZoom: false
+      });
+
+      // Production-grade basemap tiles: Clean, watermark-free Esri World Street Map by default (no API key required), or CARTO if API key is provided
+      const cartoKey = window.VS_CARTO_API_KEY || "";
+      const tileUrl = cartoKey
+        ? `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?api_key=${cartoKey}`
+        : "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}";
+      const tileAttribution = cartoKey
+        ? '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>'
+        : 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, METI, TomTom';
+
+      L.tileLayer(tileUrl, {
+        maxZoom: 19,
+        subdomains: cartoKey ? "abcd" : "",
+        attribution: tileAttribution
+      }).addTo(map);
+
+      // Custom Marker Pin Icon Builder
+      function createPinIcon(isSelected = false) {
+        return L.divIcon({
+          className: "custom-leaflet-marker",
+          html: `<div class="marker-pin-wrap ${isSelected ? "selected" : ""}">
+                   <div class="marker-pin-glow"></div>
+                   <div class="marker-pin-core"></div>
+                 </div>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16],
+          popupAnchor: [0, -16]
+        });
+      }
+
+      const markersMap = {};
+      const latLngBounds = L.latLngBounds();
+
+      // Function to select and update a project in both panel and map
+      function selectProject(project, panToMap = true) {
+        // 1. Update Right Side Detail Panel
+        const detailImg = document.getElementById("detail-image");
+        const detailBadge = document.getElementById("detail-category-badge");
+        const detailLoc = document.getElementById("detail-location-text");
+        const detailTitle = document.getElementById("detail-title");
+        const detailCrane = document.getElementById("detail-crane-type");
+        const detailCap = document.getElementById("detail-capacity");
+        const detailInd = document.getElementById("detail-industry");
+        const detailDesc = document.getElementById("detail-description");
+
+        if (detailImg) {
+          detailImg.style.opacity = "0.5";
+          setTimeout(() => {
+            detailImg.src = project.image;
+            detailImg.alt = project.title;
+            detailImg.style.opacity = "1";
+          }, 150);
+        }
+        if (detailBadge) detailBadge.textContent = project.category;
+        if (detailLoc) detailLoc.textContent = project.locationName;
+        if (detailTitle) detailTitle.textContent = project.title;
+        if (detailCrane) detailCrane.textContent = project.craneType;
+        if (detailCap) detailCap.textContent = project.capacity;
+        if (detailInd) detailInd.textContent = project.industry;
+        if (detailDesc) detailDesc.textContent = project.description;
+
+        // 2. Update Active Class on Project Cards
+        document.querySelectorAll(".project-card-interactive").forEach(card => {
+          if (card.dataset.projectId === project.id) {
+            card.classList.add("active-card");
+          } else {
+            card.classList.remove("active-card");
+          }
+        });
+
+        // 3. Highlight marker and open popup
+        Object.keys(markersMap).forEach(id => {
+          const m = markersMap[id];
+          if (id === project.id) {
+            m.setIcon(createPinIcon(true));
+            m.openPopup();
+          } else {
+            m.setIcon(createPinIcon(false));
+          }
+        });
+
+        // 4. Pan to map coordinate if requested
+        if (panToMap) {
+          map.panTo([project.lat, project.lng], { animate: true, duration: 0.8 });
+        }
+      }
+
+      // Add Markers for each project
+      projectsData.forEach(p => {
+        const marker = L.marker([p.lat, p.lng], {
+          icon: createPinIcon(p.id === "south-africa")
+        }).addTo(map);
+
+        const popupContent = `
+          <div class="popup-box">
+            <div class="popup-title">${p.title}</div>
+            <div class="popup-loc">📍 ${p.locationName}</div>
+            <div class="popup-spec">⚙️ ${p.craneType} (${p.capacity})</div>
+          </div>
+        `;
+        marker.bindPopup(popupContent);
+
+        marker.on("click", () => {
+          selectProject(p, false);
+        });
+
+        markersMap[p.id] = marker;
+        latLngBounds.extend([p.lat, p.lng]);
+      });
+
+      // Fit bounds to show India and international locations
+      map.fitBounds(latLngBounds, { padding: [50, 50] });
+
+      // Reset View Button
+      const resetBtn = document.getElementById("reset-map-view");
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          map.fitBounds(latLngBounds, { padding: [50, 50] });
+        });
+      }
+
+      // Card click interaction in Completed Projects
+      document.querySelectorAll(".project-card-interactive").forEach(card => {
+        card.addEventListener("click", (e) => {
+          const projId = card.dataset.projectId;
+          const found = projectsData.find(p => p.id === projId);
+          if (found) {
+            selectProject(found, true);
+            // Smooth scroll to showcase split view
+            const showcaseSection = document.getElementById("project-showcase-section");
+            if (showcaseSection) {
+              const yOffset = -80;
+              const y = showcaseSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+              window.scrollTo({ top: y, behavior: "smooth" });
+            }
+          }
+        });
+      });
+
+      // Initially select the first project
+      selectProject(projectsData[0], false);
+
+      // Force Leaflet recalculation after DOM fully renders
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 300);
+    });
+  </script>
+</body>
+</html>

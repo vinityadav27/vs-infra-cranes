@@ -1,0 +1,75 @@
+# ==================================================
+# VS Infra & Cranes — Production .gitignore
+# ==================================================
+
+# 1. Environment & Credentials (NEVER COMMIT SECRETS)
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# 2. Local Databases & Customer Data Mirrors
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+data/*.db
+data/*.db-journal
+data/inquiries.json
+inquiries_*.json
+customer_*.json
+vs_cranes_local.db
+
+# 3. Logs & Runtime Telemetry
+*.log
+logs/
+*.pid
+
+# 4. Caches & Temporary Files
+__pycache__/
+*.py[cod]
+*$py.class
+.cache/
+.pytest_cache/
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+assets/**/.DS_Store
+
+# 5. Virtual Environments & Vendored Libraries
+.venv/
+venv/
+ENV/
+env/
+lib/
+
+# 6. Test Suites & Verification Scripts
+test_*.py
+check_*.py
+
+# 7. Development Scratch & One-off Migration Scripts
+fix_*.py
+update_projects.py
+generate_pages.py
+prompt_extract.txt
+PROJECT_STATE.md
+
+# 8. Admin Uploaded Certificates (Preserve directory structure via .gitkeep)
+assets/documents/certificates/*
+!assets/documents/certificates/.gitkeep
+
+# 9. IDE & Agent Scratch Artifacts
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.agents/
+.system_generated/
+.user_uploaded/
+.tempmedia/
+scratch/

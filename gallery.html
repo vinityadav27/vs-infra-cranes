@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crane Gallery & Manufacturing Showcase — VS Infra & Cranes</title>
+  <meta name="description" content="Explore the official photo gallery of VS Infra & Cranes: heavy-duty EOT cranes, gantry systems, overhead installations, manufacturing facility, and proof load testing."/>
+  <link rel="canonical" href="https://vsinfracranes.com/gallery.html"/>
+  <link rel="icon" type="image/png" href="assets/images/logo.png"/>
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Crane Gallery & Manufacturing Showcase — VS Infra & Cranes"/>
+  <meta property="og:description" content="Explore heavy-duty EOT cranes, gantry systems, overhead installations, manufacturing facility, and proof load testing."/>
+  <meta property="og:url" content="https://vsinfracranes.com/gallery.html"/>
+  <meta property="og:site_name" content="VS Infra & Cranes"/>
+  <meta property="og:image" content="https://vsinfracranes.com/assets/images/logo.png"/>
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Crane Gallery & Manufacturing Showcase — VS Infra & Cranes"/>
+  <meta name="twitter:description" content="Explore heavy-duty EOT cranes, gantry systems, overhead installations, manufacturing facility, and proof load testing."/>
+  <meta name="twitter:image" content="https://vsinfracranes.com/assets/images/logo.png"/>
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ImageGallery",
+        "@id": "https://vsinfracranes.com/gallery.html",
+        "url": "https://vsinfracranes.com/gallery.html",
+        "name": "VS Infra & Cranes Photo Gallery",
+        "description": "Visual documentation of manufactured EOT cranes, gantry cranes, hoists, and factory operations.",
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://vsinfracranes.com/#website",
+          "url": "https://vsinfracranes.com/",
+          "name": "VS Infra & Cranes"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://vsinfracranes.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Gallery",
+            "item": "https://vsinfracranes.com/gallery.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/design-system.css"/>
+  <style>
+    .page-hero { min-height: 40vh; display: flex; align-items: center; position: relative; overflow: hidden; padding-top: calc(var(--header-height) + var(--space-8)); }
+    .page-hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #1A1A2E, #0f0f1a); z-index: 0; }
+    .page-hero-pattern { position: absolute; inset: 0; opacity: 0.05; background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(232,99,10,0.15) 35px, rgba(232,99,10,0.15) 36px); }
+    .page-hero-content { position: relative; z-index: 2; }
+    .breadcrumb { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: rgba(255,255,255,0.5); margin-bottom: var(--space-6); }
+    .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--color-primary); }
+    .page-hero h1 { color: white; font-size: clamp(2.5rem, 5vw, 3.75rem); margin-bottom: var(--space-4); }
+    .page-hero p { color: rgba(255,255,255,0.7); font-size: var(--text-xl); max-width: 680px; }
+
+    /* Filter Bar */
+    .gallery-filter-bar {
+      padding: var(--space-4) 0;
+      background: var(--color-bg);
+      position: sticky;
+      top: var(--header-height);
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .filter-scroll {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 4px 2px;
+    }
+    .filter-scroll::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .filter-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      transform: translateY(-1px);
+    }
+    .filter-btn.active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(232, 99, 10, 0.28);
+    }
+    .filter-count {
+      font-size: 11px;
+      background: rgba(0,0,0,0.08);
+      color: inherit;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+    .filter-btn.active .filter-count {
+      background: rgba(255,255,255,0.25);
+      color: #ffffff;
+    }
+
+    /* Gallery Grid & Cards */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      padding: var(--space-8) 0 var(--space-12);
+    }
+    @media (max-width: 1024px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+    }
+    @media (max-width: 600px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: #11121c;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.3s ease;
+      aspect-ratio: 4/3;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .gallery-item:hover, .gallery-item:focus-visible {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.35);
+      border-color: var(--color-primary);
+      outline: none;
+    }
+    .gallery-item img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.06);
+    }
+    .gallery-item-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,12,20,0.95) 0%, rgba(10,12,20,0.55) 45%, rgba(10,12,20,0.15) 75%, transparent 100%);
+      z-index: 2;
+      transition: background 0.3s ease;
+    }
+    .gallery-item:hover .gallery-item-overlay {
+      background: linear-gradient(to top, rgba(10,12,20,0.98) 0%, rgba(10,12,20,0.68) 50%, rgba(10,12,20,0.2) 80%, transparent 100%);
+    }
+    .gallery-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 3;
+      background: rgba(232, 99, 10, 0.92);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+    .gallery-zoom-icon {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 3;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.85);
+      transition: all 0.25s ease;
+    }
+    .gallery-item:hover .gallery-zoom-icon,
+    .gallery-item:focus-visible .gallery-zoom-icon {
+      opacity: 1;
+      transform: scale(1);
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+    .gallery-item-caption {
+      position: relative;
+      z-index: 3;
+      padding: var(--space-4) var(--space-5);
+      color: #ffffff;
+      pointer-events: none;
+    }
+    .gallery-item-caption h4 {
+      color: #ffffff !important;
+      font-size: var(--text-lg);
+      font-weight: 700;
+      margin-bottom: 4px;
+      font-family: 'Space Grotesk', sans-serif;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+      line-height: 1.3;
+    }
+    .gallery-item-caption p {
+      color: rgba(255,255,255,0.88) !important;
+      font-size: var(--text-sm);
+      line-height: 1.4;
+      margin: 0;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Lightbox Modal */
+    .gallery-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8, 10, 18, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: var(--space-4);
+    }
+    .gallery-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .gallery-modal-dialog {
+      position: relative;
+      max-width: 960px;
+      width: 100%;
+      background: var(--color-bg-elevated, #1A1A2E);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-2xl);
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
+      animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .gallery-modal-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 55vh;
+      min-height: 280px;
+      background: #090a12;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .gallery-modal-img-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .gallery-modal-body {
+      padding: var(--space-5) var(--space-6);
+      background: var(--color-bg-elevated, #1A1A2E);
+    }
+    .gallery-modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .gallery-modal-header h3 {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--color-text);
+      margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .gallery-modal-body p {
+      color: var(--color-text-secondary);
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      margin: 0;
+    }
+    .gallery-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 10;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .gallery-modal-close:hover {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      transform: rotate(90deg);
+    }
+    .gallery-modal-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+    .gallery-modal-nav:hover {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+    .gallery-modal-prev { left: 16px; }
+    .gallery-modal-next { right: 16px; }
+  </style>
+</head>
+<body>
+  <header class="header"><div class="header-inner">
+    <a href="index.html"><img src="assets/images/logo.png" alt="VS Infra & Cranes" class="logo"/></a>
+    <nav class="nav-desktop"><a href="index.html" class="nav-link">Home</a><a href="about.html" class="nav-link">About</a><a href="products.html" class="nav-link">Products</a>
+        <a href="catalog.html" class="nav-link">Catalog</a><a href="services.html" class="nav-link">Services</a><a href="projects.html" class="nav-link">Projects</a><a href="gallery.html" class="nav-link active">Gallery</a><a href="blog.html" class="nav-link">Blog</a><a href="contact.html" class="nav-link">Contact</a></nav>
+    <div class="nav-actions">
+<a href="admin.html" class="admin-link" aria-label="Admin Panel" title="Admin Panel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></a>
+<button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme"></button><a href="request-quote.html" class="btn btn-primary btn-sm">Request Quote</a></div>
+    <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div></header>
+
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-bg"><div class="page-hero-pattern"></div></div>
+      <div class="container page-hero-content">
+        <div class="breadcrumb"><a href="index.html">Home</a><span>›</span><span style="color:rgba(255,255,255,.8);">Gallery</span></div>
+        <h1 class="section-title">Visual Showcase</h1>
+        <p class="section-subtitle">A glimpse into our manufacturing facility, heavy-duty overhead crane installations, proof load testing, and precision engineering.</p>
+      </div>
+    </section>
+
+    <!-- Category Filter Bar -->
+    <nav class="gallery-filter-bar" aria-label="Gallery category filters">
+      <div class="container">
+        <div class="filter-scroll" id="gallery-filters" role="tablist">
+          <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All Photos <span class="filter-count" id="count-all">6</span></button>
+          <button class="filter-btn" data-filter="eot cranes" role="tab" aria-selected="false">EOT Cranes <span class="filter-count" id="count-eot">1</span></button>
+          <button class="filter-btn" data-filter="gantry cranes" role="tab" aria-selected="false">Gantry Cranes <span class="filter-count" id="count-gantry">1</span></button>
+          <button class="filter-btn" data-filter="jib cranes" role="tab" aria-selected="false">Jib Cranes <span class="filter-count" id="count-jib">1</span></button>
+          <button class="filter-btn" data-filter="manufacturing" role="tab" aria-selected="false">Manufacturing <span class="filter-count" id="count-mfg">1</span></button>
+          <button class="filter-btn" data-filter="testing" role="tab" aria-selected="false">Testing <span class="filter-count" id="count-test">1</span></button>
+          <button class="filter-btn" data-filter="electrical" role="tab" aria-selected="false">Electrical <span class="filter-count" id="count-elec">1</span></button>
+        </div>
+      </div>
+    </nav>
+
+    <section class="section pt-0">
+      <div class="container">
+        <div class="gallery-grid" id="gallery-grid">
+
+          <!-- Item 1: Steel Plant Installation -->
+          <div class="gallery-item revealed" data-category="eot cranes" tabindex="0" role="button" aria-label="View Steel Plant Installation image">
+            <span class="gallery-badge">EOT Cranes</span>
+            <div class="gallery-zoom-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+            <img src="assets/images/gallery/30t-double-girder.jpg" alt="Steel Plant Installation" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/30t-double-girder.jpg';"/>
+            <div class="gallery-item-overlay"></div>
+            <div class="gallery-item-caption">
+              <h4>Steel Plant Installation</h4>
+              <p>Heavy-duty 30T Double Girder EOT crane operating inside high-temperature steel rolling bay.</p>
+            </div>
+          </div>
+
+          <!-- Item 2: Heavy Load Testing -->
+          <div class="gallery-item revealed" data-category="testing" tabindex="0" role="button" aria-label="View Heavy Load Testing image">
+            <span class="gallery-badge">Testing</span>
+            <div class="gallery-zoom-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+            <img src="assets/images/gallery/testing.jpg" alt="Heavy Load Testing" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/30t-double-girder.jpg';"/>
+            <div class="gallery-item-overlay"></div>
+            <div class="gallery-item-caption">
+              <h4>Heavy Load Testing</h4>
+              <p>Statutory 125% proof load testing and deflection verification prior to client handover.</p>
+            </div>
+          </div>
+
+          <!-- Item 3: Precision Assembly -->
+          <div class="gallery-item revealed" data-category="manufacturing" tabindex="0" role="button" aria-label="View Precision Assembly image">
+            <span class="gallery-badge">Manufacturing</span>
+            <div class="gallery-zoom-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+            <img src="assets/images/gallery/hoist-assembly.jpg" alt="Precision Assembly" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/30t-double-girder.jpg';"/>
+            <div class="gallery-item-overlay"></div>
+            <div class="gallery-item-caption">
+              <h4>Precision Assembly</h4>
+              <p>End carriage align-boring and structural girder fabrication inside Faridabad works.</p>
+            </div>
+          </div>
+
+          <!-- Item 4: Goliath Crane Erection -->
+          <div class="gallery-item revealed" data-category="gantry cranes" tabindex="0" role="button" aria-label="View Goliath Crane Erection image">
+            <span class="gallery-badge">Gantry Cranes</span>
+            <div class="gallery-zoom-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+            <img src="assets/images/gallery/goliath-erection.jpg" alt="Goliath Crane Erection" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/30t-double-girder.jpg';"/>
+            <div class="gallery-item-overlay"></div>
+            <div class="gallery-item-caption">
+              <h4>Goliath Crane Erection</h4>
+              <p>Outdoor 40-meter span goliath crane assembly for precast concrete yard.</p>
+            </div>
+          </div>
+
+          <!-- Item 5: Jib Cranes Delivery -->
+          <div class="gallery-item revealed" data-category="jib cranes" tabindex="0" role="button" aria-label="View Jib Cranes Delivery image">
+            <span class="gallery-badge">Jib Cranes</span>
+            <div class="gallery-zoom-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+            <img src="assets/images/gallery/jib-delivery.jpg" alt="Jib Cranes Delivery" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/30t-double-girder.jpg';"/>
+            <div class="gallery-item-overlay"></div>
+            <div class="gallery-item-caption">
+              <h4>Jib Cranes Delivery</h4>
+              <p>Pillar mounted 360-degree slew jib cranes dispatched for automotive assembly stations.</p>
+            </div>
+          </div>
+
+          <!-- Item 6: Control Panels & Automation -->
+          <div class="gallery-item revealed" data-category="electrical" tabindex="0" role="button" aria-label="View Control Panels & Automation image">
+            <span class="gallery-badge">Electrical</span>
+            <div class="gallery-zoom-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+            <img src="assets/images/gallery/control-panel.jpg" alt="Control Panels & Automation" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/30t-double-girder.jpg';"/>
+            <div class="gallery-item-overlay"></div>
+            <div class="gallery-item-caption">
+              <h4>Control Panels & Automation</h4>
+              <p>Custom VFD control panels with soft start-stop logic and wireless remote transceivers.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div class="gallery-modal" id="gallery-modal" role="dialog" aria-modal="true" aria-label="Image Preview">
+    <button class="gallery-modal-close" id="modal-close" aria-label="Close preview">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <button class="gallery-modal-nav gallery-modal-prev" id="modal-prev" aria-label="Previous image">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="gallery-modal-nav gallery-modal-next" id="modal-next" aria-label="Next image">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <div class="gallery-modal-dialog">
+      <div class="gallery-modal-img-wrap">
+        <img id="modal-img" src="assets/images/gallery/30t-double-girder.jpg" alt="Preview"/>
+      </div>
+      <div class="gallery-modal-body">
+        <div class="gallery-modal-header">
+          <span class="badge" id="modal-badge" style="background:rgba(232,99,10,0.15); color:var(--color-primary); font-weight:700; text-transform:uppercase; font-size:11px; padding:3px 10px; border-radius:12px;">EOT Cranes</span>
+          <h3 id="modal-title">Steel Plant Installation</h3>
+        </div>
+        <p id="modal-desc">Heavy-duty 30T Double Girder EOT crane operating inside high-temperature steel rolling bay.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-grid">
+    <div><img src="assets/images/logo.png" alt="VS Infra & Cranes" style="height:48px;margin-bottom:var(--space-2);"/><p class="footer-brand-desc">Leading manufacturer of industrial cranes and material handling equipment since 2021.</p><div class="footer-social"><a href="https://www.facebook.com/people/VS-Infra-Cranes/100085546544517/?name=xhp_nt__fb__action__open_user" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a><a href="https://wa.me/919990191859" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div></div>
+    <div><h6 class="footer-heading">Quick Links</h6><a href="about.html" class="footer-link">About</a><a href="products.html" class="footer-link">Products</a>
+    <a href="catalog.html" class="footer-link">3D Company Catalog</a><a href="services.html" class="footer-link">Services</a><a href="contact.html" class="footer-link">Contact</a></div>
+    <div><h6 class="footer-heading">Products</h6><a href="products/single-girder-eot-crane.html" class="footer-link">Single Girder EOT</a><a href="products/double-girder-eot-crane.html" class="footer-link">Double Girder EOT</a><a href="products/gantry-crane.html" class="footer-link">Gantry Crane</a></div>
+    <div><h6 class="footer-heading">Contact</h6><a href="contact.html" class="footer-link">📍 Bhankri Industrial Area, Faridabad, Haryana – 121005</a><a href="tel:+919990191859" class="footer-link">📞 +91 99901 91859</a><a href="mailto:vsinfracranes@gmail.com" class="footer-link">✉️ vsinfracranes@gmail.com</a></div>
+  </div><div class="footer-bottom"><p class="footer-copyright">© 2026 VS Infra & Cranes. All rights reserved. <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p></div></div></footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/motion-engine.js"></script>
+  <script src="js/ai-consultant.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      // 1. Dual Image Resolution (matching Admin Panel logic)
+      function resolveGalleryImage(g) {
+        if (!g) return "assets/images/gallery/30t-double-girder.jpg";
+        const publicGalleryMap = {
+          "gal_1": "assets/images/gallery/30t-double-girder.jpg",
+          "gal_2": "assets/images/gallery/testing.jpg",
+          "gal_3": "assets/images/gallery/hoist-assembly.jpg",
+          "gal_4": "assets/images/gallery/goliath-erection.jpg",
+          "gal_5": "assets/images/gallery/jib-delivery.jpg",
+          "gal_6": "assets/images/gallery/control-panel.jpg",
+          "assets/images/gallery/gallery-1.jpg": "assets/images/gallery/30t-double-girder.jpg",
+          "assets/images/gallery/gallery-2.jpg": "assets/images/gallery/testing.jpg",
+          "assets/images/gallery/gallery-3.jpg": "assets/images/gallery/hoist-assembly.jpg",
+          "assets/images/gallery/gallery-4.jpg": "assets/images/gallery/goliath-erection.jpg",
+          "assets/images/gallery/gallery-5.jpg": "assets/images/gallery/jib-delivery.jpg",
+          "assets/images/gallery/gallery-6.jpg": "assets/images/gallery/control-panel.jpg"
+        };
+        return (g && publicGalleryMap[g.id]) || (g && publicGalleryMap[g.image]) || (g && g.image) || "assets/images/gallery/30t-double-girder.jpg";
+      }
+
+      function escapeHtml(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      let currentGalleryItems = [
+        {
+          id: "gal_1",
+          title: "Steel Plant Installation",
+          category: "EOT Cranes",
+          image: "assets/images/gallery/30t-double-girder.jpg",
+          description: "Heavy-duty 30T Double Girder EOT crane operating inside high-temperature steel rolling bay."
+        },
+        {
+          id: "gal_2",
+          title: "Heavy Load Testing",
+          category: "Testing",
+          image: "assets/images/gallery/testing.jpg",
+          description: "Statutory 125% proof load testing and deflection verification prior to client handover."
+        },
+        {
+          id: "gal_3",
+          title: "Precision Assembly",
+          category: "Manufacturing",
+          image: "assets/images/gallery/hoist-assembly.jpg",
+          description: "End carriage align-boring and structural girder fabrication inside Faridabad works."
+        },
+        {
+          id: "gal_4",
+          title: "Goliath Crane Erection",
+          category: "Gantry Cranes",
+          image: "assets/images/gallery/goliath-erection.jpg",
+          description: "Outdoor 40-meter span goliath crane assembly for precast concrete yard."
+        },
+        {
+          id: "gal_5",
+          title: "Jib Cranes Delivery",
+          category: "Jib Cranes",
+          image: "assets/images/gallery/jib-delivery.jpg",
+          description: "Pillar mounted 360-degree slew jib cranes dispatched for automotive assembly stations."
+        },
+        {
+          id: "gal_6",
+          title: "Control Panels & Automation",
+          category: "Electrical",
+          image: "assets/images/gallery/control-panel.jpg",
+          description: "Custom VFD control panels with soft start-stop logic and wireless remote transceivers."
+        }
+      ];
+
+      let activeModalIndex = -1;
+      let activeFilter = 'all';
+
+      // 2. Lightbox Modal Logic
+      const modal = document.getElementById('gallery-modal');
+      const modalImg = document.getElementById('modal-img');
+      const modalTitle = document.getElementById('modal-title');
+      const modalBadge = document.getElementById('modal-badge');
+      const modalDesc = document.getElementById('modal-desc');
+      const modalClose = document.getElementById('modal-close');
+      const modalPrev = document.getElementById('modal-prev');
+      const modalNext = document.getElementById('modal-next');
+
+      function getVisibleItems() {
+        if (activeFilter === 'all') return currentGalleryItems;
+        return currentGalleryItems.filter(item => (item.category || '').toLowerCase() === activeFilter.toLowerCase());
+      }
+
+      function openModal(idx) {
+        const visibleItems = getVisibleItems();
+        if (idx < 0 || idx >= visibleItems.length) return;
+        activeModalIndex = idx;
+        const item = visibleItems[idx];
+        const imgSrc = resolveGalleryImage(item);
+        modalImg.src = imgSrc;
+        modalImg.alt = item.title || 'Crane Gallery Preview';
+        modalTitle.textContent = item.title || '';
+        modalBadge.textContent = item.category || 'Industrial Crane';
+        modalDesc.textContent = item.description || '';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        activeModalIndex = -1;
+      }
+
+      function nextModal() {
+        const visibleItems = getVisibleItems();
+        if (!visibleItems.length) return;
+        const nextIdx = (activeModalIndex + 1) % visibleItems.length;
+        openModal(nextIdx);
+      }
+
+      function prevModal() {
+        const visibleItems = getVisibleItems();
+        if (!visibleItems.length) return;
+        const prevIdx = (activeModalIndex - 1 + visibleItems.length) % visibleItems.length;
+        openModal(prevIdx);
+      }
+
+      if (modalClose) modalClose.addEventListener('click', closeModal);
+      if (modalNext) modalNext.addEventListener('click', (e) => { e.stopPropagation(); nextModal(); });
+      if (modalPrev) modalPrev.addEventListener('click', (e) => { e.stopPropagation(); prevModal(); });
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
+        });
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (!modal || !modal.classList.contains('active')) return;
+        if (e.key === 'Escape') closeModal();
+        else if (e.key === 'ArrowRight') nextModal();
+        else if (e.key === 'ArrowLeft') prevModal();
+      });
+
+      // 3. Render Cards
+      function renderGalleryCards(items) {
+        const grid = document.getElementById('gallery-grid');
+        if (!grid) return;
+
+        grid.innerHTML = items.map((item, idx) => {
+          const imgSrc = resolveGalleryImage(item);
+          const cat = item.category || 'EOT Cranes';
+          const title = item.title || 'Industrial Crane';
+          const desc = item.description || '';
+
+          return `
+            <div class="gallery-item revealed" data-category="${escapeHtml(cat.toLowerCase())}" data-index="${idx}" tabindex="0" role="button" aria-label="View ${escapeHtml(title)} image">
+              <span class="gallery-badge">${escapeHtml(cat)}</span>
+              <div class="gallery-zoom-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+              <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/30t-double-girder.jpg';"/>
+              <div class="gallery-item-overlay"></div>
+              <div class="gallery-item-caption">
+                <h4>${escapeHtml(title)}</h4>
+                <p>${escapeHtml(desc)}</p>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Attach click & enter key handlers for lightbox
+        grid.querySelectorAll('.gallery-item').forEach(card => {
+          card.addEventListener('click', () => {
+            const cardCat = card.getAttribute('data-category');
+            const titleEl = card.querySelector('h4');
+            const titleText = titleEl ? titleEl.textContent.trim() : '';
+            const visible = getVisibleItems();
+            const index = visible.findIndex(it => (it.category || '').toLowerCase() === cardCat && it.title === titleText);
+            openModal(index >= 0 ? index : 0);
+          });
+          card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              card.click();
+            }
+          });
+        });
+
+        applyFilter(activeFilter);
+        updateCategoryCounts();
+        if (window.ScrollTrigger) ScrollTrigger.refresh();
+      }
+
+      // 4. Filtering Logic
+      function applyFilter(filter) {
+        activeFilter = (filter || 'all').toLowerCase();
+        const cards = document.querySelectorAll('#gallery-grid .gallery-item');
+        cards.forEach(card => {
+          const cardCat = (card.getAttribute('data-category') || '').toLowerCase();
+          if (activeFilter === 'all' || cardCat === activeFilter) {
+            card.style.display = 'flex';
+            card.classList.add('revealed');
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+
+      function updateCategoryCounts() {
+        const counts = { all: currentGalleryItems.length };
+        currentGalleryItems.forEach(it => {
+          const c = (it.category || '').toLowerCase();
+          counts[c] = (counts[c] || 0) + 1;
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+          const f = (btn.getAttribute('data-filter') || 'all').toLowerCase();
+          const countEl = btn.querySelector('.filter-count');
+          if (countEl) {
+            countEl.textContent = counts[f] !== undefined ? counts[f] : 0;
+          }
+        });
+      }
+
+      // Bind filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          const filter = btn.getAttribute('data-filter') || 'all';
+          applyFilter(filter);
+        });
+      });
+
+      // 5. Hydrate from Live CMS API (Non-blocking & Resilient)
+      async function hydrateGallery() {
+        try {
+          const apiBase = typeof getVsApiBase === 'function' ? getVsApiBase() : '';
+          const res = await fetch(`${apiBase}/api/content/gallery`);
+          if (!res.ok) return;
+          const json = await res.json();
+          const items = json.data;
+          if (Array.isArray(items) && items.length > 0) {
+            currentGalleryItems = items;
+            renderGalleryCards(currentGalleryItems);
+          }
+        } catch (err) {
+          renderGalleryCards(currentGalleryItems);
+        }
+      }
+
+      // Initial card binding & CMS hydration
+      renderGalleryCards(currentGalleryItems);
+      hydrateGallery();
+    })();
+  </script>
+
+  <!-- Floating CTA -->
+  <div class="floating-cta">
+    <a href="https://wa.me/919990191859" target="_blank" class="floating-btn floating-whatsapp" aria-label="WhatsApp">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+    <a href="tel:+919990191859" class="floating-btn floating-phone" aria-label="Call us">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    </a>
+    <button class="floating-btn floating-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+    </button>
+  </div>
+
+</body>
+</html>

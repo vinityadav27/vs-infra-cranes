@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crane Engineering Blog & Technical Insights — VS Infra & Cranes</title>
+  <meta name="description" content="Technical guides, crane engineering insights, safety checklists, and material handling news from VS Infra & Cranes. Learn about EOT cranes, VFD drives, wire rope care, and tandem lifting."/>
+  <link rel="canonical" href="https://vsinfracranes.com/blog.html"/>
+  <link rel="icon" type="image/png" href="assets/images/logo.png"/>
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Crane Engineering Blog & Technical Insights — VS Infra & Cranes"/>
+  <meta property="og:description" content="Technical guides, crane engineering insights, safety checklists, and material handling news from VS Infra & Cranes."/>
+  <meta property="og:url" content="https://vsinfracranes.com/blog.html"/>
+  <meta property="og:site_name" content="VS Infra & Cranes"/>
+  <meta property="og:image" content="https://vsinfracranes.com/assets/images/logo.png"/>
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Crane Engineering Blog & Technical Insights — VS Infra & Cranes"/>
+  <meta name="twitter:description" content="Technical guides, crane engineering insights, safety checklists, and material handling news from VS Infra & Cranes."/>
+  <meta name="twitter:image" content="https://vsinfracranes.com/assets/images/logo.png"/>
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Blog",
+        "@id": "https://vsinfracranes.com/blog.html",
+        "url": "https://vsinfracranes.com/blog.html",
+        "name": "VS Infra & Cranes Engineering Blog",
+        "description": "Technical crane engineering articles, safety checklists, and lifting equipment guides.",
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://vsinfracranes.com/#website",
+          "url": "https://vsinfracranes.com/",
+          "name": "VS Infra & Cranes"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://vsinfracranes.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": "https://vsinfracranes.com/blog.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/design-system.css"/>
+  <style>
+    .page-hero { min-height: 40vh; display: flex; align-items: center; position: relative; overflow: hidden; padding-top: calc(var(--header-height) + var(--space-8)); }
+    .page-hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #1A1A2E, #0f0f1a); z-index: 0; }
+    .page-hero-pattern { position: absolute; inset: 0; opacity: 0.05; background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(232,99,10,0.15) 35px, rgba(232,99,10,0.15) 36px); }
+    .page-hero-content { position: relative; z-index: 2; }
+    .breadcrumb { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: rgba(255,255,255,0.5); margin-bottom: var(--space-6); }
+    .breadcrumb a { color: rgba(255,255,255,0.5); }
+    .breadcrumb a:hover { color: var(--color-primary); }
+    .page-hero h1 { color: white; font-size: clamp(2.5rem, 5vw, 3.75rem); margin-bottom: var(--space-4); }
+    .page-hero p { color: rgba(255,255,255,0.6); font-size: var(--text-xl); max-width: 650px; }
+
+    .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-8); }
+    @media (max-width: 992px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .blog-grid { grid-template-columns: 1fr; } }
+
+    .blog-card { background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: var(--radius-xl); overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s; }
+    .blog-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-xl); border-color: var(--color-primary); }
+    .blog-img { aspect-ratio: 16/9; background: linear-gradient(135deg, #1a1a2e, #0f0f1a); display: flex; align-items: center; justify-content: center; position: relative; }
+    .blog-img svg { width: 48px; height: 48px; color: rgba(255,255,255,0.1); }
+    .blog-category { position: absolute; top: 16px; left: 16px; background: var(--color-primary); color: white; padding: 4px 12px; border-radius: var(--radius-full); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    .blog-content { padding: var(--space-6); display: flex; flex-direction: column; flex: 1; }
+    .blog-meta { display: flex; align-items: center; gap: var(--space-4); font-size: 12px; color: var(--color-text-tertiary); margin-bottom: var(--space-3); }
+    .blog-title { font-size: var(--text-xl); font-family: 'Space Grotesk', sans-serif; font-weight: 700; margin-bottom: var(--space-3); color: var(--color-text); line-height: 1.3; }
+    .blog-excerpt { font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-6); line-height: 1.6; flex: 1; }
+    .blog-read-more { color: var(--color-primary); font-weight: 600; font-size: var(--text-sm); display: flex; align-items: center; gap: 4px; text-decoration: none; transition: gap 0.2s; }
+    .blog-card:hover .blog-read-more { gap: 8px; }
+  </style>
+</head>
+<body>
+  <header class="header"><div class="header-inner">
+    <a href="index.html"><img src="assets/images/logo.png" alt="VS Infra & Cranes" class="logo"/></a>
+    <nav class="nav-desktop"><a href="index.html" class="nav-link">Home</a><a href="about.html" class="nav-link">About</a><a href="products.html" class="nav-link">Products</a>
+        <a href="catalog.html" class="nav-link">Catalog</a><a href="services.html" class="nav-link">Services</a><a href="projects.html" class="nav-link">Projects</a><a href="gallery.html" class="nav-link">Gallery</a><a href="blog.html" class="nav-link active">Blog</a><a href="contact.html" class="nav-link">Contact</a></nav>
+    <div class="nav-actions">
+<a href="admin.html" class="admin-link" aria-label="Admin Panel" title="Admin Panel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></a>
+<button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme"></button><a href="request-quote.html" class="btn btn-primary btn-sm">Request Quote</a></div>
+    <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div></header>
+
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-bg"><div class="page-hero-pattern"></div></div>
+      <div class="container page-hero-content">
+        <div class="breadcrumb"><a href="index.html">Home</a><span>›</span><span style="color:rgba(255,255,255,.8);">Blog</span></div>
+        <h1 class="section-title">News & Insights</h1>
+        <p class="section-subtitle">Technical articles, safety guidelines, and company updates from VS Infra & Cranes.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="blog-grid">
+          
+          <!-- Blog Post 1 -->
+          <article class="blog-card reveal">
+            <div class="blog-img">
+              <div class="blog-category">Safety</div>
+              <img src="assets/images/crane/08-project-install.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Essential Safety Checklist for EOT Cranes"/>
+            </div>
+            <div class="blog-content">
+              <div class="blog-meta"><span>Oct 15, 2024</span><span>•</span><span>5 min read</span></div>
+              <h3 class="blog-title">Essential Safety Checklist for EOT Cranes</h3>
+              <p class="blog-excerpt">Regular maintenance and pre-shift inspections are critical for preventing accidents. Discover our comprehensive safety checklist designed for crane operators and maintenance staff.</p>
+              <a href="blog/safety-checklist.html" class="blog-read-more">Read Article <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Blog Post 2 -->
+          <article class="blog-card reveal">
+            <div class="blog-img">
+              <div class="blog-category">Technology</div>
+              <img src="assets/images/crane/06-product-panel.jpg" style="width:100%;height:100%;object-fit:cover;" alt="The Impact of VFDs on Crane Lifespan"/>
+            </div>
+            <div class="blog-content">
+              <div class="blog-meta"><span>Sep 28, 2024</span><span>•</span><span>4 min read</span></div>
+              <h3 class="blog-title">The Impact of VFDs on Crane Lifespan</h3>
+              <p class="blog-excerpt">Variable Frequency Drives (VFDs) provide smooth acceleration and deceleration, drastically reducing mechanical wear on gearboxes and structures. Learn how upgrading can save you money.</p>
+              <a href="blog/vfd-impact.html" class="blog-read-more">Read Article <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </article>
+
+
+          <!-- Blog Post 4 -->
+          <article class="blog-card reveal">
+            <div class="blog-img">
+              <div class="blog-category">Guide</div>
+              <img src="assets/images/crane/04-product-angle.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Choosing Between Single vs Double Girder Cranes"/>
+            </div>
+            <div class="blog-content">
+              <div class="blog-meta"><span>Aug 22, 2024</span><span>•</span><span>6 min read</span></div>
+              <h3 class="blog-title">Choosing Between Single vs Double Girder Cranes</h3>
+              <p class="blog-excerpt">Struggling to decide which crane fits your facility? We break down the cost, clearance requirements, and capacity limits of single vs double girder overhead cranes.</p>
+              <a href="blog/single-vs-double.html" class="blog-read-more">Read Article <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Blog Post 5 -->
+          <article class="blog-card reveal">
+            <div class="blog-img">
+              <div class="blog-category">Case Study</div>
+              <img src="assets/images/gallery/goliath-erection.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Tandem Lifting for Precast Concrete Yards"/>
+            </div>
+            <div class="blog-content">
+              <div class="blog-meta"><span>Jul 14, 2024</span><span>•</span><span>5 min read</span></div>
+              <h3 class="blog-title">Tandem Lifting for Precast Concrete Yards</h3>
+              <p class="blog-excerpt">A look into how we engineered two synchronized 50T Goliath Cranes to safely handle delicate, oversized precast segments for a major metro infrastructure project.</p>
+              <a href="blog/tandem-lifting.html" class="blog-read-more">Read Article <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Blog Post 6 -->
+          <article class="blog-card reveal">
+            <div class="blog-img">
+              <div class="blog-category">Maintenance</div>
+              <img src="assets/images/crane/05-product-hoist.jpg" style="width:100%;height:100%;object-fit:cover;" alt="When to Replace Wire Rope on Your Hoist"/>
+            </div>
+            <div class="blog-content">
+              <div class="blog-meta"><span>Jun 05, 2024</span><span>•</span><span>4 min read</span></div>
+              <h3 class="blog-title">When to Replace Wire Rope on Your Hoist</h3>
+              <p class="blog-excerpt">Wire rope failure can be catastrophic. Learn the visible signs of wear, broken wires, and diameter reduction that indicate it's time for an immediate replacement per IS standards.</p>
+              <a href="blog/wire-rope-replacement.html" class="blog-read-more">Read Article <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container"><div class="footer-grid">
+    <div><img src="assets/images/logo.png" alt="VS Infra & Cranes" style="height:48px;margin-bottom:var(--space-2);"/><p class="footer-brand-desc">Leading manufacturer of industrial cranes and material handling equipment since 2021.</p><div class="footer-social"><a href="https://www.facebook.com/people/VS-Infra-Cranes/100085546544517/?name=xhp_nt__fb__action__open_user" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a><a href="https://wa.me/919990191859" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div></div>
+    <div><h6 class="footer-heading">Quick Links</h6><a href="about.html" class="footer-link">About</a><a href="products.html" class="footer-link">Products</a>
+    <a href="catalog.html" class="footer-link">3D Company Catalog</a><a href="services.html" class="footer-link">Services</a><a href="contact.html" class="footer-link">Contact</a></div>
+    <div><h6 class="footer-heading">Products</h6><a href="products/single-girder-eot-crane.html" class="footer-link">Single Girder EOT</a><a href="products/double-girder-eot-crane.html" class="footer-link">Double Girder EOT</a><a href="products/gantry-crane.html" class="footer-link">Gantry Crane</a></div>
+    <div><h6 class="footer-heading">Contact</h6><a href="contact.html" class="footer-link">📍 Bhankri Industrial Area, Faridabad, Haryana – 121005</a><a href="tel:+919990191859" class="footer-link">📞 +91 99901 91859</a><a href="mailto:vsinfracranes@gmail.com" class="footer-link">✉️ vsinfracranes@gmail.com</a></div>
+  </div><div class="footer-bottom"><p class="footer-copyright">© 2026 VS Infra & Cranes. All rights reserved. <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p></div></div></footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/motion-engine.js"></script>
+  <script src="js/ai-consultant.js"></script>
+
+  <!-- Floating CTA -->
+  <div class="floating-cta">
+    <a href="https://wa.me/919990191859" target="_blank" class="floating-btn floating-whatsapp" aria-label="WhatsApp">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+    <a href="tel:+919990191859" class="floating-btn floating-phone" aria-label="Call us">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    </a>
+    <button class="floating-btn floating-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+    </button>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 — Page Not Found | VS Infra & Cranes</title>
+  <meta name="robots" content="noindex, follow"/>
+  <link rel="icon" type="image/png" href="assets/images/logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/design-system.css"/>
+  <style>
+    .not-found-section { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; padding: var(--space-12); background: linear-gradient(135deg, #1A1A2E, #0f0f1a); color: white; }
+    .not-found-pattern { position: absolute; inset: 0; opacity: 0.05; background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(232,99,10,0.15) 35px, rgba(232,99,10,0.15) 36px); z-index: 0; }
+    .not-found-content { position: relative; z-index: 2; max-width: 650px; margin: 0 auto; }
+    
+    .error-code { font-size: clamp(6rem, 15vw, 10rem); font-family: 'Space Grotesk', sans-serif; font-weight: 800; line-height: 1; color: var(--color-primary); margin-bottom: var(--space-4); text-shadow: 0 10px 30px rgba(232,99,10,0.3); }
+    .error-title { font-size: var(--text-3xl); font-family: 'Space Grotesk', sans-serif; margin-bottom: var(--space-4); }
+    .error-desc { font-size: var(--text-lg); color: rgba(255,255,255,0.7); margin-bottom: var(--space-8); }
+    .error-links { display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: center; }
+  </style>
+</head>
+<body>
+  <div class="not-found-section">
+    <div class="not-found-pattern"></div>
+    <div class="not-found-content">
+      <div class="error-code">404</div>
+      <h1 class="error-title">Page Not Found</h1>
+      <p class="error-desc">The requested resource could not be found or has been moved. Explore our industrial crane product line or contact our engineering support team.</p>
+      <div class="error-links">
+        <a href="index.html" class="btn btn-primary btn-lg">Return to Home</a>
+        <a href="products.html" class="btn btn-outline btn-lg" style="color:white; border-color:rgba(255,255,255,0.3);">View Products</a>
+        <a href="contact.html" class="btn btn-outline btn-lg" style="color:white; border-color:rgba(255,255,255,0.3);">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

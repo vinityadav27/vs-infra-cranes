@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /api/admin/
+Disallow: /api/analytics/
+Disallow: /data/
+
+Sitemap: https://vsinfracranes.com/sitemap.xml

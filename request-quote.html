@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Request a Crane Quote — Custom Engineering & Pricing | VS Infra & Cranes</title>
+  <meta name="description" content="Request an engineered quotation for overhead EOT cranes, gantry systems, hoists, and AMC services from VS Infra & Cranes. Fast quotes with capacity-specific recommendations."/>
+  <link rel="canonical" href="https://vsinfracranes.com/request-quote.html"/>
+  <link rel="icon" type="image/png" href="assets/images/logo.png"/>
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Request a Crane Quote — Custom Engineering & Pricing | VS Infra & Cranes"/>
+  <meta property="og:description" content="Request an engineered quotation for overhead EOT cranes, gantry systems, hoists, and AMC services from VS Infra & Cranes."/>
+  <meta property="og:url" content="https://vsinfracranes.com/request-quote.html"/>
+  <meta property="og:site_name" content="VS Infra & Cranes"/>
+  <meta property="og:image" content="https://vsinfracranes.com/assets/images/logo.png"/>
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Request a Crane Quote — Custom Engineering & Pricing | VS Infra & Cranes"/>
+  <meta name="twitter:description" content="Request an engineered quotation for overhead EOT cranes, gantry systems, hoists, and AMC services from VS Infra & Cranes."/>
+  <meta name="twitter:image" content="https://vsinfracranes.com/assets/images/logo.png"/>
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ContactPage",
+        "@id": "https://vsinfracranes.com/request-quote.html",
+        "url": "https://vsinfracranes.com/request-quote.html",
+        "name": "Request a Crane Quote",
+        "description": "Interactive quotation request form for EOT cranes, gantry cranes, and custom material handling solutions.",
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://vsinfracranes.com/#website",
+          "url": "https://vsinfracranes.com/",
+          "name": "VS Infra & Cranes"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://vsinfracranes.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Request Quote",
+            "item": "https://vsinfracranes.com/request-quote.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/design-system.css"/>
+  <style>
+    .page-hero{min-height:40vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:calc(var(--header-height) + var(--space-8));}
+    .page-hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#1A1A2E,#0f0f1a);z-index:0;}
+    .page-hero-pattern{position:absolute;inset:0;opacity:.05;background-image:repeating-linear-gradient(45deg,transparent,transparent 35px,rgba(232,99,10,.15) 35px,rgba(232,99,10,.15) 36px);}
+    .page-hero-content{position:relative;z-index:2;}
+    .breadcrumb{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:rgba(255,255,255,.5);margin-bottom:var(--space-6);}
+    .breadcrumb a{color:rgba(255,255,255,.5);}
+    .breadcrumb a:hover{color:var(--color-primary);}
+    .page-hero h1{color:white;font-size:clamp(2.5rem,5vw,3.75rem);margin-bottom:var(--space-4);}
+    .page-hero p{color:rgba(255,255,255,.6);font-size:var(--text-xl);max-width:650px;}
+
+    /* Stepper */
+    .stepper{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:var(--space-12);position:relative;}
+    .stepper-step{display:flex;flex-direction:column;align-items:center;gap:var(--space-2);position:relative;z-index:1;min-width:100px;}
+    .stepper-dot{width:44px;height:44px;border-radius:50%;background:var(--color-bg-elevated);border:3px solid var(--color-border);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:var(--text-sm);color:var(--color-text-tertiary);transition:all 0.4s ease;}
+    .stepper-step.active .stepper-dot{border-color:var(--color-primary);background:var(--color-primary);color:white;box-shadow:0 0 0 6px rgba(232,99,10,0.15);}
+    .stepper-step.done .stepper-dot{border-color:var(--color-success);background:var(--color-success);color:white;}
+    .stepper-label{font-size:var(--text-xs);font-weight:600;color:var(--color-text-tertiary);transition:color 0.3s;}
+    .stepper-step.active .stepper-label{color:var(--color-primary);}
+    .stepper-step.done .stepper-label{color:var(--color-success);}
+    .stepper-line{flex:1;height:3px;background:var(--color-border);transition:background 0.4s;}
+    .stepper-line.done{background:var(--color-success);}
+
+    /* Form steps */
+    .form-step{display:none;animation:stepIn 0.4s ease;}
+    .form-step.active{display:block;}
+    @keyframes stepIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+
+    /* Quote form card */
+    .quote-form-card{background:var(--color-bg-elevated);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-12);max-width:800px;margin:0 auto;}
+
+    /* Radio cards */
+    .option-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-4);}
+    .option-card{padding:var(--space-6);background:var(--color-surface);border:2px solid var(--color-border);border-radius:var(--radius-lg);cursor:pointer;transition:all 0.3s;position:relative;text-align:center;}
+    .option-card:hover{border-color:var(--color-primary);background:var(--color-primary-light);}
+    .option-card.selected{border-color:var(--color-primary);background:var(--color-primary-light);box-shadow:0 0 0 4px rgba(232,99,10,0.1);}
+    .option-card.selected::after{content:'✓';position:absolute;top:8px;right:10px;width:22px;height:22px;background:var(--color-primary);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;}
+    .option-card input{position:absolute;opacity:0;pointer-events:none;}
+    .option-card-icon{font-size:2rem;margin-bottom:var(--space-2);}
+    .option-card h5{margin-bottom:var(--space-1);font-size:var(--text-sm);}
+    .option-card p{font-size:var(--text-xs);color:var(--color-text-tertiary);}
+
+    /* Range slider */
+    .range-wrapper{padding:var(--space-2) 0;}
+    .range-display{font-family:'Space Grotesk',sans-serif;font-size:var(--text-4xl);font-weight:800;color:var(--color-primary);margin-bottom:var(--space-4);text-align:center;}
+    .range-display span{font-size:var(--text-lg);font-weight:500;color:var(--color-text-secondary);}
+    input[type="range"]{-webkit-appearance:none;width:100%;height:8px;border-radius:4px;background:var(--color-border);outline:none;transition:all 0.3s;}
+    input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--color-primary);cursor:pointer;box-shadow:0 2px 8px rgba(232,99,10,0.4);transition:transform 0.2s;}
+    input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
+    .range-labels{display:flex;justify-content:space-between;font-size:var(--text-xs);color:var(--color-text-tertiary);margin-top:var(--space-2);}
+
+    /* Recommendation panel */
+    .rec-panel{margin-top:var(--space-8);padding:var(--space-8);background:linear-gradient(135deg,rgba(232,99,10,0.05),rgba(232,99,10,0.02));border:1px solid rgba(232,99,10,0.2);border-radius:var(--radius-lg);display:none;animation:stepIn 0.5s ease;}
+    .rec-panel.show{display:block;}
+    .rec-product{padding:var(--space-4);background:var(--color-bg-elevated);border:1px solid var(--color-border);border-radius:var(--radius-md);margin-bottom:var(--space-3);display:flex;align-items:center;gap:var(--space-4);transition:all 0.3s;}
+    .rec-product:hover{border-color:var(--color-primary);}
+    .rec-rank{width:32px;height:32px;border-radius:50%;background:var(--color-primary);color:white;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:var(--text-sm);flex-shrink:0;}
+    .rec-product-info{flex:1;}
+    .rec-product-name{font-weight:700;font-size:var(--text-sm);}
+    .rec-product-specs{font-size:var(--text-xs);color:var(--color-text-tertiary);}
+    .rec-match{font-size:var(--text-xs);font-weight:700;color:var(--color-primary);white-space:nowrap;}
+
+    /* Nav buttons */
+    .form-nav{display:flex;gap:var(--space-4);justify-content:space-between;margin-top:var(--space-8);padding-top:var(--space-6);border-top:1px solid var(--color-border);}
+
+    .success-view{display:none;text-align:center;padding:var(--space-16) var(--space-8);}
+    .success-view.show{display:block;}
+    .success-check{width:80px;height:80px;border-radius:50%;background:rgba(16,185,129,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-6);}
+
+    @media(max-width:768px){
+      .quote-form-card{padding:var(--space-6);}
+      .option-grid{grid-template-columns:1fr 1fr;}
+      .stepper-label{display:none;}
+      .stepper-step{min-width:auto; flex:1;}
+      .stepper-dot{width:36px; height:36px; font-size:12px;}
+    }
+    @media(max-width:480px){
+      .option-grid{grid-template-columns:1fr;}
+      .stepper-dot{width:30px; height:30px; font-size:11px;}
+    }
+  </style>
+</head>
+<body>
+  <header class="header"><div class="header-inner">
+    <a href="index.html"><img src="assets/images/logo.png" alt="VS Infra & Cranes" class="logo"/></a>
+    <nav class="nav-desktop"><a href="index.html" class="nav-link">Home</a><a href="about.html" class="nav-link">About</a><a href="products.html" class="nav-link">Products</a>
+        <a href="catalog.html" class="nav-link">Catalog</a><a href="services.html" class="nav-link">Services</a><a href="projects.html" class="nav-link">Projects</a><a href="gallery.html" class="nav-link">Gallery</a><a href="blog.html" class="nav-link">Blog</a><a href="contact.html" class="nav-link">Contact</a></nav>
+    <div class="nav-actions">
+<a href="admin.html" class="admin-link" aria-label="Admin Panel" title="Admin Panel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></a>
+<button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme"></button></div>
+    <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div></header>
+  <div class="mobile-nav-overlay"></div>
+  <nav class="mobile-nav"><a href="index.html" class="mobile-nav-link">Home</a><a href="about.html" class="mobile-nav-link">About</a><a href="products.html" class="mobile-nav-link">Products</a>
+    <a href="catalog.html" class="mobile-nav-link">3D Catalog</a><a href="services.html" class="mobile-nav-link">Services</a><a href="projects.html" class="mobile-nav-link">Projects</a><a href="gallery.html" class="mobile-nav-link">Gallery</a><a href="blog.html" class="mobile-nav-link">Blog</a><a href="contact.html" class="mobile-nav-link">Contact</a></nav>
+
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-bg"><div class="page-hero-pattern"></div></div>
+      <div class="container page-hero-content">
+        <div class="breadcrumb"><a href="index.html">Home</a><span>›</span><span style="color:rgba(255,255,255,.8);">Request a Quote</span></div>
+        <h1>Get Your Custom Quote</h1>
+        <p>Our smart form recommends the right crane and provides an instant preliminary estimate. Final pricing confirmed by our engineers within 24 hours. &bull; <a href="catalog.html" style="color:var(--color-primary);font-weight:700;text-decoration:underline;">Browse 3D Catalog Specifications &rarr;</a></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <!-- Stepper -->
+        <div class="stepper" id="stepper">
+          <div class="stepper-step active" data-step="0"><div class="stepper-dot">1</div><div class="stepper-label">Type</div></div>
+          <div class="stepper-line"></div>
+          <div class="stepper-step" data-step="1"><div class="stepper-dot">2</div><div class="stepper-label">Specs</div></div>
+          <div class="stepper-line"></div>
+          <div class="stepper-step" data-step="2"><div class="stepper-dot">3</div><div class="stepper-label">Details</div></div>
+          <div class="stepper-line"></div>
+          <div class="stepper-step" data-step="3"><div class="stepper-dot">4</div><div class="stepper-label">Contact</div></div>
+        </div>
+
+        <div class="quote-form-card" id="quote-form-card">
+          <form id="quote-form">
+            <!-- STEP 0: Type -->
+            <div class="form-step active" data-step="0">
+              <h3 style="margin-bottom:var(--space-2);">What type of equipment do you need?</h3>
+              <p style="color:var(--color-text-tertiary);margin-bottom:var(--space-6);">Select the category that best matches your requirement.</p>
+              <div class="option-grid">
+                <label class="option-card">
+                  <input type="radio" name="equipment_type" value="EOT Crane" required/>
+                  <div class="option-card-icon">🏗️</div>
+                  <h5>EOT Crane</h5>
+                  <p>Overhead crane for indoor use</p>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="equipment_type" value="Gantry Crane"/>
+                  <div class="option-card-icon">🏭</div>
+                  <h5>Gantry Crane</h5>
+                  <p>Freestanding, outdoor use</p>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="equipment_type" value="Jib Crane"/>
+                  <div class="option-card-icon">🔄</div>
+                  <h5>Jib Crane</h5>
+                  <p>360° rotation workstation</p>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="equipment_type" value="Hoist"/>
+                  <div class="option-card-icon">⬆️</div>
+                  <h5>Hoist</h5>
+                  <p>Wire rope or chain hoist</p>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="equipment_type" value="Not Sure"/>
+                  <div class="option-card-icon">❓</div>
+                  <h5>Not Sure</h5>
+                  <p>Let us recommend</p>
+                </label>
+              </div>
+            </div>
+
+            <!-- STEP 1: Specifications -->
+            <div class="form-step" data-step="1">
+              <h3 style="margin-bottom:var(--space-2);">Specifications</h3>
+              <p style="color:var(--color-text-tertiary);margin-bottom:var(--space-8);">Help us size the right crane for your facility.</p>
+
+              <div style="margin-bottom:var(--space-8);">
+                <label class="form-label">Required Lifting Capacity</label>
+                <div class="range-display"><span id="capacity-value">10</span> <span>Ton</span></div>
+                <div class="range-wrapper"><input type="range" id="capacity-range" min="0.5" max="50" step="0.5" value="10"/></div>
+                <div class="range-labels"><span>0.5T</span><span>10T</span><span>25T</span><span>50T</span></div>
+              </div>
+
+              <div style="margin-bottom:var(--space-8);">
+                <label class="form-label">Span (Distance between rails in meters)</label>
+                <div class="range-display"><span id="span-value">15</span> <span>Meters</span></div>
+                <div class="range-wrapper"><input type="range" id="span-range" min="3" max="35" step="0.5" value="15"/></div>
+                <div class="range-labels"><span>3m</span><span>10m</span><span>20m</span><span>35m</span></div>
+              </div>
+
+              <div style="margin-bottom:var(--space-6);">
+                <label class="form-label">Lift Height (meters)</label>
+                <div class="range-display"><span id="lift-value">8</span> <span>Meters</span></div>
+                <div class="range-wrapper"><input type="range" id="lift-range" min="3" max="25" step="0.5" value="8"/></div>
+                <div class="range-labels"><span>3m</span><span>10m</span><span>18m</span><span>25m</span></div>
+              </div>
+
+              <!-- Live Recommendation -->
+              <div class="rec-panel" id="rec-panel">
+                <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-4);">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4"/></svg>
+                  <strong style="color:var(--color-primary);font-size:var(--text-sm);">AI Recommendation</strong>
+                </div>
+                <div id="rec-results"></div>
+              </div>
+            </div>
+
+            <!-- STEP 2: Project Details -->
+            <div class="form-step" data-step="2">
+              <h3 style="margin-bottom:var(--space-2);">Project Details</h3>
+              <p style="color:var(--color-text-tertiary);margin-bottom:var(--space-6);">Tell us more about your project.</p>
+
+              <div class="form-group">
+                <label class="form-label">Industry</label>
+                <select class="form-select" id="industry" name="industry">
+                  <option value="">Select your industry</option>
+                  <option>Steel & Metal Processing</option>
+                  <option>Automobile Manufacturing</option>
+                  <option>Warehouse & Logistics</option>
+                  <option>Construction</option>
+                  <option>Power & Energy</option>
+                  <option>Engineering & Fabrication</option>
+                  <option>Textile & Garments</option>
+                  <option>Food & Beverage</option>
+                  <option>Pharmaceutical</option>
+                  <option>Railway</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Duty Class</label>
+                <div class="option-grid" style="grid-template-columns:repeat(3,1fr);">
+                  <label class="option-card" style="padding:var(--space-4);">
+                    <input type="radio" name="duty_class" value="Light"/>
+                    <h5>Light Duty</h5>
+                    <p>Occasional use</p>
+                  </label>
+                  <label class="option-card" style="padding:var(--space-4);">
+                    <input type="radio" name="duty_class" value="Medium"/>
+                    <h5>Medium Duty</h5>
+                    <p>Regular shifts</p>
+                  </label>
+                  <label class="option-card" style="padding:var(--space-4);">
+                    <input type="radio" name="duty_class" value="Heavy"/>
+                    <h5>Heavy Duty</h5>
+                    <p>Continuous operation</p>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Additional Services Needed</label>
+                <div style="display:flex;flex-wrap:wrap;gap:var(--space-3);">
+                  <label style="display:flex;align-items:center;gap:var(--space-2);cursor:pointer;padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-full);font-size:var(--text-sm);"><input type="checkbox" name="services" value="Installation"/> Installation</label>
+                  <label style="display:flex;align-items:center;gap:var(--space-2);cursor:pointer;padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-full);font-size:var(--text-sm);"><input type="checkbox" name="services" value="AMC"/> Annual Maintenance</label>
+                  <label style="display:flex;align-items:center;gap:var(--space-2);cursor:pointer;padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-full);font-size:var(--text-sm);"><input type="checkbox" name="services" value="Modernization"/> Modernization</label>
+                  <label style="display:flex;align-items:center;gap:var(--space-2);cursor:pointer;padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-full);font-size:var(--text-sm);"><input type="checkbox" name="services" value="Spare Parts"/> Spare Parts</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Special Requirements / Notes</label>
+                <textarea class="form-textarea" name="notes" placeholder="Any specific requirements, timeline, or questions..."></textarea>
+              </div>
+            </div>
+
+            <!-- STEP 3: Contact Info -->
+            <div class="form-step" data-step="3">
+              <h3 style="margin-bottom:var(--space-2);">Your Contact Information</h3>
+              <p style="color:var(--color-text-tertiary);margin-bottom:var(--space-6);">We'll get back to you within 24 hours with a detailed quote.</p>
+              <div style="position:absolute;left:-9999px;"><input type="text" name="website" tabindex="-1" autocomplete="off"/></div>
+              <div class="grid grid-2" style="gap:var(--space-6);">
+                <div class="form-group"><label class="form-label">Full Name *</label><input class="form-input" type="text" name="name" placeholder="Your full name" required/></div>
+                <div class="form-group"><label class="form-label">Company Name *</label><input class="form-input" type="text" name="company" placeholder="Your company name" required/></div>
+              </div>
+              <div class="grid grid-2" style="gap:var(--space-6);">
+                <div class="form-group"><label class="form-label">Email *</label><input class="form-input" type="email" name="email" placeholder="your@email.com" required/></div>
+                <div class="form-group"><label class="form-label">Phone *</label><input class="form-input" type="tel" name="phone" placeholder="+91 XXXXX XXXXX" required/></div>
+              </div>
+              <div class="form-group"><label class="form-label">Location / City</label><input class="form-input" type="text" name="city" placeholder="e.g., Faridabad, Haryana"/></div>
+              <div class="form-group">
+                <label class="form-label">Preferred Contact Method</label>
+                <div class="option-grid" style="grid-template-columns:repeat(3,1fr);">
+                  <label class="option-card" style="padding:var(--space-3);"><input type="radio" name="contact_method" value="Phone" checked/><h5>📞 Phone</h5></label>
+                  <label class="option-card" style="padding:var(--space-3);"><input type="radio" name="contact_method" value="WhatsApp"/><h5>💬 WhatsApp</h5></label>
+                  <label class="option-card" style="padding:var(--space-3);"><input type="radio" name="contact_method" value="Email"/><h5>✉️ Email</h5></label>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- Navigation buttons -->
+          <div class="form-nav" id="form-nav">
+            <button type="button" id="prev-btn" class="btn btn-outline" style="display:none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+              Previous
+            </button>
+            <div style="flex:1;"></div>
+            <button type="button" id="next-btn" class="btn btn-primary btn-lg">
+              Next Step
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- Success View -->
+          <div class="success-view" id="success-view">
+            <div class="success-check"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+            <h2 style="margin-bottom:var(--space-4);">Quote Request Submitted! 🎉</h2>
+            <p style="color:var(--color-text-secondary);max-width:500px;margin:0 auto var(--space-8);">Thank you! Our engineering team will review your requirements and get back to you with a detailed quote within 24 hours.</p>
+            <div id="success-summary" style="text-align:left;max-width:400px;margin:0 auto var(--space-8);padding:var(--space-6);background:var(--color-surface);border-radius:var(--radius-md);"></div>
+            <div class="flex flex-center gap-4" style="flex-wrap:wrap;">
+              <a href="index.html" class="btn btn-primary">Back to Home</a>
+              <a href="products.html" class="btn btn-outline">View Products</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container"><div class="footer-grid">
+    <div><img src="assets/images/logo.png" alt="VS Infra & Cranes" style="height:48px;margin-bottom:var(--space-2);"/><p class="footer-brand-desc">Leading manufacturer of industrial cranes and material handling equipment since 2021.</p><div class="footer-social"><a href="https://www.facebook.com/people/VS-Infra-Cranes/100085546544517/?name=xhp_nt__fb__action__open_user" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a><a href="https://wa.me/919990191859" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div></div>
+    <div><h6 class="footer-heading">Quick Links</h6><a href="about.html" class="footer-link">About</a><a href="products.html" class="footer-link">Products</a>
+    <a href="catalog.html" class="footer-link">3D Company Catalog</a><a href="services.html" class="footer-link">Services</a><a href="contact.html" class="footer-link">Contact</a></div>
+    <div><h6 class="footer-heading">Products</h6><a href="products/single-girder-eot-crane.html" class="footer-link">Single Girder EOT</a><a href="products/double-girder-eot-crane.html" class="footer-link">Double Girder EOT</a><a href="products/gantry-crane.html" class="footer-link">Gantry Crane</a></div>
+    <div><h6 class="footer-heading">Contact</h6><a href="#" class="footer-link">📍 Bhankri Industrial Area, Faridabad, Haryana – 121005</a><a href="tel:+919990191859" class="footer-link">📞 +91 99901 91859</a><a href="mailto:vsinfracranes@gmail.com" class="footer-link">✉️ vsinfracranes@gmail.com</a></div>
+  </div><div class="footer-bottom"><p class="footer-copyright">© 2026 VS Infra & Cranes. All rights reserved.</p>
+        <p class="footer-credit" style="font-size: var(--text-xs); color: rgba(255,255,255,0.3); margin-top: var(--space-2);">Made by <a href="https://wa.me/917042271859" target="_blank" style="color: inherit; text-decoration: underline;">Vinit Yadav</a></p></div></div></footer>
+
+  <div class="floating-cta">
+    <a href="https://wa.me/919990191859" target="_blank" class="floating-btn floating-whatsapp" aria-label="WhatsApp"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+    <a href="tel:+919990191859" class="floating-btn floating-phone" aria-label="Call"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+    <button class="floating-btn floating-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Top"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/motion-engine.js"></script>
+  <script src="js/ai-consultant.js"></script>
+  <script>
+    // ============================================
+    // QUOTE FORM — Multi-step + Recommendation
+    // ============================================
+    (function() {
+      let currentStep = 0;
+      const totalSteps = 4;
+
+      const PRODUCTS = [
+        { id:'sg-eot', name:'Single Girder EOT', capMin:1, capMax:20, spanMax:25, type:'EOT Crane', price:'Budget-friendly' },
+        { id:'dg-eot', name:'Double Girder EOT', capMin:5, capMax:50, spanMax:35, type:'EOT Crane', price:'Mid-range' },
+        { id:'gantry', name:'Gantry Crane', capMin:5, capMax:50, spanMax:30, type:'Gantry Crane', price:'Mid-to-high' },
+        { id:'goliath', name:'Goliath Crane', capMin:10, capMax:50, spanMax:40, type:'Gantry Crane', price:'Premium' },
+        { id:'semi-gantry', name:'Semi-Gantry Crane', capMin:5, capMax:30, spanMax:20, type:'Gantry Crane', price:'Mid-range' },
+        { id:'jib', name:'Jib Crane', capMin:0.5, capMax:10, spanMax:6, type:'Jib Crane', price:'Budget-friendly' },
+        { id:'wrh', name:'Wire Rope Hoist', capMin:1, capMax:20, spanMax:0, type:'Hoist', price:'Component' },
+        { id:'chain', name:'Chain Hoist', capMin:0.5, capMax:5, spanMax:0, type:'Hoist', price:'Budget' },
+      ];
+
+      function recommend(cap, span, type) {
+        const results = [];
+        PRODUCTS.forEach(p => {
+          let score = 0;
+          if (cap >= p.capMin && cap <= p.capMax) score += 40;
+          else if (cap <= p.capMax * 1.2) score += 15;
+          if (p.spanMax > 0 && span <= p.spanMax) score += 25;
+          if (type && p.type === type) score += 30;
+          if (score > 20) results.push({ ...p, score });
+        });
+        results.sort((a, b) => b.score - a.score);
+        return results.slice(0, 3);
+      }
+
+      function updateRecommendation() {
+        const cap = parseFloat(document.getElementById('capacity-range').value);
+        const span = parseFloat(document.getElementById('span-range').value);
+        const typeRadio = document.querySelector('input[name="equipment_type"]:checked');
+        const type = typeRadio ? typeRadio.value : '';
+
+        const recs = recommend(cap, span, type);
+        const panel = document.getElementById('rec-panel');
+        const results = document.getElementById('rec-results');
+
+        if (recs.length > 0) {
+          panel.classList.add('show');
+          results.innerHTML = recs.map((r, i) => `
+            <div class="rec-product">
+              <div class="rec-rank">${i + 1}</div>
+              <div class="rec-product-info">
+                <div class="rec-product-name">${r.name}</div>
+                <div class="rec-product-specs">${r.capMin}–${r.capMax}T · ${r.price}</div>
+              </div>
+              <div class="rec-match">${Math.min(Math.round(r.score), 100)}% match</div>
+            </div>
+          `).join('');
+        } else {
+          panel.classList.remove('show');
+        }
+      }
+
+      // Range sliders
+      ['capacity', 'span', 'lift'].forEach(id => {
+        const range = document.getElementById(id + '-range');
+        const display = document.getElementById(id + '-value');
+        if (range && display) {
+          range.addEventListener('input', () => {
+            display.textContent = range.value;
+            if (id === 'capacity' || id === 'span') updateRecommendation();
+          });
+        }
+      });
+
+      // Option cards
+      document.querySelectorAll('.option-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const radio = card.querySelector('input[type="radio"]');
+          if (radio) {
+            const name = radio.name;
+            document.querySelectorAll(`input[name="${name}"]`).forEach(r => r.closest('.option-card').classList.remove('selected'));
+            card.classList.add('selected');
+            radio.checked = true;
+            if (name === 'equipment_type') updateRecommendation();
+          }
+        });
+      });
+
+      // Navigation
+      const nextBtn = document.getElementById('next-btn');
+      const prevBtn = document.getElementById('prev-btn');
+
+      function showStep(step) {
+        document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+        document.querySelector(`.form-step[data-step="${step}"]`).classList.add('active');
+
+        // Update stepper
+        document.querySelectorAll('.stepper-step').forEach((s, i) => {
+          s.classList.remove('active', 'done');
+          if (i < step) s.classList.add('done');
+          if (i === step) s.classList.add('active');
+        });
+        document.querySelectorAll('.stepper-line').forEach((l, i) => {
+          l.classList.toggle('done', i < step);
+        });
+
+        prevBtn.style.display = step > 0 ? 'flex' : 'none';
+        nextBtn.textContent = step === totalSteps - 1 ? 'Submit Quote Request' : 'Next Step';
+        if (step < totalSteps - 1) nextBtn.innerHTML += ' <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+
+        if (step === 1) updateRecommendation();
+      }
+
+      nextBtn.addEventListener('click', () => {
+        if (currentStep === 0) {
+          const selected = document.querySelector('input[name="equipment_type"]:checked');
+          if (!selected) { alert('Please select an equipment type.'); return; }
+        }
+        if (currentStep < totalSteps - 1) {
+          currentStep++;
+          showStep(currentStep);
+        } else {
+          // Submit
+          const form = document.getElementById('quote-form');
+          const formData = new FormData(form);
+          const name = formData.get('name');
+          const email = formData.get('email');
+          if (!name || !email) { alert('Please fill in your name and email.'); return; }
+
+          // Show success
+          document.getElementById('quote-form-card').querySelector('form').style.display = 'none';
+          document.getElementById('form-nav').style.display = 'none';
+          const sv = document.getElementById('success-view');
+          sv.classList.add('show');
+
+          // Save to Backend Database / MongoDB API
+          const attr = window.VSAnalytics ? (window.VSAnalytics.getLeadPayload ? window.VSAnalytics.getLeadPayload() : window.VSAnalytics.getAttribution()) : {};
+          const payload = Object.assign({
+            name: name,
+            email: email,
+            phone: formData.get('phone') || '',
+            company: formData.get('company') || '',
+            subject: `Quote Request: ${formData.get('equipment_type') || 'Industrial Crane'} (${document.getElementById('capacity-range').value}T)`,
+            equipment_type: formData.get('equipment_type') || 'N/A',
+            capacity: document.getElementById('capacity-range').value,
+            span: document.getElementById('span-range').value,
+            lift: document.getElementById('lift-range').value,
+            duty_class: formData.get('duty_class') || '',
+            message: formData.get('message') || '',
+            source_page: 'Request a Quote Page',
+            created_at: new Date().toISOString()
+          }, attr);
+
+          const apiBase = window.getVsApiBase ? window.getVsApiBase() : '';
+          fetch(`${apiBase}/api/inquiries`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          }).catch(err => console.warn('Backend sync notice:', err));
+
+          const summaryEl = document.getElementById('success-summary');
+          summaryEl.innerHTML = '';
+          const items = [
+            ['Equipment', formData.get('equipment_type') || 'N/A'],
+            ['Capacity', document.getElementById('capacity-range').value + 'T'],
+            ['Span', document.getElementById('span-range').value + 'm'],
+            ['Contact', (name || 'N/A') + (email ? ' (' + email + ')' : '')]
+          ];
+          items.forEach(([label, val]) => {
+            const row = document.createElement('div');
+            row.style.fontSize = 'var(--text-sm)';
+            const strong = document.createElement('strong');
+            strong.textContent = label + ': ';
+            row.appendChild(strong);
+            row.appendChild(document.createTextNode(val));
+            summaryEl.appendChild(row);
+          });
+
+          // Mark all stepper done
+          document.querySelectorAll('.stepper-step').forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
+          document.querySelectorAll('.stepper-line').forEach(l => l.classList.add('done'));
+        }
+      });
+
+      prevBtn.addEventListener('click', () => {
+        if (currentStep > 0) { currentStep--; showStep(currentStep); }
+      });
+
+    })();
+  </script>
+</body>
+</html>

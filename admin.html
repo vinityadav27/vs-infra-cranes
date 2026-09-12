@@ -1,0 +1,3203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal — VS Infra & Cranes</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="stylesheet" href="css/design-system.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --admin-bg: #0d0f17;
+      --admin-surface: #141824;
+      --admin-surface-hover: #1c2234;
+      --admin-border: rgba(255, 255, 255, 0.08);
+      --admin-primary: #E8630A;
+      --admin-primary-hover: #ff751a;
+      --admin-success: #10b981;
+      --admin-warning: #f59e0b;
+      --admin-danger: #ef4444;
+      --admin-info: #3b82f6;
+      --admin-text: #f1f5f9;
+      --admin-text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      background-color: var(--admin-bg);
+      color: var(--admin-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .admin-wrapper { max-width: 1440px; margin: 0 auto; padding: 20px; width: 100%; flex-grow: 1; }
+
+    /* Login View */
+    #login-view {
+      max-width: 440px;
+      margin: 10vh auto;
+      background: var(--admin-surface);
+      padding: 40px;
+      border-radius: 16px;
+      border: 1px solid var(--admin-border);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
+    }
+    .brand-header { text-align: center; margin-bottom: 28px; }
+    .brand-logo { width: 56px; height: 56px; object-fit: contain; margin-bottom: 12px; }
+    .brand-title { font-family: "Space Grotesk", sans-serif; font-size: 1.6rem; font-weight: 700; color: #fff; margin: 0; }
+    .brand-sub { color: var(--admin-text-muted); font-size: 0.85rem; margin-top: 4px; }
+
+    /* Dashboard Shell */
+    #dashboard-view { display: none; }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--admin-border);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .top-bar-left { display: flex; align-items: center; gap: 14px; }
+    .top-logo { height: 42px; width: auto; }
+    .top-title { font-family: "Space Grotesk", sans-serif; font-size: 1.35rem; font-weight: 700; margin: 0; }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--admin-success);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--admin-success); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* Nav Tabs */
+    .tabs-nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--admin-border);
+      scrollbar-width: thin;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--admin-text-muted);
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 8px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.04); }
+    .tab-btn.active {
+      color: #fff;
+      background: var(--admin-surface);
+      border-bottom: 2px solid var(--admin-primary);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .tab-badge {
+      background: var(--admin-primary);
+      color: white;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .stat-card {
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      padding: 16px 14px;
+      position: relative;
+      transition: transform 0.15s;
+    }
+    .stat-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.15); }
+    .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--admin-text-muted); margin-bottom: 6px; }
+    .stat-val { font-size: 1.85rem; font-family: "Space Grotesk", sans-serif; font-weight: 800; color: #fff; line-height: 1; }
+    .stat-card.stat-new { border-color: rgba(232, 99, 10, 0.4); background: linear-gradient(135deg, rgba(232,99,10,0.12), var(--admin-surface)); }
+    .stat-card.stat-new .stat-val { color: var(--admin-primary); }
+    .stat-card.stat-urgent { border-color: rgba(239, 68, 68, 0.4); background: linear-gradient(135deg, rgba(239,68,68,0.1), var(--admin-surface)); }
+    .stat-card.stat-urgent .stat-val { color: var(--admin-danger); }
+
+    /* Filters Bar */
+    .filters-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      background: var(--admin-surface);
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--admin-border);
+    }
+    .filter-inputs { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; flex-grow: 1; }
+    .search-box {
+      flex-grow: 1;
+      min-width: 240px;
+      padding: 8px 12px;
+      background: var(--admin-bg);
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+    .search-box:focus { border-color: var(--admin-primary); }
+    .filter-select {
+      padding: 8px 12px;
+      background: var(--admin-bg);
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      outline: none;
+    }
+    .filter-select:focus { border-color: var(--admin-primary); }
+    .actions-group { display: flex; gap: 8px; align-items: center; }
+
+    /* Buttons */
+    .btn-admin {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .btn-admin-primary { background: var(--admin-primary); color: #fff; }
+    .btn-admin-primary:hover { background: var(--admin-primary-hover); }
+    .btn-admin-outline { background: transparent; color: var(--admin-text); border-color: var(--admin-border); }
+    .btn-admin-outline:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
+    .btn-admin-success { background: rgba(16,185,129,0.15); color: var(--admin-success); border-color: rgba(16,185,129,0.3); }
+    .btn-admin-success:hover { background: var(--admin-success); color: #fff; }
+    .btn-admin-danger { background: rgba(239,68,68,0.12); color: var(--admin-danger); border-color: rgba(239,68,68,0.25); }
+    .btn-admin-danger:hover { background: var(--admin-danger); color: #fff; }
+    .btn-admin-wa { background: rgba(37,211,102,0.15); color: #25D366; border-color: rgba(37,211,102,0.3); }
+    .btn-admin-wa:hover { background: #25D366; color: #fff; }
+
+    /* Table */
+    .table-container {
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      overflow-x: auto;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .inquiries-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; min-width: 900px; }
+    .inquiries-table th, .inquiries-table td { padding: 12px 14px; border-bottom: 1px solid var(--admin-border); vertical-align: middle; }
+    .inquiries-table th { background: rgba(0,0,0,0.3); font-weight: 600; font-size: 11px; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .inquiries-table tr:hover { background: var(--admin-surface-hover); }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .badge-priority-normal { background: rgba(148,163,184,0.15); color: #94a3b8; }
+    .badge-priority-important { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+    .badge-priority-urgent { background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid rgba(239,68,68,0.4); font-weight: 700; }
+
+    .status-select-sm {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid var(--admin-border);
+      background: var(--admin-bg);
+      color: #fff;
+      cursor: pointer;
+    }
+    .status-select-sm.status-new { color: #f59e0b; border-color: #f59e0b; }
+    .status-select-sm.status-contacted { color: #3b82f6; border-color: #3b82f6; }
+    .status-select-sm.status-quoted { color: #06b6d4; border-color: #06b6d4; }
+    .status-select-sm.status-in_progress { color: #a855f7; border-color: #a855f7; }
+    .status-select-sm.status-completed { color: #10b981; border-color: #10b981; }
+    .status-select-sm.status-closed { color: #64748b; border-color: #64748b; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+    .modal-dialog {
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--admin-border);
+    }
+    .modal-title { font-family: "Space Grotesk", sans-serif; font-size: 1.25rem; font-weight: 700; margin: 0; color: #fff; }
+    .modal-close { background: none; border: none; font-size: 20px; color: var(--admin-text-muted); cursor: pointer; padding: 4px; }
+    .modal-close:hover { color: #fff; }
+    .modal-body { padding: 22px; display: flex; flex-direction: column; gap: 16px; }
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 22px;
+      border-top: 1px solid var(--admin-border);
+      background: rgba(0,0,0,0.2);
+    }
+
+    .detail-card {
+      background: var(--admin-bg);
+      border: 1px solid var(--admin-border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .detail-card-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--admin-primary);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .detail-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
+    .detail-label { color: var(--admin-text-muted); }
+    .detail-value { font-weight: 600; color: #fff; text-align: right; }
+
+    /* CMS Content Panels */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .cms-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .cms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .cms-card {
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.15s;
+    }
+    .cms-card:hover { border-color: rgba(255,255,255,0.2); }
+    .cms-card-img { width: 100%; height: 160px; object-fit: cover; background: #000; }
+    .cms-card-body { padding: 14px; flex-grow: 1; display: flex; flex-direction: column; }
+    .cms-card-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin: 0 0 6px 0; }
+    .cms-card-desc { font-size: 12px; color: var(--admin-text-muted); line-height: 1.5; margin-bottom: 12px; flex-grow: 1; }
+    /* Analytics & Monitoring Styles */
+    .period-selector {
+      display: inline-flex;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+    }
+    .analytics-period-btn {
+      background: transparent;
+      border: none;
+      color: var(--admin-text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .analytics-period-btn:hover {
+      color: #fff;
+    }
+    .analytics-period-btn.active {
+      background: var(--admin-primary);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(232,99,10,0.3);
+    }
+    .funnel-stage-card {
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .funnel-stage-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .funnel-bar-bg {
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .funnel-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #E8630A, #f59e0b);
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+    .badge-sev-critical { background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid rgba(239,68,68,0.4); font-weight: 700; }
+    .badge-sev-high { background: rgba(245,158,11,0.2); color: #f59e0b; border: 1px solid rgba(245,158,11,0.4); font-weight: 700; }
+    .badge-sev-medium { background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); font-weight: 600; }
+    .badge-sev-info { background: rgba(148,163,184,0.15); color: #94a3b8; border: 1px solid rgba(148,163,184,0.3); }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: none;
+      z-index: 2000;
+      font-size: 13px;
+      font-weight: 600;
+      animation: slideIn 0.2s ease;
+    }
+    @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* Form Fields */
+    .form-group-admin { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .form-label-admin { font-size: 12px; font-weight: 600; color: var(--admin-text-muted); }
+    .form-control-admin {
+      background: var(--admin-bg);
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+      font-family: inherit;
+    }
+    .form-control-admin:focus { border-color: var(--admin-primary); }
+    textarea.form-control-admin { resize: vertical; min-height: 80px; }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .admin-wrapper { padding: 12px; }
+      .top-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .filters-bar { flex-direction: column; align-items: stretch; }
+      .filter-inputs { flex-direction: column; align-items: stretch; }
+      .search-box, .filter-select { width: 100%; min-width: 0; }
+      .actions-group { width: 100%; justify-content: space-between; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      #login-view { padding: 28px 18px; width: 100%; max-width: 380px; margin: 40px auto; }
+      .form-control-admin { font-size: 16px; } /* Prevents iOS Safari auto-zoom */
+      .table-container { -webkit-overflow-scrolling: touch; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .tabs-nav { gap: 4px; padding-bottom: 6px; }
+      .tab-btn { padding: 8px 12px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-wrapper">
+
+    <!-- 1. LOGIN VIEW -->
+    <div id="login-view">
+      <div class="brand-header">
+        <img src="assets/images/logo.png" alt="VS Infra & Cranes Logo" class="brand-logo" onerror="this.style.display='none'">
+        <h2 class="brand-title">VS Infra & Cranes</h2>
+        <p class="brand-sub">Production Database & CMS Control</p>
+      </div>
+      <div id="login-conn-indicator" style="display:none; font-size:11px; color:var(--admin-text-muted); text-align:center; margin-bottom:16px; font-family:monospace; background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:6px; border:1px solid var(--admin-border);"></div>
+      <form id="admin-login-form">
+        <div class="form-group-admin">
+          <label class="form-label-admin">Administrator Email</label>
+          <input type="email" id="admin-email" class="form-control-admin" required value="" placeholder="admin@example.com" autocomplete="username">
+        </div>
+        <div class="form-group-admin" style="margin-bottom: 20px;">
+          <label class="form-label-admin">Password</label>
+          <input type="password" id="admin-password" class="form-control-admin" required placeholder="Enter password">
+        </div>
+        <button type="submit" class="btn-admin btn-admin-primary" style="width: 100%; justify-content: center; padding: 11px; font-size: 14px;">Secure Login</button>
+        <p id="login-error" style="display:none; color: var(--admin-danger); font-size: 12px; text-align: center; margin-top: 12px; font-weight: 600;"></p>
+      </form>
+    </div>
+
+    <!-- 2. DASHBOARD VIEW -->
+    <div id="dashboard-view">
+
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <img src="assets/images/logo.png" alt="Logo" class="top-logo" onerror="this.style.display='none'">
+          <div>
+            <h1 class="top-title">VS Infra & Cranes Admin</h1>
+            <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+              <span class="status-pill" id="top-status-pill"><span class="status-dot" id="top-status-dot"></span> <span id="db-status-text">Checking status...</span></span>
+              <span style="font-size:12px; color:var(--admin-text-muted);">Faridabad, Haryana</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <a href="index.html" target="_blank" class="btn-admin btn-admin-outline">Live Website ↗</a>
+          <a href="catalog.html" target="_blank" class="btn-admin btn-admin-outline">3D Catalog ↗</a>
+          <button id="refresh-all-btn" class="btn-admin btn-admin-outline">Refresh ⟳</button>
+          <button id="logout-btn" class="btn-admin btn-admin-danger">Logout</button>
+        </div>
+      </div>
+
+      <!-- Tabs Navigation -->
+      <div class="tabs-nav">
+        <button class="tab-btn active" data-tab="tab-inquiries">
+          📋 Inquiries CRM <span class="tab-badge" id="badge-inquiries-count">0</span>
+        </button>
+        <button class="tab-btn" data-tab="tab-analytics">📊 Analytics</button>
+        <button class="tab-btn" data-tab="tab-products">🏗️ Products</button>
+        <button class="tab-btn" data-tab="tab-services">⚙️ Services</button>
+        <button class="tab-btn" data-tab="tab-gallery">🖼️ Gallery</button>
+        <button class="tab-btn" data-tab="tab-projects">📍 Projects &amp; Map</button>
+        <button class="tab-btn" data-tab="tab-contact">📞 Contact Info</button>
+        <button class="tab-btn" data-tab="tab-blog">📝 Blog</button>
+        <button class="tab-btn" data-tab="tab-catalog">📖 Catalog</button>
+        <button class="tab-btn" data-tab="tab-certificates">📜 Certificates &amp; Registrations</button>
+        <button class="tab-btn" data-tab="tab-health">🛡️ System Health</button>
+      </div>
+
+      <!-- TAB 1: INQUIRIES CRM -->
+      <div id="tab-inquiries" class="tab-content active">
+        <div class="stats-grid">
+          <div class="stat-card stat-new">
+            <div class="stat-label">New / Unread</div>
+            <div class="stat-val" id="stat-new">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Contacted</div>
+            <div class="stat-val" id="stat-contacted">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Quoted</div>
+            <div class="stat-val" id="stat-quoted">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">In Progress</div>
+            <div class="stat-val" id="stat-inprogress">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Completed</div>
+            <div class="stat-val" id="stat-completed">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Closed</div>
+            <div class="stat-val" id="stat-closed">0</div>
+          </div>
+          <div class="stat-card stat-urgent">
+            <div class="stat-label">Urgent</div>
+            <div class="stat-val" id="stat-urgent">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Records</div>
+            <div class="stat-val" id="stat-total">0</div>
+          </div>
+        </div>
+
+        <div class="filters-bar">
+          <div class="filter-inputs">
+            <input type="text" id="inq-search" class="search-box" placeholder="Search client name, email, phone, equipment, message, city...">
+            
+            <select id="inq-type" class="filter-select">
+              <option value="all">All Request Types</option>
+              <option value="quote">Quote Requests</option>
+              <option value="service">Service &amp; AMC</option>
+              <option value="contact">Contact Messages</option>
+            </select>
+
+            <select id="inq-status" class="filter-select">
+              <option value="all">All Statuses</option>
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Quoted">Quoted</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+              <option value="Closed">Closed</option>
+            </select>
+
+            <select id="inq-priority" class="filter-select">
+              <option value="all">All Priorities</option>
+              <option value="Normal">Normal</option>
+              <option value="Important">Important</option>
+              <option value="Urgent">Urgent</option>
+            </select>
+          </div>
+
+          <div class="actions-group">
+            <button id="export-csv-btn" class="btn-admin btn-admin-success">📥 Export CSV</button>
+            <button id="refresh-inq-btn" class="btn-admin btn-admin-outline">Refresh ⟳</button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="inquiries-table">
+            <thead>
+              <tr>
+                <th>Date &amp; Time</th>
+                <th>Client / Contact</th>
+                <th>Equipment / Subject</th>
+                <th>Priority</th>
+                <th>Specifications</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inquiries-tbody">
+              <tr><td colspan="7" style="text-align:center; padding: 40px; color: var(--admin-text-muted);">Loading inquiries from persistent database...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: ANALYTICS & MONITORING -->
+      <div id="tab-analytics" class="tab-content">
+        <!-- Dashboard Header & Controls -->
+        <div class="cms-header" style="align-items:flex-end; margin-bottom:20px;">
+          <div>
+            <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#fff; font-size:1.3rem;">Production Analytics &amp; Telemetry</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:var(--admin-text-muted);">Real-time operational monitoring, 9-stage conversion funnel, product interest &amp; lead attribution.</p>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div class="period-selector">
+              <button class="analytics-period-btn active" data-period="7d">Last 7 Days</button>
+              <button class="analytics-period-btn" data-period="today">Today</button>
+              <button class="analytics-period-btn" data-period="30d">Last 30 Days</button>
+              <button class="analytics-period-btn" data-period="all">All Time</button>
+            </div>
+            <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--admin-text-muted); cursor:pointer;">
+              <input type="checkbox" id="analytics-auto-refresh" checked style="accent-color:var(--admin-primary);"> Auto-refresh (30s)
+            </label>
+            <button id="refresh-analytics-btn" class="btn-admin btn-admin-outline" style="padding:6px 12px; font-size:12px;">🔄 Refresh</button>
+          </div>
+        </div>
+
+        <!-- SECTION 1: SYSTEM HEALTH & OPERATIONAL MONITORING BAR -->
+        <div style="margin-bottom:24px;">
+          <div style="font-size:11px; font-weight:700; color:var(--admin-text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+            <span>⚡</span> Section 1 — System Health &amp; Infrastructure Telemetry
+          </div>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+            <!-- API Server Status -->
+            <div style="background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:10px; padding:14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:11px; color:var(--admin-text-muted); font-weight:600; text-transform:uppercase;">API Status</span>
+                <span id="health-api-badge" class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">UP</span>
+              </div>
+              <div id="health-api-uptime" style="font-size:1.05rem; font-weight:700; color:#fff;">—</div>
+              <div style="font-size:11px; color:var(--admin-text-muted); margin-top:2px;">Uptime</div>
+            </div>
+
+            <!-- API Latency -->
+            <div style="background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:10px; padding:14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:11px; color:var(--admin-text-muted); font-weight:600; text-transform:uppercase;">API Latency</span>
+                <span style="font-size:11px; color:#60a5fa; font-weight:600;">p95: <span id="health-latency-p95">—</span></span>
+              </div>
+              <div id="health-latency-avg" style="font-size:1.05rem; font-weight:700; color:#60a5fa;">— ms</div>
+              <div style="font-size:11px; color:var(--admin-text-muted); margin-top:2px;">Average response time</div>
+            </div>
+
+            <!-- HTTP Request Volume -->
+            <div style="background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:10px; padding:14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:11px; color:var(--admin-text-muted); font-weight:600; text-transform:uppercase;">HTTP Requests</span>
+                <span id="health-requests-total" style="font-size:11px; color:#fff; font-weight:700;">0 total</span>
+              </div>
+              <div style="display:flex; gap:8px; font-size:11px; font-weight:600; margin-top:6px;">
+                <span style="color:var(--admin-success);">2xx: <span id="health-req-2xx">0</span></span>
+                <span style="color:#60a5fa;">3xx: <span id="health-req-3xx">0</span></span>
+                <span style="color:#f59e0b;">4xx: <span id="health-req-4xx">0</span></span>
+                <span style="color:#ef4444;">5xx: <span id="health-req-5xx">0</span></span>
+              </div>
+              <div style="font-size:11px; color:var(--admin-text-muted); margin-top:4px;">Status code distribution</div>
+            </div>
+
+            <!-- Database Primary -->
+            <div style="background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:10px; padding:14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:11px; color:var(--admin-text-muted); font-weight:600; text-transform:uppercase;">Primary Database</span>
+                <span id="health-db-badge" class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">ONLINE</span>
+              </div>
+              <div id="health-db-name" style="font-size:1.05rem; font-weight:700; color:#fff;">MongoDB Atlas</div>
+              <div style="font-size:11px; color:var(--admin-text-muted); margin-top:2px;">Ping: <span id="health-db-latency">—</span></div>
+            </div>
+
+            <!-- SMTP Service -->
+            <div style="background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:10px; padding:14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:11px; color:var(--admin-text-muted); font-weight:600; text-transform:uppercase;">SMTP Service</span>
+                <span id="health-smtp-badge" class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">HEALTHY</span>
+              </div>
+              <div id="health-smtp-status" style="font-size:1.05rem; font-weight:700; color:#fff;">smtp.gmail.com</div>
+              <div style="font-size:11px; color:var(--admin-text-muted); margin-top:2px;">Inquiry email dispatch</div>
+            </div>
+
+            <!-- Incident Alerts -->
+            <div style="background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:10px; padding:14px; cursor:pointer;" onclick="document.getElementById('sec-alerts').scrollIntoView({behavior:'smooth'});">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:11px; color:var(--admin-text-muted); font-weight:600; text-transform:uppercase;">Active Alerts</span>
+                <span id="health-alerts-badge" class="badge" style="background:rgba(255,255,255,0.08); color:#fff;">0 Active</span>
+              </div>
+              <div id="health-alerts-count" style="font-size:1.05rem; font-weight:700; color:#fff;">0 Incidents</div>
+              <div style="font-size:11px; color:var(--admin-primary); margin-top:2px;">View operational log ↓</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: TRAFFIC & VISITOR TRENDS -->
+        <div style="margin-bottom:24px;">
+          <div style="font-size:11px; font-weight:700; color:var(--admin-text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+            <span>📈</span> Section 2 — Traffic &amp; Visitor Trends
+          </div>
+          <div class="stats-grid" style="margin-bottom:16px;">
+            <div class="stat-card">
+              <div class="stat-label">Total Page Views</div>
+              <div class="stat-val" id="analytics-total-views" style="color:var(--admin-primary);">0</div>
+              <div style="font-size:11px; color:var(--admin-text-muted); margin-top:4px;">In selected period</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Unique Visitors</div>
+              <div class="stat-val" id="analytics-unique-visitors" style="color:#60a5fa;">0</div>
+              <div style="font-size:11px; color:var(--admin-text-muted); margin-top:4px;">Salted SHA-256 IP hashes</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Live Active Visitors (Now)</div>
+              <div class="stat-val" id="analytics-active-visitors" style="color:var(--admin-success);">0</div>
+              <div style="font-size:11px; color:var(--admin-text-muted); margin-top:4px;">Active in last 15 minutes</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Estimated Bounce Rate</div>
+              <div class="stat-val" id="analytics-bounce-rate" style="color:#f59e0b;">0%</div>
+              <div style="font-size:11px; color:var(--admin-text-muted); margin-top:4px;">Single-page visits</div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:16px;">
+            <!-- Top Pages & Timeline -->
+            <div style="background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:12px; padding:20px;">
+              <h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px 0; display:flex; align-items:center; gap:8px;">
+                <span>📄</span> Top Visited Pages
+              </h4>
+              <div id="analytics-top-pages" style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+                <div style="color:var(--admin-text-muted);">Loading page views...</div>
+              </div>
+            </div>
+
+            <!-- Devices, Browsers & Approx Geography -->
+            <div style="background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:12px; padding:20px;">
+              <h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px 0; display:flex; align-items:center; gap:8px;">
+                <span>📱</span> Device &amp; Technology Breakdown
+              </h4>
+              <div style="margin-bottom:14px;">
+                <div style="font-size:11px; font-weight:600; color:var(--admin-text-muted); text-transform:uppercase; margin-bottom:6px;">Device Split</div>
+                <div id="analytics-devices" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+              </div>
+              <div style="margin-bottom:16px;">
+                <div style="font-size:11px; font-weight:600; color:var(--admin-text-muted); text-transform:uppercase; margin-bottom:6px;">Browsers &amp; OS</div>
+                <div id="analytics-browsers" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+              </div>
+              <div>
+                <div style="font-size:11px; font-weight:600; color:var(--admin-text-muted); text-transform:uppercase; margin-bottom:6px;">Approximate Visitor Geography</div>
+                <div id="analytics-geo" style="display:flex; flex-direction:column; gap:6px; font-size:12px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: PRODUCT INTEREST & ENGAGEMENT -->
+        <div style="margin-bottom:24px;">
+          <div style="font-size:11px; font-weight:700; color:var(--admin-text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+            <span>🏗️</span> Section 3 — Product Interest &amp; Viewer Analytics
+          </div>
+          <div class="table-container" style="margin-bottom:0;">
+            <table class="inquiries-table">
+              <thead>
+                <tr>
+                  <th>Industrial Equipment Model</th>
+                  <th>Page Views</th>
+                  <th>360° / 3D Viewer Opens</th>
+                  <th>Brochure Clicks</th>
+                  <th>Quote CTA Clicks</th>
+                  <th>Inquiries Generated</th>
+                  <th>Conversion Rate</th>
+                </tr>
+              </thead>
+              <tbody id="analytics-products-tbody">
+                <tr><td colspan="7" style="text-align:center; padding:20px; color:var(--admin-text-muted);">Loading product interest metrics...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SECTION 4: SERVICE INTEREST & ENGAGEMENT -->
+        <div style="margin-bottom:24px;">
+          <div style="font-size:11px; font-weight:700; color:var(--admin-text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+            <span>⚙️</span> Section 4 — Service Interest Analytics
+          </div>
+          <div class="table-container" style="margin-bottom:0;">
+            <table class="inquiries-table">
+              <thead>
+                <tr>
+                  <th>Engineering &amp; AMC Service</th>
+                  <th>Views &amp; Interest</th>
+                  <th>Inquiries Generated</th>
+                  <th>View-to-Inquiry Conversion</th>
+                </tr>
+              </thead>
+              <tbody id="analytics-services-tbody">
+                <tr><td colspan="4" style="text-align:center; padding:20px; color:var(--admin-text-muted);">Loading service interest metrics...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SECTION 5: LEAD SOURCES & ATTRIBUTION -->
+        <div style="margin-bottom:24px;">
+          <div style="font-size:11px; font-weight:700; color:var(--admin-text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+            <span>🎯</span> Section 5 — Lead Acquisition Sources &amp; Attribution
+          </div>
+          <div class="table-container" style="margin-bottom:0;">
+            <table class="inquiries-table">
+              <thead>
+                <tr>
+                  <th>Traffic Channel</th>
+                  <th>Visitor Traffic</th>
+                  <th>% of Total Visits</th>
+                  <th>Inquiries Generated</th>
+                  <th>Channel Yield</th>
+                </tr>
+              </thead>
+              <tbody id="analytics-leads-tbody">
+                <tr><td colspan="5" style="text-align:center; padding:20px; color:var(--admin-text-muted);">Loading lead source attribution...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SECTION 6: INQUIRY FUNNEL -->
+        <div style="margin-bottom:24px;">
+          <div style="font-size:11px; font-weight:700; color:var(--admin-text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+            <span>🔄</span> Section 6 — 9-Stage Customer Inquiry &amp; Conversion Funnel
+          </div>
+          <div id="analytics-funnel-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- SECTION 7: RECENT ALERTS & OPERATIONAL LOG -->
+        <div id="sec-alerts" style="margin-bottom:24px;">
+          <div class="cms-header" style="margin-bottom:12px;">
+            <div style="font-size:11px; font-weight:700; color:var(--admin-text-muted); text-transform:uppercase; letter-spacing:0.06em; display:flex; align-items:center; gap:6px;">
+              <span>🚨</span> Section 7 — Operational Incident Alerts &amp; Diagnostics
+            </div>
+            <button id="resolve-all-alerts-btn" class="btn-admin btn-admin-outline" style="padding:5px 12px; font-size:11px;">✓ Resolve All Alerts</button>
+          </div>
+          <div class="table-container" style="margin-bottom:0;">
+            <table class="inquiries-table">
+              <thead>
+                <tr>
+                  <th>Severity</th>
+                  <th>Category</th>
+                  <th>Title &amp; Diagnostic Message</th>
+                  <th>Occurrences</th>
+                  <th>Last Occurred</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="analytics-alerts-tbody">
+                <tr><td colspan="7" style="text-align:center; padding:20px; color:var(--admin-text-muted);">No operational alerts recorded. System running smoothly.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Privacy & Security Notice -->
+        <div style="padding:14px 18px; background:rgba(255,255,255,0.02); border:1px solid var(--admin-border); border-radius:10px; font-size:12px; color:var(--admin-text-muted); display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.2rem;">🔒</span>
+          <div>
+            <strong style="color:#fff;">Privacy-First Server-Side Telemetry:</strong>
+            Analytics and operational telemetry are recorded server-side without external trackers, third-party cookies, or invasive scripts. Client IP addresses are salted and hashed with SHA-256. Geolocation is strictly approximate (country/city level; never exact addresses). Secrets and credentials are completely redacted.
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: PRODUCTS CMS -->
+      <div id="tab-products" class="tab-content">
+        <div class="cms-header">
+          <div>
+            <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#fff;">Industrial Products Catalog</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:var(--admin-text-muted);">Manage crane models, specifications, and images on the website.</p>
+          </div>
+          <button id="add-product-btn" class="btn-admin btn-admin-primary">+ Add New Product</button>
+        </div>
+        <div id="products-grid" class="cms-grid"></div>
+      </div>
+
+      <!-- TAB 3: SERVICES CMS -->
+      <div id="tab-services" class="tab-content">
+        <div class="cms-header">
+          <div>
+            <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#fff;">Engineering &amp; AMC Services</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:var(--admin-text-muted);">Manage industrial crane maintenance, modernization, and manufacturing service cards.</p>
+          </div>
+          <button id="add-service-btn" class="btn-admin btn-admin-primary">+ Add New Service</button>
+        </div>
+        <div id="services-grid" class="cms-grid"></div>
+      </div>
+
+      <!-- TAB 4: GALLERY CMS -->
+      <div id="tab-gallery" class="tab-content">
+        <div class="cms-header">
+          <div>
+            <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#fff;">Site &amp; Factory Gallery</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:var(--admin-text-muted);">Manage high-resolution images, installations, and factory photography.</p>
+          </div>
+          <button id="add-gallery-btn" class="btn-admin btn-admin-primary">+ Add Gallery Photo</button>
+        </div>
+        <div id="gallery-grid" class="cms-grid"></div>
+      </div>
+
+      <!-- TAB 5: PROJECTS & MAP CMS -->
+      <div id="tab-projects" class="tab-content">
+        <div class="cms-header">
+          <div>
+            <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#fff;">Completed Installations &amp; Interactive Map Pins</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:var(--admin-text-muted);">Manage showcase projects and their geographical coordinates on the projects map.</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button id="add-project-btn" class="btn-admin btn-admin-primary">+ Add Project Case</button>
+            <button id="add-pin-btn" class="btn-admin btn-admin-outline">+ Add Map Pin</button>
+          </div>
+        </div>
+
+        <h4 style="color:var(--admin-primary); margin: 18px 0 10px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Showcase Projects</h4>
+        <div id="projects-grid" class="cms-grid"></div>
+
+        <h4 style="color:var(--admin-primary); margin: 28px 0 10px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Interactive Map Pins</h4>
+        <div id="pins-grid" class="cms-grid"></div>
+      </div>
+
+      <!-- TAB 6: CONTACT INFORMATION CMS -->
+      <div id="tab-contact" class="tab-content">
+        <div class="cms-header">
+          <div>
+            <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#fff;">Official Company Contact Information</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:var(--admin-text-muted);">Update phone, email, factory location, and business hours across the entire website.</p>
+          </div>
+        </div>
+
+        <div style="background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:12px; padding:24px; max-width:760px;">
+          <form id="contact-info-form">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <div class="form-group-admin">
+                <label class="form-label-admin">Company Name</label>
+                <input type="text" id="ci-name" class="form-control-admin" required>
+              </div>
+              <div class="form-group-admin">
+                <label class="form-label-admin">Founded Year</label>
+                <input type="number" id="ci-year" class="form-control-admin">
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <div class="form-group-admin">
+                <label class="form-label-admin">Primary Phone</label>
+                <input type="text" id="ci-phone" class="form-control-admin" required>
+              </div>
+              <div class="form-group-admin">
+                <label class="form-label-admin">WhatsApp Number (e.g. 919990191859)</label>
+                <input type="text" id="ci-whatsapp" class="form-control-admin" required>
+              </div>
+            </div>
+
+            <div class="form-group-admin">
+              <label class="form-label-admin">Official Email Address</label>
+              <input type="email" id="ci-email" class="form-control-admin" required>
+            </div>
+
+            <div class="form-group-admin">
+              <label class="form-label-admin">Factory &amp; Corporate Address</label>
+              <textarea id="ci-address" class="form-control-admin" rows="2" required></textarea>
+            </div>
+
+            <div class="form-group-admin">
+              <label class="form-label-admin">Business Hours</label>
+              <input type="text" id="ci-hours" class="form-control-admin" required>
+            </div>
+
+            <div class="form-group-admin">
+              <label class="form-label-admin">Corporate Tagline</label>
+              <input type="text" id="ci-tagline" class="form-control-admin">
+            </div>
+
+            <button type="submit" class="btn-admin btn-admin-primary" style="margin-top:10px; padding:10px 20px;">Save Contact Details</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- TAB 7: BLOG CMS -->
+      <div id="tab-blog" class="tab-content">
+        <div class="cms-header">
+          <div>
+            <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#fff;">Technical Articles &amp; Insights</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:var(--admin-text-muted);">Manage industrial crane knowledge base and blog publications.</p>
+          </div>
+          <button id="add-blog-btn" class="btn-admin btn-admin-primary">+ Add New Article</button>
+        </div>
+        <div id="blog-grid" class="cms-grid"></div>
+      </div>
+
+      <!-- TAB 8: CATALOG CMS -->
+      <div id="tab-catalog" class="tab-content">
+        <div class="cms-header">
+          <div>
+            <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#fff;">Official Product Catalog Settings</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:var(--admin-text-muted);">Update digital catalog specifications, standards, and highlighted features.</p>
+          </div>
+        </div>
+
+        <div style="background:var(--admin-surface); border:1px solid var(--admin-border); border-radius:12px; padding:24px; max-width:760px;">
+          <form id="catalog-form">
+            <div class="form-group-admin">
+              <label class="form-label-admin">Catalog Title</label>
+              <input type="text" id="cat-title" class="form-control-admin" required>
+            </div>
+            <div class="form-group-admin">
+              <label class="form-label-admin">Subtitle</label>
+              <input type="text" id="cat-subtitle" class="form-control-admin" required>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <div class="form-group-admin">
+                <label class="form-label-admin">Catalog Version / Edition</label>
+                <input type="text" id="cat-version" class="form-control-admin" required>
+              </div>
+              <div class="form-group-admin">
+                <label class="form-label-admin">Catalog Page Link</label>
+                <input type="text" id="cat-url" class="form-control-admin" required>
+              </div>
+            </div>
+            <div class="form-group-admin">
+              <label class="form-label-admin">Manufacturing Standards (comma-separated)</label>
+              <input type="text" id="cat-standards" class="form-control-admin" placeholder="IS:3177, IS:807, IS:3938, ISO 9001:2015">
+            </div>
+            <div class="form-group-admin">
+              <label class="form-label-admin">Key Highlights (one per line)</label>
+              <textarea id="cat-highlights" class="form-control-admin" rows="4"></textarea>
+            </div>
+            <button type="submit" class="btn-admin btn-admin-primary" style="margin-top:10px; padding:10px 20px;">Save Catalog Settings</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- TAB: CERTIFICATES & REGISTRATIONS -->
+      <div id="tab-certificates" class="tab-content">
+        <div class="cms-header">
+          <div>
+            <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#fff;">Certificates &amp; Registrations</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:var(--admin-text-muted);">Manage company certifications, ISO standards, and statutory registrations.</p>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <button class="btn-admin btn-admin-outline" onclick="loadCertificates()">Refresh ⟳</button>
+            <button class="btn-admin btn-admin-primary" onclick="openAddCertificateModal()">+ Add Certificate Slot</button>
+          </div>
+        </div>
+
+        <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; font-size: 12.5px; color: #fde68a; display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 20px; flex-shrink: 0;">ℹ️</span>
+          <div>
+            <strong>Company Certificate Renewal State:</strong> Existing documents are currently expired and will be renewed. Keep them marked <em>Hidden</em> until current valid renewed documents are uploaded. Once uploaded, verify details and mark <strong>Public Live</strong> to display them on the website.
+          </div>
+        </div>
+
+        <div id="certificates-list" style="display:flex; flex-direction:column; gap:16px;">
+          <!-- Loaded dynamically via loadCertificates() -->
+        </div>
+      </div>
+
+      <!-- TAB 9: SYSTEM HEALTH -->
+      <div id="tab-health" class="tab-content">
+        <div class="cms-header">
+          <div>
+            <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#fff;">Backend Diagnostics &amp; Security</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:var(--admin-text-muted);">Real-time database connectivity, SMTP configuration, and security headers verification.</p>
+          </div>
+          <button id="refresh-health-btn" class="btn-admin btn-admin-outline">Check Health ⟳</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:18px;">
+          <div class="detail-card">
+            <div class="detail-card-title">Database Storage Status</div>
+            <div class="detail-row"><span class="detail-label">Active Engine:</span> <span class="detail-value" id="sh-engine">—</span></div>
+            <div class="detail-row"><span class="detail-label">MongoDB Atlas:</span> <span class="detail-value" id="sh-mongo-state">—</span></div>
+            <div class="detail-row"><span class="detail-label">Total Persistent Records:</span> <span class="detail-value" id="sh-records">0</span></div>
+            <div class="detail-row"><span class="detail-label">Storage Integrity:</span> <span class="detail-value" style="color:var(--admin-success);">Verified (Dual-Tier Mirror)</span></div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-card-title">Security &amp; Notifications</div>
+            <div class="detail-row"><span class="detail-label">Admin Authentication:</span> <span class="detail-value" style="color:var(--admin-success);">PBKDF2-HMAC-SHA256 (100k)</span></div>
+            <div class="detail-row"><span class="detail-label">Brute-Force Protection:</span> <span class="detail-value" style="color:var(--admin-success);">Active (5 attempts/15min)</span></div>
+            <div class="detail-row"><span class="detail-label">Security Headers:</span> <span class="detail-value" style="color:var(--admin-success);">CSP, HSTS, X-Content-Type</span></div>
+            <div class="detail-row"><span class="detail-label">SMTP Email Alert:</span> <span class="detail-value" id="sh-smtp">vsinfracranes@gmail.com</span></div>
+          </div>
+        </div>
+
+        <div id="sh-diagnostic-box" style="display:none; margin-top:16px;"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- INQUIRY DETAILS & ACTIONS MODAL -->
+  <div id="inquiry-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="modal-inq-title">Inquiry Details</h3>
+          <span style="font-size:11px; color:var(--admin-text-muted);" id="modal-inq-meta">ID: —</span>
+        </div>
+        <button class="modal-close" onclick="closeInquiryModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="detail-card">
+          <div class="detail-card-title">Client Information</div>
+          <div class="detail-row"><span class="detail-label">Client Name:</span> <span class="detail-value" id="m-name">—</span></div>
+          <div class="detail-row"><span class="detail-label">Company:</span> <span class="detail-value" id="m-company">—</span></div>
+          <div class="detail-row"><span class="detail-label">Phone Number:</span> <span class="detail-value" id="m-phone">—</span></div>
+          <div class="detail-row"><span class="detail-label">Email Address:</span> <span class="detail-value" id="m-email">—</span></div>
+          <div class="detail-row"><span class="detail-label">Location:</span> <span class="detail-value" id="m-location">—</span></div>
+          <div class="detail-row"><span class="detail-label">Source Page:</span> <span class="detail-value" id="m-source">—</span></div>
+        </div>
+
+        <div class="detail-card" style="border-color: rgba(96, 165, 250, 0.3);">
+          <div class="detail-card-title" style="display:flex; justify-content:space-between; align-items:center;">
+            <span>🎯 Lead Intelligence &amp; Attribution</span>
+            <span id="m-lead-source-badge" class="badge" style="background:rgba(96,165,250,0.2); color:#60a5fa;">Direct</span>
+          </div>
+          <div class="detail-row"><span class="detail-label">Acquisition Channel:</span> <span class="detail-value" id="m-lead-source">—</span></div>
+          <div class="detail-row"><span class="detail-label">Initial Referrer:</span> <span class="detail-value" id="m-referrer" style="word-break:break-all;">—</span></div>
+          <div class="detail-row"><span class="detail-label">Landing Page:</span> <span class="detail-value" id="m-landing">—</span></div>
+          <div class="detail-row"><span class="detail-label">UTM Tags / Campaign:</span> <span class="detail-value" id="m-utm">—</span></div>
+          <div class="detail-row"><span class="detail-label">Device &amp; Browser:</span> <span class="detail-value" id="m-tech">—</span></div>
+          <div class="detail-row"><span class="detail-label">Approximate Location:</span> <span class="detail-value" id="m-geo">—</span></div>
+          <div class="detail-row"><span class="detail-label">Product / Service Context:</span> <span class="detail-value" id="m-context">—</span></div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-card-title">Technical Specifications &amp; Requirements</div>
+          <div class="detail-row"><span class="detail-label">Category / Subject:</span> <span class="detail-value" id="m-subject">—</span></div>
+          <div class="detail-row"><span class="detail-label">Equipment Type:</span> <span class="detail-value" id="m-equipment">—</span></div>
+          <div class="detail-row"><span class="detail-label">Lifting Capacity:</span> <span class="detail-value" id="m-capacity">—</span></div>
+          <div class="detail-row"><span class="detail-label">Crane Span:</span> <span class="detail-value" id="m-span">—</span></div>
+          <div class="detail-row"><span class="detail-label">Height of Lift:</span> <span class="detail-value" id="m-lift">—</span></div>
+          <div class="detail-row"><span class="detail-label">Duty Class:</span> <span class="detail-value" id="m-duty">—</span></div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-card-title">Customer Message / Note</div>
+          <div id="m-message" style="font-size:13px; color:#fff; line-height:1.6; white-space:pre-wrap;">—</div>
+        </div>
+
+        <div class="detail-card" style="border-color: rgba(232, 99, 10, 0.3);">
+          <div class="detail-card-title">Management Status &amp; CRM Priority</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <div class="form-group-admin">
+              <label class="form-label-admin">Status</label>
+              <select id="m-status-select" class="form-control-admin">
+                <option value="New">New</option>
+                <option value="Contacted">Contacted</option>
+                <option value="Quoted">Quoted</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
+            <div class="form-group-admin">
+              <label class="form-label-admin">Priority</label>
+              <select id="m-priority-select" class="form-control-admin">
+                <option value="Normal">Normal</option>
+                <option value="Important">Important</option>
+                <option value="Urgent">Urgent</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group-admin">
+            <label class="form-label-admin">Follow-up Date</label>
+            <input type="date" id="m-follow-up" class="form-control-admin">
+          </div>
+
+          <div class="form-group-admin">
+            <label class="form-label-admin">Internal Admin Notes</label>
+            <textarea id="m-admin-notes" class="form-control-admin" placeholder="Record customer discussion, quotation pricing, or follow-up details..."></textarea>
+          </div>
+          <button id="save-modal-btn" class="btn-admin btn-admin-primary" style="width:100%; justify-content:center; padding:9px;">Save Status &amp; Notes</button>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a id="m-call-btn" href="#" class="btn-admin btn-admin-success" style="flex:1; justify-content:center; padding:10px;">📞 Call Customer</a>
+          <a id="m-wa-btn" href="#" target="_blank" class="btn-admin btn-admin-wa" style="flex:1; justify-content:center; padding:10px;">💬 Open WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="m-delete-btn" class="btn-admin btn-admin-danger">Delete Inquiry</button>
+        <button class="btn-admin btn-admin-outline" onclick="closeInquiryModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CMS GENERIC ITEM EDIT MODAL -->
+  <div id="cms-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="cms-modal-title">Edit Content</h3>
+        <button class="modal-close" onclick="closeCmsModal()">&times;</button>
+      </div>
+      <form id="cms-form">
+        <div class="modal-body" id="cms-modal-fields"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn-admin btn-admin-outline" onclick="closeCmsModal()">Cancel</button>
+          <button type="submit" class="btn-admin btn-admin-primary">Save Content</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CERTIFICATE & REGISTRATION EDIT/REPLACE MODAL -->
+  <div id="certificate-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="cert-modal-title">Edit Certificate / Registration</h3>
+        <button class="modal-close" onclick="closeCertificateModal()">&times;</button>
+      </div>
+      <form id="cert-form">
+        <div class="modal-body">
+          <input type="hidden" id="cert-edit-id" name="id">
+
+          <div class="form-group-admin">
+            <label class="form-label-admin">Document Type *</label>
+            <select id="cert-edit-doc-type" name="doc_type" class="form-control-admin" required>
+              <option value="ISO 9001:2015">ISO 9001:2015</option>
+              <option value="Udyam Registration Certificate">Udyam Registration Certificate</option>
+              <option value="GST Registration Certificate">GST Registration Certificate</option>
+              <option value="Factory / Industrial License">Factory / Industrial License</option>
+              <option value="Other Statutory Registration">Other Statutory Registration</option>
+            </select>
+          </div>
+
+          <div class="form-group-admin">
+            <label class="form-label-admin">Document Title *</label>
+            <input type="text" id="cert-edit-title" name="title" class="form-control-admin" required placeholder="e.g. ISO 9001:2015 Quality Management System">
+          </div>
+
+          <div class="form-group-admin">
+            <label class="form-label-admin">Certificate / Registration Number (Optional)</label>
+            <input type="text" id="cert-edit-number" name="cert_number" class="form-control-admin" placeholder="e.g. 06AABCV1234F1Z1 or UDYAM-HR-03-0012345">
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="form-group-admin">
+              <label class="form-label-admin">Issue Date</label>
+              <input type="date" id="cert-edit-issue-date" name="issue_date" class="form-control-admin">
+            </div>
+            <div class="form-group-admin">
+              <label class="form-label-admin">Expiry / Validity Date</label>
+              <input type="date" id="cert-edit-expiry-date" name="expiry_date" class="form-control-admin">
+              <div style="margin-top:6px;">
+                <label style="font-size:11.5px; color:var(--admin-text-muted); cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
+                  <input type="checkbox" id="cert-edit-no-expiry"> No Expiry / Lifetime
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-admin">
+            <label class="form-label-admin">Short Description</label>
+            <textarea id="cert-edit-description" name="description" class="form-control-admin" rows="2" placeholder="Brief summary of this document or certification standard..."></textarea>
+          </div>
+
+          <div class="form-group-admin">
+            <label class="form-label-admin">Upload / Replace Document File (PDF, JPG, JPEG, PNG, WEBP — Max 15MB)</label>
+            <div id="cert-current-file-info" style="font-size:12px; color:var(--admin-text-muted); margin-bottom:6px;"></div>
+            <input type="file" id="cert-edit-file" accept=".pdf,image/png,image/jpeg,image/webp" class="form-control-admin" style="padding:6px;">
+            <span style="font-size:11px; color:var(--admin-text-muted);">Leave empty to keep existing file if already uploaded.</span>
+          </div>
+
+          <div class="form-group-admin">
+            <label class="form-label-admin">Internal Management Notes (Admin only, never shown publicly)</label>
+            <input type="text" id="cert-edit-notes" name="notes" class="form-control-admin" placeholder="e.g. Renewal application filed Sept 2026...">
+          </div>
+
+          <div class="form-group-admin" style="background:rgba(255,255,255,0.03); border:1px solid var(--admin-border); border-radius:8px; padding:12px;">
+            <label style="display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; color:#fff; cursor:pointer;">
+              <input type="checkbox" id="cert-edit-public" name="is_public" style="width:16px; height:16px;">
+              <span>Public Live</span>
+            </label>
+            <p style="margin:4px 0 0 26px; font-size:11.5px; color:var(--admin-text-muted);">When checked and a valid document is uploaded, this certificate will be publicly visible on the company website. If unchecked or if the file is expired, it remains hidden.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-admin btn-admin-outline" onclick="closeCertificateModal()">Cancel</button>
+          <button type="submit" id="cert-submit-btn" class="btn-admin btn-admin-primary">Save Certificate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Element -->
+  <div id="toast">Message notification</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Portable Protocol & Host Agnostic API Base Resolution
+      function getApiBaseUrl() {
+        if (typeof window !== "undefined" && window.VS_API_BASE) {
+          return window.VS_API_BASE.replace(/\/+$/, "");
+        }
+        if (typeof window !== "undefined" && window.__API_BASE__) {
+          return window.__API_BASE__.replace(/\/+$/, "");
+        }
+        // Direct local file opening (file:///)
+        if (window.location.protocol === "file:" || !window.location.origin || window.location.origin === "null") {
+          return "http://localhost:8080";
+        }
+        const hostname = window.location.hostname;
+        const isLocalHost = hostname === "localhost" || hostname === "127.0.0.1" || hostname === "0.0.0.0" || hostname === "[::1]";
+        // Local dev server running on another port (e.g. VS Code Live Server on :5500, Vite on :5173)
+        if (isLocalHost && window.location.port && window.location.port !== "8080") {
+          return `http://${hostname}:8080`;
+        }
+        // Backend served or production deployment (Render, AWS, Hostinger VPS, reverse proxy) -> relative root
+        return "";
+      }
+      const API_BASE = getApiBaseUrl();
+
+      const loginView = document.getElementById("login-view");
+      const dashView = document.getElementById("dashboard-view");
+      const loginForm = document.getElementById("admin-login-form");
+      const loginError = document.getElementById("login-error");
+      const logoutBtn = document.getElementById("logout-btn");
+      const refreshAllBtn = document.getElementById("refresh-all-btn");
+
+      const inqSearch = document.getElementById("inq-search");
+      const inqType = document.getElementById("inq-type");
+      const inqStatus = document.getElementById("inq-status");
+      const inqPriority = document.getElementById("inq-priority");
+      const inqTbody = document.getElementById("inquiries-tbody");
+      const exportCsvBtn = document.getElementById("export-csv-btn");
+      const refreshInqBtn = document.getElementById("refresh-inq-btn");
+
+      let allInquiries = [];
+      let activeInquiry = null;
+      let activeCmsSection = null;
+      let activeCmsItem = null;
+
+      // Backend Connection Health Indicator for Admin Login
+      async function checkBackendStatus() {
+        const connIndicator = document.getElementById("login-conn-indicator");
+        try {
+          const res = await fetch(`${API_BASE}/api/health`);
+          if (res.ok) {
+            if (connIndicator) {
+              const targetHost = API_BASE || (window.location.origin === "null" ? "http://localhost:8080" : window.location.origin);
+              connIndicator.innerHTML = `<span style="color:#10b981; font-weight:bold;">●</span> API Server Connected <span style="opacity:0.75; font-size:10px;">(${escapeHtml(targetHost)})</span>`;
+              connIndicator.style.display = "block";
+            }
+          } else {
+            if (connIndicator) {
+              connIndicator.innerHTML = `<span style="color:#f59e0b; font-weight:bold;">●</span> API Responded HTTP ${res.status}`;
+              connIndicator.style.display = "block";
+            }
+          }
+        } catch (err) {
+          if (connIndicator) {
+            const targetHost = API_BASE || "http://localhost:8080";
+            connIndicator.innerHTML = `<span style="color:#ef4444; font-weight:bold;">●</span> API Server Offline <span style="opacity:0.75; font-size:10px;">(Start python3 server.py on :8080)</span>`;
+            connIndicator.style.display = "block";
+          }
+        }
+      }
+      checkBackendStatus();
+
+      const sessionToken = localStorage.getItem("vs_admin_token");
+      if (sessionToken) {
+        showDashboard();
+      }
+
+      function handleAuthExpired() {
+        localStorage.removeItem("vs_admin_token");
+        dashView.style.display = "none";
+        loginView.style.display = "block";
+        loginError.style.display = "block";
+        loginError.textContent = "Your admin session has expired. Please sign in again.";
+        checkBackendStatus();
+      }
+
+      function renderBackendUnavailableHtml(sectionTitle = "Data") {
+        return `
+          <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 12px; padding: 32px 20px; text-align: center; margin: 16px 0;">
+            <div style="font-size: 32px; margin-bottom: 10px;">🔌</div>
+            <h4 style="color: #ef4444; margin: 0 0 8px 0; font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem;">Backend Server Unavailable</h4>
+            <p style="color: var(--admin-text-muted); font-size: 13px; max-width: 520px; margin: 0 auto 16px auto; line-height: 1.5;">
+              The administration portal cannot communicate with the backend server.<br>
+              To load ${escapeHtml(sectionTitle)} and connect to MongoDB Atlas / persistent mirror, please ensure the backend server is running.
+            </p>
+            <div style="display: inline-block; background: var(--admin-bg); border: 1px solid var(--admin-border); padding: 8px 16px; border-radius: 8px; font-family: monospace; font-size: 13px; color: var(--admin-primary); margin-bottom: 16px;">
+              python3 server.py
+            </div>
+            <div>
+              <button class="btn-admin btn-admin-primary" onclick="loadAllData()">Retry Connection ⟳</button>
+            </div>
+          </div>
+        `;
+      }
+
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        loginError.style.display = "none";
+        const email = document.getElementById("admin-email").value.trim();
+        const password = document.getElementById("admin-password").value.trim();
+
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data.token) {
+            localStorage.setItem("vs_admin_token", data.token);
+            showDashboard();
+          } else {
+            loginError.style.display = "block";
+            loginError.textContent = data.error || "Invalid credentials. Please try again.";
+          }
+        } catch (err) {
+          loginError.style.display = "block";
+          const targetHost = API_BASE || (window.location.origin === "null" ? "http://localhost:8080" : window.location.origin);
+          loginError.innerHTML = `<strong>Backend server unavailable.</strong><div style='font-size:11px; margin-top:4px;'>Please ensure the backend API server is running on ${escapeHtml(targetHost)}.</div>`;
+        }
+      });
+
+      logoutBtn.addEventListener("click", async () => {
+        const token = localStorage.getItem("vs_admin_token");
+        try {
+          await fetch(`${API_BASE}/api/admin/logout`, {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + token }
+          });
+        } catch(e) {}
+        localStorage.removeItem("vs_admin_token");
+        dashView.style.display = "none";
+        loginView.style.display = "block";
+        loginForm.reset();
+        document.getElementById("admin-email").value = "";
+        checkBackendStatus();
+        showToast("Logged out successfully");
+      });
+
+      function showDashboard() {
+        loginView.style.display = "none";
+        dashView.style.display = "block";
+        loadAllData();
+      }
+
+      function getToken() {
+        return localStorage.getItem("vs_admin_token") || "";
+      }
+
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+          document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+          btn.classList.add("active");
+          const target = document.getElementById(btn.dataset.tab);
+          if (target) target.classList.add("active");
+
+          if (btn.dataset.tab === "tab-analytics") loadAnalytics();
+          if (btn.dataset.tab === "tab-products") loadProducts();
+          if (btn.dataset.tab === "tab-services") loadServices();
+          if (btn.dataset.tab === "tab-gallery") loadGallery();
+          if (btn.dataset.tab === "tab-projects") { loadProjects(); loadPins(); }
+          if (btn.dataset.tab === "tab-contact") loadContactInfo();
+          if (btn.dataset.tab === "tab-blog") loadBlog();
+          if (btn.dataset.tab === "tab-catalog") loadCatalog();
+          if (btn.dataset.tab === "tab-certificates") loadCertificates();
+          if (btn.dataset.tab === "tab-health") loadHealth();
+        });
+      });
+
+      function loadAllData() {
+        fetchInquiries();
+        fetchStats();
+        loadHealth();
+        loadAnalytics();
+      }
+
+      let currentAnalyticsPeriod = "7d";
+      let analyticsAutoRefreshTimer = null;
+
+      async function loadAnalytics() {
+        try {
+          const [resSummary, resHealth, resAlerts] = await Promise.all([
+            fetch(`${API_BASE}/api/admin/analytics/summary?period=${encodeURIComponent(currentAnalyticsPeriod)}`, {
+              headers: { "Authorization": "Bearer " + getToken() }
+            }),
+            fetch(`${API_BASE}/api/admin/analytics/health`, {
+              headers: { "Authorization": "Bearer " + getToken() }
+            }),
+            fetch(`${API_BASE}/api/admin/alerts?resolved=all`, {
+              headers: { "Authorization": "Bearer " + getToken() }
+            })
+          ]);
+
+          // Section 1: System Health & Telemetry
+          if (resHealth.ok) {
+            const hData = await resHealth.json();
+            const elApiBadge = document.getElementById("health-api-badge");
+            const elApiUptime = document.getElementById("health-api-uptime");
+            const elLatAvg = document.getElementById("health-latency-avg");
+            const elLatP95 = document.getElementById("health-latency-p95");
+            const elReqTotal = document.getElementById("health-requests-total");
+            const elReq2xx = document.getElementById("health-req-2xx");
+            const elReq3xx = document.getElementById("health-req-3xx");
+            const elReq4xx = document.getElementById("health-req-4xx");
+            const elReq5xx = document.getElementById("health-req-5xx");
+            const elDbBadge = document.getElementById("health-db-badge");
+            const elDbName = document.getElementById("health-db-name");
+            const elDbLatency = document.getElementById("health-db-latency");
+            const elSmtpBadge = document.getElementById("health-smtp-badge");
+            const elSmtpStatus = document.getElementById("health-smtp-status");
+            const elAlertsBadge = document.getElementById("health-alerts-badge");
+            const elAlertsCount = document.getElementById("health-alerts-count");
+
+            if (elApiBadge) {
+              const st = hData.api_health || "UP";
+              elApiBadge.textContent = st;
+              if (st === "UP") {
+                elApiBadge.style.background = "rgba(16,185,129,0.15)";
+                elApiBadge.style.color = "var(--admin-success)";
+              } else if (st === "DEGRADED") {
+                elApiBadge.style.background = "rgba(245,158,11,0.15)";
+                elApiBadge.style.color = "#f59e0b";
+              } else {
+                elApiBadge.style.background = "rgba(239,68,68,0.15)";
+                elApiBadge.style.color = "#ef4444";
+              }
+            }
+            if (elApiUptime) elApiUptime.textContent = hData.server?.uptime_human || "Online";
+            if (elLatAvg) elLatAvg.textContent = (hData.latency_ms?.avg ?? 0) + " ms";
+            if (elLatP95) elLatP95.textContent = (hData.latency_ms?.p95 ?? 0) + " ms";
+            if (elReqTotal) elReqTotal.textContent = (hData.http_requests?.total ?? 0) + " total";
+            if (elReq2xx) elReq2xx.textContent = hData.http_requests?.by_status_class?.["2xx"] ?? 0;
+            if (elReq3xx) elReq3xx.textContent = hData.http_requests?.by_status_class?.["3xx"] ?? 0;
+            if (elReq4xx) elReq4xx.textContent = hData.http_requests?.by_status_class?.["4xx"] ?? 0;
+            if (elReq5xx) elReq5xx.textContent = hData.http_requests?.by_status_class?.["5xx"] ?? 0;
+
+            if (elDbBadge) {
+              const dbSt = hData.database?.status || "ONLINE";
+              elDbBadge.textContent = dbSt;
+              if (dbSt === "ONLINE") {
+                elDbBadge.style.background = "rgba(16,185,129,0.15)";
+                elDbBadge.style.color = "var(--admin-success)";
+              } else if (dbSt === "FALLBACK") {
+                elDbBadge.style.background = "rgba(245,158,11,0.15)";
+                elDbBadge.style.color = "#f59e0b";
+              } else {
+                elDbBadge.style.background = "rgba(239,68,68,0.15)";
+                elDbBadge.style.color = "#ef4444";
+              }
+            }
+            if (elDbName) elDbName.textContent = hData.database?.primary || "MongoDB Atlas";
+            if (elDbLatency) {
+              elDbLatency.textContent = hData.database?.latency_ms != null ? hData.database.latency_ms + " ms" : "—";
+            }
+
+            if (elSmtpBadge) {
+              const smSt = hData.smtp?.status || "HEALTHY";
+              elSmtpBadge.textContent = smSt;
+              if (smSt === "HEALTHY") {
+                elSmtpBadge.style.background = "rgba(16,185,129,0.15)";
+                elSmtpBadge.style.color = "var(--admin-success)";
+              } else if (smSt === "DEGRADED") {
+                elSmtpBadge.style.background = "rgba(245,158,11,0.15)";
+                elSmtpBadge.style.color = "#f59e0b";
+              } else {
+                elSmtpBadge.style.background = "rgba(255,255,255,0.08)";
+                elSmtpBadge.style.color = "var(--admin-text-muted)";
+              }
+            }
+            if (elSmtpStatus) {
+              elSmtpStatus.textContent = hData.smtp?.host ? (hData.smtp.host + ":" + (hData.smtp.port || 587)) : "Not Configured";
+            }
+
+            const activeAlerts = hData.active_alerts_count || 0;
+            if (elAlertsBadge) {
+              elAlertsBadge.textContent = activeAlerts + " Active";
+              if (activeAlerts > 0) {
+                elAlertsBadge.style.background = "rgba(239,68,68,0.18)";
+                elAlertsBadge.style.color = "#ef4444";
+              } else {
+                elAlertsBadge.style.background = "rgba(16,185,129,0.15)";
+                elAlertsBadge.style.color = "var(--admin-success)";
+              }
+            }
+            if (elAlertsCount) elAlertsCount.textContent = activeAlerts + " Incident" + (activeAlerts === 1 ? "" : "s");
+          }
+
+          // Section 2: Traffic & Trends
+          if (resSummary.ok) {
+            const data = await resSummary.json();
+            const elTotal = document.getElementById("analytics-total-views");
+            const elUniq = document.getElementById("analytics-unique-visitors");
+            const elActive = document.getElementById("analytics-active-visitors");
+            const elBounce = document.getElementById("analytics-bounce-rate");
+            const elPages = document.getElementById("analytics-top-pages");
+            const elDev = document.getElementById("analytics-devices");
+            const elBrowsers = document.getElementById("analytics-browsers");
+            const elGeo = document.getElementById("analytics-geo");
+
+            if (elTotal) elTotal.textContent = data.total_views ?? 0;
+            if (elUniq) elUniq.textContent = data.unique_visitors ?? 0;
+            if (elActive) elActive.textContent = data.active_visitors_15m ?? 0;
+            if (elBounce) elBounce.textContent = (data.bounce_rate_pct ?? 0) + "%";
+
+            // Top Pages
+            if (elPages) {
+              if (!data.top_pages || data.top_pages.length === 0) {
+                elPages.innerHTML = '<div style="color:var(--admin-text-muted);">No page views recorded in this period.</div>';
+              } else {
+                elPages.innerHTML = data.top_pages.map(p => `
+                  <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 10px; background:rgba(255,255,255,0.03); border-radius:6px;">
+                    <span style="color:#fff; font-family:monospace; font-size:12px;">${escapeHtml(p.path)}</span>
+                    <span class="badge" style="background:rgba(232,99,10,0.15); color:var(--admin-primary);">${p.views} views</span>
+                  </div>
+                `).join("");
+              }
+            }
+
+            // Devices
+            if (elDev) {
+              const devEntries = Object.entries(data.devices || {});
+              if (devEntries.length === 0) {
+                elDev.innerHTML = '<span style="color:var(--admin-text-muted); font-size:12px;">No device data yet</span>';
+              } else {
+                elDev.innerHTML = devEntries.map(([dev, count]) => `
+                  <span class="badge" style="background:rgba(96,165,250,0.15); color:#60a5fa; padding:4px 8px; font-size:11px; text-transform:capitalize;">
+                    ${escapeHtml(dev)}: <strong>${count}</strong>
+                  </span>
+                `).join("");
+              }
+            }
+
+            // Browsers & OS
+            if (elBrowsers) {
+              const brEntries = Object.entries(data.browsers || {});
+              const osEntries = Object.entries(data.operating_systems || {});
+              let brHtml = "";
+              if (brEntries.length > 0) {
+                brHtml += brEntries.map(([br, count]) => `
+                  <span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); padding:4px 8px; font-size:11px;">
+                    ${escapeHtml(br)}: <strong>${count}</strong>
+                  </span>
+                `).join("");
+              }
+              if (osEntries.length > 0) {
+                brHtml += osEntries.map(([os, count]) => `
+                  <span class="badge" style="background:rgba(255,255,255,0.08); color:#e2e8f0; padding:4px 8px; font-size:11px;">
+                    ${escapeHtml(os)}: <strong>${count}</strong>
+                  </span>
+                `).join("");
+              }
+              elBrowsers.innerHTML = brHtml || '<span style="color:var(--admin-text-muted); font-size:12px;">No browser/OS data yet</span>';
+            }
+
+            // Approx Geo
+            if (elGeo) {
+              const geoList = data.approx_geo || [];
+              if (geoList.length === 0) {
+                elGeo.innerHTML = '<span style="color:var(--admin-text-muted); font-size:12px;">No approximate location telemetry recorded yet</span>';
+              } else {
+                elGeo.innerHTML = geoList.map(g => `
+                  <div style="display:flex; justify-content:space-between; align-items:center; padding:4px 8px; background:rgba(255,255,255,0.02); border-radius:4px;">
+                    <span style="color:#fff;">📍 ${escapeHtml(g.location)}</span>
+                    <span class="badge" style="background:rgba(255,255,255,0.06); color:var(--admin-text-muted);">${g.views} hits</span>
+                  </div>
+                `).join("");
+              }
+            }
+
+            // Section 3: Product Interest & Engagement
+            const prodTbody = document.getElementById("analytics-products-tbody");
+            if (prodTbody) {
+              const prods = data.product_engagement || [];
+              if (prods.length === 0) {
+                prodTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--admin-text-muted);">No product interactions recorded in this period.</td></tr>';
+              } else {
+                prodTbody.innerHTML = prods.map(p => `
+                  <tr>
+                    <td>
+                      <strong style="color:#fff;">${escapeHtml(p.product_name || p.product_id)}</strong><br>
+                      <span style="font-size:11px; color:var(--admin-text-muted); font-family:monospace;">ID: ${escapeHtml(p.product_id)}</span>
+                    </td>
+                    <td><span class="badge" style="background:rgba(255,255,255,0.06); color:#fff;">${p.page_views || 0}</span></td>
+                    <td><span class="badge" style="background:rgba(96,165,250,0.15); color:#60a5fa;">${p.viewer_opens || 0}</span></td>
+                    <td><span class="badge" style="background:rgba(245,158,11,0.15); color:#f59e0b;">${p.brochure_downloads || 0}</span></td>
+                    <td><span class="badge" style="background:rgba(232,99,10,0.15); color:var(--admin-primary);">${p.quote_cta_clicks || 0}</span></td>
+                    <td><span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">${p.inquiries_generated || 0}</span></td>
+                    <td><strong style="color:var(--admin-success);">${p.conversion_rate_pct || 0}%</strong></td>
+                  </tr>
+                `).join("");
+              }
+            }
+
+            // Section 4: Service Interest & Engagement
+            const srvTbody = document.getElementById("analytics-services-tbody");
+            if (srvTbody) {
+              const srvs = data.service_interest || [];
+              if (srvs.length === 0) {
+                srvTbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--admin-text-muted);">No service interactions recorded in this period.</td></tr>';
+              } else {
+                srvTbody.innerHTML = srvs.map(s => `
+                  <tr>
+                    <td>
+                      <strong style="color:#fff;">${escapeHtml(s.service_name || s.service_id)}</strong><br>
+                      <span style="font-size:11px; color:var(--admin-text-muted); font-family:monospace;">ID: ${escapeHtml(s.service_id)}</span>
+                    </td>
+                    <td><span class="badge" style="background:rgba(255,255,255,0.06); color:#fff;">${s.views || 0}</span></td>
+                    <td><span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">${s.inquiries_generated || 0}</span></td>
+                    <td><strong style="color:var(--admin-success);">${s.conversion_rate_pct || 0}%</strong></td>
+                  </tr>
+                `).join("");
+              }
+            }
+
+            // Section 5: Lead Sources & Attribution
+            const leadTbody = document.getElementById("analytics-leads-tbody");
+            if (leadTbody) {
+              const leads = data.lead_sources || [];
+              if (leads.length === 0) {
+                leadTbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--admin-text-muted);">No lead attribution recorded in this period.</td></tr>';
+              } else {
+                leadTbody.innerHTML = leads.map(l => `
+                  <tr>
+                    <td><strong style="color:#fff;">${escapeHtml(l.source)}</strong></td>
+                    <td><span class="badge" style="background:rgba(255,255,255,0.06); color:#fff;">${l.visits || 0}</span></td>
+                    <td>${l.pct_of_total || 0}%</td>
+                    <td><span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-weight:700;">${l.inquiries || 0}</span></td>
+                    <td><strong style="color:var(--admin-success);">${l.conversion_rate_pct || 0}%</strong></td>
+                  </tr>
+                `).join("");
+              }
+            }
+
+            // Section 6: 9-Stage Inquiry & Conversion Funnel
+            const funnelGrid = document.getElementById("analytics-funnel-grid");
+            if (funnelGrid) {
+              const stages = data.funnel?.stages || [];
+              if (stages.length === 0) {
+                funnelGrid.innerHTML = '<div style="color:var(--admin-text-muted); padding:20px;">No funnel data available for this period.</div>';
+              } else {
+                funnelGrid.innerHTML = stages.map(st => `
+                  <div class="funnel-stage-card">
+                    <div class="stage-num">Stage ${st.stage}</div>
+                    <div class="stage-name">${escapeHtml(st.name)}</div>
+                    <div class="stage-count">${st.count}</div>
+                    <div class="stage-pct">${st.pct_of_top}% of top</div>
+                    <div class="stage-bar-wrap">
+                      <div class="stage-bar-fill" style="width: ${Math.max(4, Math.min(100, st.pct_of_top))}%;"></div>
+                    </div>
+                    ${st.stage > 1 ? `<div class="stage-dropoff" style="margin-top:6px; font-size:10px; color:${st.dropoff_pct > 50 ? '#ef4444' : 'var(--admin-text-muted)'};">Drop: ${st.dropoff_pct}%</div>` : '<div style="height:15px;"></div>'}
+                  </div>
+                `).join("");
+              }
+            }
+          }
+
+          // Section 7: Recent Alerts & Incidents
+          if (resAlerts.ok) {
+            const aData = await resAlerts.json();
+            const alertTbody = document.getElementById("analytics-alerts-tbody");
+            if (alertTbody) {
+              const alerts = aData.alerts || [];
+              if (alerts.length === 0) {
+                alertTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--admin-text-muted);">No operational alerts recorded. System running smoothly.</td></tr>';
+              } else {
+                alertTbody.innerHTML = alerts.map(a => `
+                  <tr>
+                    <td><span class="alert-severity-badge severity-${escapeHtml((a.severity || 'info').toLowerCase())}">${escapeHtml(a.severity || 'INFO')}</span></td>
+                    <td><span class="badge" style="background:rgba(255,255,255,0.06); color:var(--admin-text-muted); font-size:11px;">${escapeHtml(a.category || 'system')}</span></td>
+                    <td>
+                      <strong style="color:#fff; font-size:12px;">${escapeHtml(a.title)}</strong><br>
+                      <span style="font-size:11px; color:var(--admin-text-muted); word-break:break-all;">${escapeHtml(a.message)}</span>
+                    </td>
+                    <td><span class="badge" style="background:rgba(232,99,10,0.15); color:var(--admin-primary); font-weight:700;">${a.occurrences || 1}x</span></td>
+                    <td style="font-size:11px; color:var(--admin-text-muted);">${escapeHtml(a.last_seen || a.created_at || '—')}</td>
+                    <td>
+                      ${a.resolved ? '<span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success);">Resolved</span>' : '<span class="badge" style="background:rgba(239,68,68,0.15); color:#ef4444;">Active</span>'}
+                    </td>
+                    <td>
+                      ${a.resolved ? '<span style="font-size:11px; color:var(--admin-text-muted);">Resolved</span>' : `<button class="btn-admin btn-admin-outline" style="padding:3px 8px; font-size:11px;" onclick="resolveAlert('${escapeHtml(a.id)}')">Resolve ✓</button>`}
+                    </td>
+                  </tr>
+                `).join("");
+              }
+            }
+          }
+        } catch(e) {
+          console.warn("Analytics load error:", e);
+        }
+      }
+
+      // Alert Resolution Handlers
+      window.resolveAlert = async function(alertId) {
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/alerts/${encodeURIComponent(alertId)}`, {
+            method: "PATCH",
+            headers: {
+              "Authorization": "Bearer " + getToken(),
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ resolved: true })
+          });
+          if (res.ok) {
+            showToast("Alert marked as resolved");
+            loadAnalytics();
+          } else {
+            showToast("Failed to resolve alert", true);
+          }
+        } catch (e) {
+          showToast("Network error resolving alert", true);
+        }
+      };
+
+      const resolveAllAlertsBtn = document.getElementById("resolve-all-alerts-btn");
+      if (resolveAllAlertsBtn) {
+        resolveAllAlertsBtn.addEventListener("click", async () => {
+          try {
+            const res = await fetch(`${API_BASE}/api/admin/alerts/resolve-all`, {
+              method: "POST",
+              headers: { "Authorization": "Bearer " + getToken() }
+            });
+            if (res.ok) {
+              showToast("All active alerts resolved");
+              loadAnalytics();
+            } else {
+              showToast("Failed to resolve alerts", true);
+            }
+          } catch (e) {
+            showToast("Network error resolving alerts", true);
+          }
+        });
+      }
+
+      // Period Selection Controls
+      document.querySelectorAll(".analytics-period-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".analytics-period-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentAnalyticsPeriod = btn.dataset.period || "7d";
+          loadAnalytics();
+        });
+      });
+
+      // Manual and Auto-refresh
+      const refreshAnalyticsBtn = document.getElementById("refresh-analytics-btn");
+      if (refreshAnalyticsBtn) {
+        refreshAnalyticsBtn.addEventListener("click", () => loadAnalytics());
+      }
+
+      const autoRefreshCb = document.getElementById("analytics-auto-refresh");
+      function setupAnalyticsAutoRefresh() {
+        if (analyticsAutoRefreshTimer) clearInterval(analyticsAutoRefreshTimer);
+        if (autoRefreshCb && autoRefreshCb.checked) {
+          analyticsAutoRefreshTimer = setInterval(() => {
+            const analyticsTab = document.getElementById("tab-analytics");
+            if (analyticsTab && analyticsTab.classList.contains("active")) {
+              loadAnalytics();
+            }
+          }, 30000);
+        }
+      }
+      if (autoRefreshCb) {
+        autoRefreshCb.addEventListener("change", setupAnalyticsAutoRefresh);
+        setupAnalyticsAutoRefresh();
+      }
+
+      refreshAllBtn.addEventListener("click", loadAllData);
+      refreshInqBtn.addEventListener("click", fetchInquiries);
+
+      async function fetchStats() {
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/stats`, {
+            headers: { "Authorization": "Bearer " + getToken() }
+          });
+          if (res.ok) {
+            const stats = await res.json();
+            document.getElementById("stat-total").textContent = stats.total || 0;
+            document.getElementById("stat-new").textContent = stats.new || 0;
+            document.getElementById("stat-contacted").textContent = stats.contacted || 0;
+            document.getElementById("stat-quoted").textContent = stats.quoted || 0;
+            document.getElementById("stat-inprogress").textContent = stats.in_progress || 0;
+            document.getElementById("stat-completed").textContent = stats.completed || 0;
+            document.getElementById("stat-closed").textContent = stats.closed || 0;
+            document.getElementById("stat-urgent").textContent = stats.urgent || 0;
+            document.getElementById("badge-inquiries-count").textContent = stats.new || 0;
+          }
+        } catch (e) {}
+      }
+
+      async function fetchInquiries() {
+        inqTbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 40px; color: var(--admin-text-muted);">Fetching live records...</td></tr>`;
+
+        const search = inqSearch.value.trim();
+        const type = inqType.value;
+        const status = inqStatus.value;
+        const priority = inqPriority.value;
+
+        const params = new URLSearchParams({ search, type, status, priority });
+
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/inquiries?` + params.toString(), {
+            headers: { "Authorization": "Bearer " + getToken() }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            allInquiries = data.inquiries || [];
+            renderInquiriesTable(allInquiries);
+            fetchStats();
+          } else if (res.status === 401) {
+            handleAuthExpired();
+          } else {
+            inqTbody.innerHTML = `<tr><td colspan="7">${renderBackendUnavailableHtml("Inquiries")}</td></tr>`;
+          }
+        } catch (err) {
+          inqTbody.innerHTML = `<tr><td colspan="7">${renderBackendUnavailableHtml("Inquiries")}</td></tr>`;
+        }
+      }
+
+      function renderEmailBadge(status, error) {
+        status = status || "Not Configured";
+        if (status === "Sent") {
+          return `<span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); font-size:10px; padding:2px 6px;">✉️ Sent</span>`;
+        } else if (status === "Failed") {
+          return `<span class="badge" style="background:rgba(239,68,68,0.15); color:var(--admin-danger); font-size:10px; padding:2px 6px;" title="${escapeHtml(error || 'SMTP delivery error')}">✉️ Failed</span>`;
+        } else if (status === "Pending") {
+          return `<span class="badge" style="background:rgba(245,158,11,0.15); color:var(--admin-warning); font-size:10px; padding:2px 6px;">✉️ Queued</span>`;
+        } else {
+          return `<span class="badge" style="background:rgba(255,255,255,0.06); color:var(--admin-text-muted); font-size:10px; padding:2px 6px;" title="SMTP not configured">✉️ Unsent</span>`;
+        }
+      }
+
+      function renderInquiriesTable(inquiries) {
+        const inqTbody = document.getElementById("inquiries-tbody");
+        if (!inquiries || inquiries.length === 0) {
+          inqTbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 40px; color: var(--admin-text-muted);">No inquiries match the active filters.</td></tr>`;
+          return;
+        }
+
+        inqTbody.innerHTML = inquiries.map(inq => {
+          const d = new Date(inq.created_at || inq.date || Date.now());
+          const dateFormatted = isNaN(d) ? inq.created_at : d.toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" });
+          
+          const subject = inq.equipment_type || inq.service_type || inq.subject || "General Inquiry";
+          const priority = inq.priority || "Normal";
+          const priorityClass = `badge-priority-${priority.toLowerCase()}`;
+
+          const specs = [];
+          if (inq.capacity) specs.push(`${inq.capacity}T`);
+          if (inq.span) specs.push(`${inq.span}m span`);
+          if (inq.lift) specs.push(`${inq.lift}m lift`);
+          if (inq.duty_class) specs.push(inq.duty_class);
+          const specsStr = specs.length > 0 ? specs.join(" • ") : `<span style="color:var(--admin-text-muted);">Standard</span>`;
+
+          const status = inq.status || "New";
+          const statusClass = `status-${status.toLowerCase().replace(" ", "_")}`;
+
+          return `
+            <tr data-id="${inq.id}">
+              <td style="white-space:nowrap; font-size:12px; color:var(--admin-text-muted);">${dateFormatted}</td>
+              <td>
+                <strong style="color:#fff;">${escapeHtml(inq.name || "N/A")}</strong>
+                ${inq.company ? `<div style="font-size:11px; color:var(--admin-text-muted);">${escapeHtml(inq.company)}</div>` : ""}
+                <div style="font-size:11px; margin-top:2px;">
+                  ${inq.email ? `<a href="mailto:${encodeURIComponent(inq.email)}" style="color:var(--admin-primary); text-decoration:none;">${escapeHtml(inq.email)}</a>` : ""}
+                  ${inq.phone ? ` • <a href="tel:${encodeURIComponent(inq.phone)}" style="color:inherit; text-decoration:none;">${escapeHtml(inq.phone)}</a>` : ""}
+                </div>
+              </td>
+              <td>
+                <span style="font-weight:600; color:#fff;">${escapeHtml(subject)}</span>
+                <div style="display:flex; align-items:center; gap:6px; margin-top:2px;">
+                  <span style="font-size:11px; color:var(--admin-text-muted);">${escapeHtml(inq.source_page || "Website")}</span>
+                  ${renderEmailBadge(inq.email_status, inq.email_error)}
+                </div>
+              </td>
+              <td><span class="badge ${priorityClass}">${priority}</span></td>
+              <td style="font-size:12px;">${specsStr}</td>
+              <td>
+                <select class="status-select-sm ${statusClass}" onchange="handleStatusChange('${inq.id}', this.value)">
+                  <option value="New" ${status === "New" ? "selected" : ""}>New</option>
+                  <option value="Contacted" ${status === "Contacted" ? "selected" : ""}>Contacted</option>
+                  <option value="Quoted" ${status === "Quoted" ? "selected" : ""}>Quoted</option>
+                  <option value="In Progress" ${status === "In Progress" ? "selected" : ""}>In Progress</option>
+                  <option value="Completed" ${status === "Completed" ? "selected" : ""}>Completed</option>
+                  <option value="Closed" ${status === "Closed" ? "selected" : ""}>Closed</option>
+                </select>
+              </td>
+              <td>
+                <div style="display:flex; gap:6px;">
+                  <button class="btn-admin btn-admin-outline" style="padding:4px 8px; font-size:11px;" onclick="openInquiryModal('${inq.id}')">View</button>
+                  ${inq.phone ? `<a href="https://wa.me/${formatPhoneForWa(inq.phone)}?text=${encodeURIComponent('Hello ' + inq.name + ', thank you for contacting VS Infra & Cranes regarding your ' + subject + ' requirement.')}" target="_blank" class="btn-admin btn-admin-wa" style="padding:4px 8px; font-size:11px;" title="WhatsApp">WA</a>` : ""}
+                  <button class="btn-admin btn-admin-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteInquiryRecord('${inq.id}')">✕</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      inqSearch.addEventListener("input", debounce(fetchInquiries, 300));
+      inqType.addEventListener("change", fetchInquiries);
+      inqStatus.addEventListener("change", fetchInquiries);
+      inqPriority.addEventListener("change", fetchInquiries);
+
+      exportCsvBtn.addEventListener("click", async () => {
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/inquiries/export`, {
+            headers: { "Authorization": "Bearer " + getToken() }
+          });
+          if (!res.ok) throw new Error("Export failed");
+          const blob = await res.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "vs_infra_cranes_inquiries.csv";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch(e) {
+          showToast("CSV export failed: " + e.message, "error");
+        }
+      });
+
+      window.handleStatusChange = async function(id, newStatus) {
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/inquiries/${id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + getToken()
+            },
+            body: JSON.stringify({ status: newStatus })
+          });
+          if (res.ok) {
+            showToast(`Status updated to "${newStatus}"`);
+            fetchStats();
+          } else {
+            showToast("Failed to update status", true);
+          }
+        } catch(e) {
+          showToast("Network error updating status", true);
+        }
+      };
+
+      window.deleteInquiryRecord = async function(id) {
+        if (!confirm("Are you sure you want to permanently delete this inquiry record from the database?")) return;
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/inquiries/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": "Bearer " + getToken() }
+          });
+          if (res.ok) {
+            showToast("Inquiry permanently deleted");
+            allInquiries = allInquiries.filter(i => i.id !== id);
+            renderInquiriesTable(allInquiries);
+            fetchStats();
+            closeInquiryModal();
+          } else {
+            showToast("Failed to delete record", true);
+          }
+        } catch(e) {
+          showToast("Error deleting inquiry", true);
+        }
+      };
+
+      window.openInquiryModal = function(id) {
+        activeInquiry = allInquiries.find(i => i.id === id);
+        if (!activeInquiry) return;
+
+        document.getElementById("modal-inq-title").textContent = activeInquiry.name || "Inquiry Details";
+        document.getElementById("modal-inq-meta").textContent = `ID: ${activeInquiry.id} • ${activeInquiry.created_at || "Recent"}`;
+
+        document.getElementById("m-name").textContent = activeInquiry.name || "N/A";
+        document.getElementById("m-company").textContent = activeInquiry.company || "None Provided";
+        document.getElementById("m-phone").textContent = activeInquiry.phone || "None";
+        document.getElementById("m-email").textContent = activeInquiry.email || "None";
+        document.getElementById("m-location").textContent = activeInquiry.location || "Not Specified";
+        document.getElementById("m-source").innerHTML = `${escapeHtml(activeInquiry.source_page || "Website Form")} &nbsp; ${renderEmailBadge(activeInquiry.email_status, activeInquiry.email_error)}`;
+
+        // Populate Lead Intelligence Card
+        const leadSrc = activeInquiry.lead_source || 'Direct';
+        const elSrcBadge = document.getElementById("m-lead-source-badge");
+        if (elSrcBadge) elSrcBadge.textContent = leadSrc;
+        const elSrc = document.getElementById("m-lead-source");
+        if (elSrc) elSrc.textContent = leadSrc;
+        const elRef = document.getElementById("m-referrer");
+        if (elRef) elRef.textContent = activeInquiry.referrer || "Direct Navigation";
+        const elLanding = document.getElementById("m-landing");
+        if (elLanding) elLanding.textContent = activeInquiry.landing_page || activeInquiry.source_page || "/";
+        const elUtm = document.getElementById("m-utm");
+        const utmItems = [];
+        if (activeInquiry.utm_source) utmItems.push("src: " + activeInquiry.utm_source);
+        if (activeInquiry.utm_medium) utmItems.push("med: " + activeInquiry.utm_medium);
+        if (activeInquiry.utm_campaign) utmItems.push("camp: " + activeInquiry.utm_campaign);
+        if (elUtm) elUtm.textContent = utmItems.length > 0 ? utmItems.join(" | ") : "None (Organic / Direct)";
+        const elTech = document.getElementById("m-tech");
+        const techItems = [activeInquiry.device, activeInquiry.browser, activeInquiry.os].filter(Boolean);
+        if (elTech) elTech.textContent = techItems.length > 0 ? techItems.join(" • ") : "Desktop • Chrome";
+        const elGeo = document.getElementById("m-geo");
+        if (elGeo) elGeo.textContent = activeInquiry.approx_geo || activeInquiry.location || "Delhi NCR, India (Approximate)";
+        const elContext = document.getElementById("m-context");
+        if (elContext) elContext.textContent = activeInquiry.product_context || activeInquiry.equipment_type || activeInquiry.service_context || activeInquiry.service_type || "Industrial Crane System";
+
+        document.getElementById("m-subject").textContent = activeInquiry.subject || activeInquiry.service_type || "General";
+        document.getElementById("m-equipment").textContent = activeInquiry.equipment_type || "N/A";
+        document.getElementById("m-capacity").textContent = activeInquiry.capacity ? `${activeInquiry.capacity} Ton` : "Standard";
+        document.getElementById("m-span").textContent = activeInquiry.span ? `${activeInquiry.span} Meters` : "Standard";
+        document.getElementById("m-lift").textContent = activeInquiry.lift ? `${activeInquiry.lift} Meters` : "Standard";
+        document.getElementById("m-duty").textContent = activeInquiry.duty_class || "Standard";
+
+        document.getElementById("m-message").textContent = activeInquiry.message || "(No message provided)";
+
+        document.getElementById("m-status-select").value = activeInquiry.status || "New";
+        document.getElementById("m-priority-select").value = activeInquiry.priority || "Normal";
+        document.getElementById("m-follow-up").value = activeInquiry.follow_up_date || "";
+        document.getElementById("m-admin-notes").value = activeInquiry.admin_notes || "";
+
+        const callBtn = document.getElementById("m-call-btn");
+        const waBtn = document.getElementById("m-wa-btn");
+        if (activeInquiry.phone) {
+          callBtn.style.display = "inline-flex";
+          callBtn.href = `tel:${activeInquiry.phone}`;
+          waBtn.style.display = "inline-flex";
+          const waMsg = `Hello ${activeInquiry.name}, thank you for contacting VS Infra & Cranes regarding your inquiry (${activeInquiry.equipment_type || activeInquiry.subject || 'Crane System'}).`;
+          waBtn.href = `https://wa.me/${formatPhoneForWa(activeInquiry.phone)}?text=${encodeURIComponent(waMsg)}`;
+        } else {
+          callBtn.style.display = "none";
+          waBtn.style.display = "none";
+        }
+
+        document.getElementById("m-delete-btn").onclick = () => deleteInquiryRecord(activeInquiry.id);
+        document.getElementById("inquiry-modal").style.display = "flex";
+      };
+
+      window.closeInquiryModal = function() {
+        document.getElementById("inquiry-modal").style.display = "none";
+        activeInquiry = null;
+      };
+
+      document.getElementById("save-modal-btn").addEventListener("click", async () => {
+        if (!activeInquiry) return;
+        const status = document.getElementById("m-status-select").value;
+        const priority = document.getElementById("m-priority-select").value;
+        const follow_up_date = document.getElementById("m-follow-up").value;
+        const admin_notes = document.getElementById("m-admin-notes").value.trim();
+
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/inquiries/${activeInquiry.id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + getToken()
+            },
+            body: JSON.stringify({ status, priority, follow_up_date, admin_notes })
+          });
+          if (res.ok) {
+            showToast("Inquiry notes & status saved");
+            activeInquiry.status = status;
+            activeInquiry.priority = priority;
+            activeInquiry.follow_up_date = follow_up_date;
+            activeInquiry.admin_notes = admin_notes;
+            fetchInquiries();
+            closeInquiryModal();
+          } else {
+            showToast("Error updating inquiry", true);
+          }
+        } catch(e) {
+          showToast("Network error saving notes", true);
+        }
+      });
+
+      async function loadProducts() {
+        const grid = document.getElementById("products-grid");
+        grid.innerHTML = `<div style="grid-column:1/-1; color:var(--admin-text-muted);">Loading products...</div>`;
+        try {
+          const res = await fetch(`${API_BASE}/api/content/products`);
+          const data = await res.json();
+          const items = data.data || [];
+          grid.innerHTML = items.map(p => `
+            <div class="cms-card">
+              <img src="${p.image || 'assets/images/crane/01-hero-crane.jpg'}" class="cms-card-img" alt="${p.name}">
+              <div class="cms-card-body">
+                <div style="font-size:11px; color:var(--admin-primary); font-weight:700; text-transform:uppercase;">${p.category || 'Crane'}</div>
+                <h4 class="cms-card-title">${escapeHtml(p.name)}</h4>
+                <div style="font-size:12px; font-weight:600; color:#fff; margin-bottom:6px;">Cap: ${p.capacity || '—'} | Span: ${p.span || '—'}</div>
+                <p class="cms-card-desc">${escapeHtml(p.description || '')}</p>
+                <div class="cms-card-footer">
+                  <span style="font-size:11px; color:var(--admin-text-muted);">${p.duty_class || 'Standard'}</span>
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn-admin btn-admin-outline" style="padding:4px 8px; font-size:11px;" onclick='openEditCmsItem("products", ${JSON.stringify(p)})'>Edit</button>
+                    <button class="btn-admin btn-admin-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteCmsItem('products', '${p.id}')">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join("");
+        } catch(e) {
+          grid.innerHTML = `<div style="grid-column:1/-1;">${renderBackendUnavailableHtml("Products")}</div>`;
+        }
+      }
+
+      async function loadServices() {
+        const grid = document.getElementById("services-grid");
+        grid.innerHTML = `<div style="grid-column:1/-1; color:var(--admin-text-muted);">Loading services...</div>`;
+        try {
+          const res = await fetch(`${API_BASE}/api/content/services`);
+          const data = await res.json();
+          const items = data.data || [];
+          grid.innerHTML = items.map(s => `
+            <div class="cms-card">
+              <img src="${s.image || 'assets/images/services/01-manufacturing.jpg'}" class="cms-card-img" alt="${s.name}">
+              <div class="cms-card-body">
+                <h4 class="cms-card-title">${escapeHtml(s.name)}</h4>
+                <p class="cms-card-desc">${escapeHtml(s.description || '')}</p>
+                <div style="margin-bottom:12px;">
+                  ${(s.benefits || []).map(b => `<span class="badge" style="background:rgba(255,255,255,0.06); color:#fff; margin:2px;">${b}</span>`).join("")}
+                </div>
+                <div class="cms-card-footer">
+                  <span style="font-size:11px; color:var(--admin-text-muted);">${s.id}</span>
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn-admin btn-admin-outline" style="padding:4px 8px; font-size:11px;" onclick='openEditCmsItem("services", ${JSON.stringify(s)})'>Edit</button>
+                    <button class="btn-admin btn-admin-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteCmsItem('services', '${s.id}')">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join("");
+        } catch(e) {
+          grid.innerHTML = `<div style="grid-column:1/-1;">${renderBackendUnavailableHtml("Services")}</div>`;
+        }
+      }
+
+      function resolveGalleryImage(g) {
+        if (!g) return "assets/images/gallery/30t-double-girder.jpg";
+        const publicGalleryMap = {
+          "gal_1": "assets/images/gallery/30t-double-girder.jpg",
+          "gal_2": "assets/images/gallery/testing.jpg",
+          "gal_3": "assets/images/gallery/hoist-assembly.jpg",
+          "gal_4": "assets/images/gallery/goliath-erection.jpg",
+          "gal_5": "assets/images/gallery/jib-delivery.jpg",
+          "gal_6": "assets/images/gallery/control-panel.jpg",
+          "assets/images/gallery/gallery-1.jpg": "assets/images/gallery/30t-double-girder.jpg",
+          "assets/images/gallery/gallery-2.jpg": "assets/images/gallery/testing.jpg",
+          "assets/images/gallery/gallery-3.jpg": "assets/images/gallery/hoist-assembly.jpg",
+          "assets/images/gallery/gallery-4.jpg": "assets/images/gallery/goliath-erection.jpg",
+          "assets/images/gallery/gallery-5.jpg": "assets/images/gallery/jib-delivery.jpg",
+          "assets/images/gallery/gallery-6.jpg": "assets/images/gallery/control-panel.jpg"
+        };
+        return (g && publicGalleryMap[g.id]) || (g && publicGalleryMap[g.image]) || (g && g.image) || "assets/images/gallery/30t-double-girder.jpg";
+      }
+
+      async function loadGallery() {
+        const grid = document.getElementById("gallery-grid");
+        grid.innerHTML = `<div style="grid-column:1/-1; color:var(--admin-text-muted);">Loading gallery...</div>`;
+        try {
+          const res = await fetch(`${API_BASE}/api/content/gallery`);
+          const data = await res.json();
+          const items = data.data || [];
+          grid.innerHTML = items.map(g => {
+            const imgSrc = resolveGalleryImage(g);
+            return `
+            <div class="cms-card">
+              <img src="${imgSrc}" class="cms-card-img" alt="${escapeHtml(g.title || '')}" onerror="this.onerror=null;this.src='assets/images/gallery/30t-double-girder.jpg';">
+              <div class="cms-card-body">
+                <span class="badge" style="background:rgba(232,99,10,0.15); color:var(--admin-primary); margin-bottom:6px;">${escapeHtml(g.category || 'Crane')}</span>
+                <h4 class="cms-card-title">${escapeHtml(g.title || '')}</h4>
+                <p class="cms-card-desc">${escapeHtml(g.description || '')}</p>
+                <div class="cms-card-footer">
+                  <span style="font-size:11px; color:var(--admin-text-muted);">${escapeHtml(g.id || '')}</span>
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn-admin btn-admin-outline" style="padding:4px 8px; font-size:11px;" onclick='openEditCmsItem("gallery", ${JSON.stringify(g)})'>Edit</button>
+                    <button class="btn-admin btn-admin-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteCmsItem('gallery', '${escapeHtml(g.id || '')}')">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          }).join("");
+        } catch(e) {
+          grid.innerHTML = `<div style="grid-column:1/-1;">${renderBackendUnavailableHtml("Gallery")}</div>`;
+        }
+      }
+
+      async function loadProjects() {
+        const grid = document.getElementById("projects-grid");
+        grid.innerHTML = `<div style="grid-column:1/-1; color:var(--admin-text-muted);">Loading projects...</div>`;
+        try {
+          const res = await fetch(`${API_BASE}/api/content/projects`);
+          const data = await res.json();
+          const items = data.data || [];
+          grid.innerHTML = items.map(p => `
+            <div class="cms-card">
+              <img src="${p.image || 'assets/images/crane/08-project-install.jpg'}" class="cms-card-img" alt="${p.title}">
+              <div class="cms-card-body">
+                <span class="badge" style="background:rgba(16,185,129,0.15); color:var(--admin-success); margin-bottom:6px;">${p.category || 'Project'}</span>
+                <h4 class="cms-card-title">${escapeHtml(p.title)}</h4>
+                <div style="font-size:12px; color:var(--admin-text-muted); margin-bottom:4px;">📍 ${escapeHtml(p.locationName || '')}</div>
+                <div style="font-size:12px; font-weight:600; color:#fff; margin-bottom:6px;">${p.craneType || ''} (${p.capacity || ''})</div>
+                <p class="cms-card-desc">${escapeHtml(p.description || '')}</p>
+                <div class="cms-card-footer">
+                  <span style="font-size:11px; color:var(--admin-text-muted);">${p.id}</span>
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn-admin btn-admin-outline" style="padding:4px 8px; font-size:11px;" onclick='openEditCmsItem("projects", ${JSON.stringify(p)})'>Edit</button>
+                    <button class="btn-admin btn-admin-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteCmsItem('projects', '${p.id}')">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join("");
+        } catch(e) {
+          grid.innerHTML = `<div style="grid-column:1/-1;">${renderBackendUnavailableHtml("Projects")}</div>`;
+        }
+      }
+
+      async function loadPins() {
+        const grid = document.getElementById("pins-grid");
+        grid.innerHTML = `<div style="grid-column:1/-1; color:var(--admin-text-muted);">Loading map pins...</div>`;
+        try {
+          const res = await fetch(`${API_BASE}/api/content/map_pins`);
+          const data = await res.json();
+          const items = data.data || [];
+          grid.innerHTML = items.map(p => `
+            <div class="cms-card" style="padding:14px;">
+              <h4 class="cms-card-title" style="margin-bottom:4px;">📍 ${escapeHtml(p.title)}</h4>
+              <div style="font-size:12px; color:var(--admin-text-muted);">${escapeHtml(p.locationName || '')}</div>
+              <div style="font-size:12px; color:#fff; margin-top:4px;">${p.craneType || ''} (${p.capacity || ''})</div>
+              <div style="font-size:11px; color:var(--admin-primary); margin-top:4px;">Coordinates: ${p.lat}, ${p.lng}</div>
+              <div class="cms-card-footer" style="margin-top:12px;">
+                <span style="font-size:11px; color:var(--admin-text-muted);">${p.id}</span>
+                <div style="display:flex; gap:6px;">
+                  <button class="btn-admin btn-admin-outline" style="padding:4px 8px; font-size:11px;" onclick='openEditCmsItem("map_pins", ${JSON.stringify(p)})'>Edit</button>
+                  <button class="btn-admin btn-admin-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteCmsItem('map_pins', '${p.id}')">Delete</button>
+                </div>
+              </div>
+            </div>
+          `).join("");
+        } catch(e) {
+          grid.innerHTML = `<div style="grid-column:1/-1;">${renderBackendUnavailableHtml("Map Pins")}</div>`;
+        }
+      }
+
+      async function loadContactInfo() {
+        try {
+          const res = await fetch(`${API_BASE}/api/content/contact`);
+          const data = await res.json();
+          const ci = data.data || {};
+          document.getElementById("ci-name").value = ci.company_name || "";
+          document.getElementById("ci-year").value = ci.founded_year || 2021;
+          document.getElementById("ci-phone").value = ci.phone || "";
+          document.getElementById("ci-whatsapp").value = ci.whatsapp_number || "";
+          document.getElementById("ci-email").value = ci.email || "";
+          document.getElementById("ci-address").value = ci.address || "";
+          document.getElementById("ci-hours").value = ci.business_hours || "";
+          document.getElementById("ci-tagline").value = ci.tagline || "";
+        } catch(e) {
+          showToast("Error loading contact details", true);
+        }
+      }
+
+      document.getElementById("contact-info-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const payload = {
+          company_name: document.getElementById("ci-name").value.trim(),
+          founded_year: parseInt(document.getElementById("ci-year").value) || 2021,
+          phone: document.getElementById("ci-phone").value.trim(),
+          whatsapp_number: document.getElementById("ci-whatsapp").value.trim(),
+          email: document.getElementById("ci-email").value.trim(),
+          address: document.getElementById("ci-address").value.trim(),
+          business_hours: document.getElementById("ci-hours").value.trim(),
+          tagline: document.getElementById("ci-tagline").value.trim()
+        };
+
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/content/contact`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + getToken()
+            },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            showToast("Contact information saved & live on website!");
+          } else {
+            showToast("Error saving contact info", true);
+          }
+        } catch(e) {
+          showToast("Network error saving contact info", true);
+        }
+      });
+
+      async function loadBlog() {
+        const grid = document.getElementById("blog-grid");
+        grid.innerHTML = `<div style="grid-column:1/-1; color:var(--admin-text-muted);">Loading articles...</div>`;
+        try {
+          const res = await fetch(`${API_BASE}/api/content/blog`);
+          const data = await res.json();
+          const items = data.data || [];
+          grid.innerHTML = items.map(b => `
+            <div class="cms-card">
+              <img src="${b.image || 'assets/images/crane/04-product-angle.jpg'}" class="cms-card-img" alt="${b.title}">
+              <div class="cms-card-body">
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                  <span class="badge" style="background:rgba(59,130,246,0.15); color:var(--admin-info);">${b.category || 'Article'}</span>
+                  <span style="font-size:11px; color:var(--admin-text-muted);">${b.date || ''}</span>
+                </div>
+                <h4 class="cms-card-title">${escapeHtml(b.title)}</h4>
+                <p class="cms-card-desc">${escapeHtml(b.excerpt || '')}</p>
+                <div class="cms-card-footer">
+                  <span class="badge" style="background:${b.published ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; color:${b.published ? 'var(--admin-success)' : 'var(--admin-danger)'};">
+                    ${b.published ? 'Published' : 'Draft'}
+                  </span>
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn-admin btn-admin-outline" style="padding:4px 8px; font-size:11px;" onclick='openEditCmsItem("blog", ${JSON.stringify(b)})'>Edit</button>
+                    <button class="btn-admin btn-admin-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteCmsItem('blog', '${b.id}')">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join("");
+        } catch(e) {
+          grid.innerHTML = `<div style="grid-column:1/-1;">${renderBackendUnavailableHtml("Blog Articles")}</div>`;
+        }
+      }
+
+      async function loadCatalog() {
+        try {
+          const res = await fetch(`${API_BASE}/api/content/catalog`);
+          const data = await res.json();
+          const c = data.data || {};
+          document.getElementById("cat-title").value = c.title || "";
+          document.getElementById("cat-subtitle").value = c.subtitle || "";
+          document.getElementById("cat-version").value = c.version || "";
+          document.getElementById("cat-url").value = c.download_url || "catalog.html";
+          document.getElementById("cat-standards").value = (c.standards || []).join(", ");
+          document.getElementById("cat-highlights").value = (c.highlights || []).join("\n");
+        } catch(e) {
+          showToast("Backend offline. Could not load catalog settings.", true);
+        }
+      }
+
+      document.getElementById("catalog-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const payload = {
+          title: document.getElementById("cat-title").value.trim(),
+          subtitle: document.getElementById("cat-subtitle").value.trim(),
+          version: document.getElementById("cat-version").value.trim(),
+          download_url: document.getElementById("cat-url").value.trim(),
+          standards: document.getElementById("cat-standards").value.split(",").map(s => s.trim()).filter(Boolean),
+          highlights: document.getElementById("cat-highlights").value.split("\n").map(s => s.trim()).filter(Boolean)
+        };
+
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/content/catalog`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + getToken()
+            },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            showToast("Catalog settings updated successfully!");
+          } else {
+            showToast("Error saving catalog settings", true);
+          }
+        } catch(e) {
+          showToast("Network error saving catalog settings", true);
+        }
+      });
+
+      async function loadHealth() {
+        const topPill = document.getElementById("top-status-pill");
+        const topDot = document.getElementById("top-status-dot");
+        const statusText = document.getElementById("db-status-text");
+        const shEngine = document.getElementById("sh-engine");
+        const shMongo = document.getElementById("sh-mongo-state");
+        const shRecords = document.getElementById("sh-records");
+        const diagBox = document.getElementById("sh-diagnostic-box");
+
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/system-status`, {
+            headers: { "Authorization": "Bearer " + getToken() }
+          });
+          if (res.ok) {
+            const status = await res.json();
+            const mongo = status.mongo || {};
+            const isMongoLive = !!mongo.connected;
+
+            if (shRecords) shRecords.textContent = `${status.total_inquiries || 0} Records`;
+
+            if (isMongoLive) {
+              if (topPill) {
+                topPill.style.background = "rgba(16, 185, 129, 0.12)";
+                topPill.style.color = "var(--admin-success)";
+                topPill.style.borderColor = "rgba(16, 185, 129, 0.25)";
+              }
+              if (topDot) topDot.style.background = "var(--admin-success)";
+              if (statusText) statusText.textContent = "MongoDB Atlas (Live)";
+              if (shEngine) shEngine.innerHTML = `<span style="color:var(--admin-success); font-weight:600;">MongoDB Atlas (Cloud Production)</span>`;
+              if (shMongo) shMongo.innerHTML = `<span style="color:var(--admin-success); font-weight:600;">Connected &amp; Online</span> <span style="font-size:11px; color:var(--admin-text-muted);">(${mongo.latency_ms || 120}ms)</span>`;
+              if (diagBox) diagBox.style.display = "none";
+            } else {
+              if (topPill) {
+                topPill.style.background = "rgba(245, 158, 11, 0.12)";
+                topPill.style.color = "var(--admin-warning)";
+                topPill.style.borderColor = "rgba(245, 158, 11, 0.3)";
+              }
+              if (topDot) topDot.style.background = "var(--admin-warning)";
+              if (statusText) statusText.textContent = `Local Mirror Active (Atlas Pending Whitelist)`;
+              if (shEngine) shEngine.innerHTML = `<span style="color:var(--admin-warning); font-weight:600;">SQLite / JSON Dual-Tier Mirror</span> <span style="font-size:11px; color:var(--admin-text-muted);">(Auto-syncs to Atlas on connect)</span>`;
+              if (shMongo) shMongo.innerHTML = `<span style="color:var(--admin-warning); font-weight:600;">Pending IP Whitelist${mongo.current_ip ? ' (' + escapeHtml(mongo.current_ip) + ')' : ''}</span>`;
+              
+              if (diagBox) {
+                diagBox.style.display = "block";
+                diagBox.innerHTML = `
+                  <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5;">
+                    <div style="font-weight: 700; color: var(--admin-warning); margin-bottom: 4px;">MongoDB Atlas Whitelist Action Required:</div>
+                    <div>${escapeHtml(mongo.diagnosis || 'Current client IP needs to be added to MongoDB Atlas Network Access.')}</div>
+                    <div style="margin-top: 8px; color: var(--admin-text-muted);">
+                      ${mongo.current_ip ? `Current Server Egress IP: <code style="color:#fff; background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px;">${escapeHtml(mongo.current_ip)}</code><br>` : ''}
+                      Add your hosting server's outbound IP address in <strong>MongoDB Atlas Console &rarr; Security &rarr; Network Access</strong>. Once authorized, the backend will auto-sync all inquiries and CMS data directly to MongoDB Atlas.
+                    </div>
+                  </div>
+                `;
+              }
+            }
+          } else if (res.status === 401) {
+            handleAuthExpired();
+          } else {
+            throw new Error("HTTP " + res.status);
+          }
+        } catch(e) {
+          if (topPill) {
+            topPill.style.background = "rgba(239, 68, 68, 0.12)";
+            topPill.style.color = "var(--admin-danger)";
+            topPill.style.borderColor = "rgba(239, 68, 68, 0.3)";
+          }
+          if (topDot) topDot.style.background = "var(--admin-danger)";
+          if (statusText) statusText.textContent = "Backend Offline (Port 8080)";
+          if (shEngine) shEngine.innerHTML = `<span style="color:var(--admin-danger); font-weight:600;">Offline — server.py not responding</span>`;
+          if (shMongo) shMongo.innerHTML = `<span style="color:var(--admin-danger);">Unavailable (Backend Offline)</span>`;
+          if (shRecords) shRecords.textContent = "—";
+          if (diagBox) {
+            diagBox.style.display = "block";
+            diagBox.innerHTML = `
+              <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5;">
+                <div style="font-weight: 700; color: var(--admin-danger); margin-bottom: 4px;">Backend Server Offline</div>
+                <div style="color: var(--admin-text-muted);">
+                  The administration portal cannot connect to the backend API service.<br>
+                  Start the backend server in your terminal:
+                  <div style="background: var(--admin-bg); padding: 6px 12px; border-radius: 6px; margin-top: 6px; font-family: monospace; color: var(--admin-primary); width: fit-content;">
+                    python3 server.py
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+        }
+      }
+
+      document.getElementById("refresh-health-btn").addEventListener("click", loadHealth);
+
+      window.openEditCmsItem = function(section, item) {
+        activeCmsSection = section;
+        activeCmsItem = item || {};
+        const isNew = !item;
+
+        document.getElementById("cms-modal-title").textContent = `${isNew ? 'Add New' : 'Edit'} ${section.slice(0, -1).replace('_', ' ').toUpperCase()}`;
+        const fields = document.getElementById("cms-modal-fields");
+        fields.innerHTML = "";
+
+        if (section === "products") {
+          fields.innerHTML = `
+            <div class="form-group-admin"><label class="form-label-admin">Product Name</label><input type="text" name="name" class="form-control-admin" required value="${activeCmsItem.name || ''}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Category</label><input type="text" name="category" class="form-control-admin" required value="${activeCmsItem.category || 'EOT Cranes'}"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="form-group-admin"><label class="form-label-admin">Lifting Capacity</label><input type="text" name="capacity" class="form-control-admin" value="${activeCmsItem.capacity || ''}"></div>
+              <div class="form-group-admin"><label class="form-label-admin">Span</label><input type="text" name="span" class="form-control-admin" value="${activeCmsItem.span || ''}"></div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="form-group-admin"><label class="form-label-admin">Lift Height</label><input type="text" name="lift_height" class="form-control-admin" value="${activeCmsItem.lift_height || ''}"></div>
+              <div class="form-group-admin"><label class="form-label-admin">Duty Class</label><input type="text" name="duty_class" class="form-control-admin" value="${activeCmsItem.duty_class || ''}"></div>
+            </div>
+            <div class="form-group-admin"><label class="form-label-admin">Image Asset Path</label><input type="text" name="image" class="form-control-admin" value="${activeCmsItem.image || 'assets/images/crane/01-hero-crane.jpg'}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Page Link</label><input type="text" name="link" class="form-control-admin" value="${activeCmsItem.link || 'products.html'}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Brochure PDF Path / URL (Optional)</label><input type="text" name="brochure" class="form-control-admin" placeholder="e.g. assets/docs/double-girder-eot-crane-brochure.pdf" value="${activeCmsItem.brochure || ''}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Video URL (Optional)</label><input type="text" name="video_url" class="form-control-admin" placeholder="e.g. assets/videos/demo.mp4 or YouTube link" value="${activeCmsItem.video_url || ''}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Description</label><textarea name="description" class="form-control-admin" rows="3">${activeCmsItem.description || ''}</textarea></div>
+          `;
+        } else if (section === "services") {
+          fields.innerHTML = `
+            <div class="form-group-admin"><label class="form-label-admin">Service Name</label><input type="text" name="name" class="form-control-admin" required value="${activeCmsItem.name || ''}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Image Asset Path</label><input type="text" name="image" class="form-control-admin" value="${activeCmsItem.image || 'assets/images/services/01-manufacturing.jpg'}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Description</label><textarea name="description" class="form-control-admin" rows="3">${activeCmsItem.description || ''}</textarea></div>
+            <div class="form-group-admin"><label class="form-label-admin">Benefits (comma-separated)</label><input type="text" name="benefits" class="form-control-admin" value="${(activeCmsItem.benefits || []).join(', ')}"></div>
+          `;
+        } else if (section === "gallery") {
+          fields.innerHTML = `
+            <div class="form-group-admin"><label class="form-label-admin">Photo Title</label><input type="text" name="title" class="form-control-admin" required value="${activeCmsItem.title || ''}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Category</label><input type="text" name="category" class="form-control-admin" value="${activeCmsItem.category || 'Manufacturing'}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Image Asset Path</label><input type="text" name="image" class="form-control-admin" required value="${resolveGalleryImage(activeCmsItem)}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Description</label><textarea name="description" class="form-control-admin" rows="2">${activeCmsItem.description || ''}</textarea></div>
+          `;
+        } else if (section === "projects") {
+          fields.innerHTML = `
+            <div class="form-group-admin"><label class="form-label-admin">Project Title</label><input type="text" name="title" class="form-control-admin" required value="${activeCmsItem.title || ''}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Location Name</label><input type="text" name="locationName" class="form-control-admin" required value="${activeCmsItem.locationName || ''}"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="form-group-admin"><label class="form-label-admin">Crane Type</label><input type="text" name="craneType" class="form-control-admin" value="${activeCmsItem.craneType || 'Double Girder EOT'}"></div>
+              <div class="form-group-admin"><label class="form-label-admin">Capacity</label><input type="text" name="capacity" class="form-control-admin" value="${activeCmsItem.capacity || '20 Ton'}"></div>
+            </div>
+            <div class="form-group-admin"><label class="form-label-admin">Image Asset Path</label><input type="text" name="image" class="form-control-admin" value="${activeCmsItem.image || 'assets/images/crane/08-project-install.jpg'}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Description</label><textarea name="description" class="form-control-admin" rows="2">${activeCmsItem.description || ''}</textarea></div>
+          `;
+        } else if (section === "map_pins") {
+          fields.innerHTML = `
+            <div class="form-group-admin"><label class="form-label-admin">Pin Title</label><input type="text" name="title" class="form-control-admin" required value="${activeCmsItem.title || ''}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Location Display</label><input type="text" name="locationName" class="form-control-admin" required value="${activeCmsItem.locationName || ''}"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="form-group-admin"><label class="form-label-admin">Latitude</label><input type="number" step="any" name="lat" class="form-control-admin" required value="${activeCmsItem.lat || 28.4}"></div>
+              <div class="form-group-admin"><label class="form-label-admin">Longitude</label><input type="number" step="any" name="lng" class="form-control-admin" required value="${activeCmsItem.lng || 77.3}"></div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="form-group-admin"><label class="form-label-admin">Crane Type</label><input type="text" name="craneType" class="form-control-admin" value="${activeCmsItem.craneType || 'EOT Crane'}"></div>
+              <div class="form-group-admin"><label class="form-label-admin">Capacity</label><input type="text" name="capacity" class="form-control-admin" value="${activeCmsItem.capacity || '10 Ton'}"></div>
+            </div>
+          `;
+        } else if (section === "blog") {
+          fields.innerHTML = `
+            <div class="form-group-admin"><label class="form-label-admin">Article Title</label><input type="text" name="title" class="form-control-admin" required value="${activeCmsItem.title || ''}"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="form-group-admin"><label class="form-label-admin">Category</label><input type="text" name="category" class="form-control-admin" value="${activeCmsItem.category || 'Industry'}"></div>
+              <div class="form-group-admin"><label class="form-label-admin">Publish Date</label><input type="date" name="date" class="form-control-admin" value="${activeCmsItem.date || new Date().toISOString().split('T')[0]}"></div>
+            </div>
+            <div class="form-group-admin"><label class="form-label-admin">Image Asset Path</label><input type="text" name="image" class="form-control-admin" value="${activeCmsItem.image || 'assets/images/crane/04-product-angle.jpg'}"></div>
+            <div class="form-group-admin"><label class="form-label-admin">Summary / Excerpt</label><textarea name="excerpt" class="form-control-admin" rows="3">${activeCmsItem.excerpt || ''}</textarea></div>
+            <div class="form-group-admin">
+              <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:#fff; cursor:pointer;">
+                <input type="checkbox" name="published" ${activeCmsItem.published !== false ? 'checked' : ''}> Published Live
+              </label>
+            </div>
+          `;
+        }
+
+        document.getElementById("cms-modal").style.display = "flex";
+      };
+
+      window.closeCmsModal = function() {
+        document.getElementById("cms-modal").style.display = "none";
+        activeCmsSection = null;
+        activeCmsItem = null;
+      };
+
+      document.getElementById("cms-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!activeCmsSection) return;
+
+        const formData = new FormData(e.target);
+        const payload = Object.fromEntries(formData.entries());
+
+        if (activeCmsItem && activeCmsItem.id) {
+          payload.id = activeCmsItem.id;
+        }
+
+        if (payload.benefits && typeof payload.benefits === "string") {
+          payload.benefits = payload.benefits.split(",").map(b => b.trim()).filter(Boolean);
+        }
+        if (payload.lat) payload.lat = parseFloat(payload.lat);
+        if (payload.lng) payload.lng = parseFloat(payload.lng);
+        if (payload.published !== undefined) payload.published = !!formData.get("published");
+
+        const isUpdate = !!activeCmsItem.id;
+        const endpoint = isUpdate ? `${API_BASE}/api/admin/content/${activeCmsSection}/${activeCmsItem.id}` : `${API_BASE}/api/admin/content/${activeCmsSection}`;
+        const method = isUpdate ? "PUT" : "POST";
+
+        try {
+          const res = await fetch(endpoint, {
+            method: method,
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + getToken()
+            },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            showToast("Content item saved!");
+            closeCmsModal();
+            if (activeCmsSection === "products") loadProducts();
+            if (activeCmsSection === "services") loadServices();
+            if (activeCmsSection === "gallery") loadGallery();
+            if (activeCmsSection === "projects") loadProjects();
+            if (activeCmsSection === "map_pins") loadPins();
+            if (activeCmsSection === "blog") loadBlog();
+          } else {
+            showToast("Failed to save content", true);
+          }
+        } catch(e) {
+          showToast("Network error saving content", true);
+        }
+      });
+
+      window.deleteCmsItem = async function(section, id) {
+        if (!confirm("Are you sure you want to remove this item?")) return;
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/content/${section}/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": "Bearer " + getToken() }
+          });
+          if (res.ok) {
+            showToast("Item deleted");
+            if (section === "products") loadProducts();
+            if (section === "services") loadServices();
+            if (section === "gallery") loadGallery();
+            if (section === "projects") loadProjects();
+            if (section === "map_pins") loadPins();
+            if (section === "blog") loadBlog();
+          } else {
+            showToast("Error deleting item", true);
+          }
+        } catch(e) {
+          showToast("Network error deleting item", true);
+        }
+      };
+
+      // =========================================
+      // CERTIFICATES & REGISTRATIONS MANAGEMENT
+      // =========================================
+      let activeCertificates = [];
+
+      window.loadCertificates = async function() {
+        const list = document.getElementById("certificates-list");
+        if (!list) return;
+        list.innerHTML = `<div style="color:var(--admin-text-muted); padding:16px;">Loading certificates &amp; registrations...</div>`;
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/content/certificates`, {
+            headers: { "Authorization": "Bearer " + getToken() }
+          });
+          if (res.status === 401) {
+            handleAuthExpired();
+            return;
+          }
+          const data = await res.json();
+          activeCertificates = data.data || [];
+
+          if (activeCertificates.length === 0) {
+            list.innerHTML = `
+              <div style="background:var(--admin-surface); border:1px dashed var(--admin-border); border-radius:12px; padding:32px; text-align:center; color:var(--admin-text-muted);">
+                <div style="font-size:28px; margin-bottom:8px;">📜</div>
+                <div style="font-weight:600; color:#fff; margin-bottom:4px;">No Certificate Slots Configured</div>
+                <div style="font-size:12px; margin-bottom:16px;">Create certificate entries for ISO, Udyam, GST, or other statutory documents.</div>
+                <button class="btn-admin btn-admin-primary" onclick="openAddCertificateModal()">+ Add Certificate</button>
+              </div>
+            `;
+            return;
+          }
+
+          const todayStr = new Date().toISOString().split("T")[0];
+
+          list.innerHTML = activeCertificates.map(c => {
+            const hasFile = !!c.file_url;
+            const isExpired = c.expiry_date && c.expiry_date < todayStr;
+            const isPdf = (c.file_url || "").toLowerCase().endsWith(".pdf") || c.file_type === "pdf";
+
+            let statusBadge = "";
+            if (!hasFile) {
+              statusBadge = `<span class="badge" style="background:rgba(156,163,175,0.15); color:#9ca3af; border:1px solid rgba(156,163,175,0.3);">⚪ No Document Uploaded</span>`;
+            } else if (isExpired) {
+              statusBadge = `<span class="badge" style="background:rgba(239,68,68,0.15); color:#ef4444; border:1px solid rgba(239,68,68,0.3);">🔴 Expired (Pending Renewal)</span>`;
+            } else if (c.is_public) {
+              statusBadge = `<span class="badge" style="background:rgba(34,197,94,0.15); color:#22c55e; border:1px solid rgba(34,197,94,0.3);">🟢 Public Live</span>`;
+            } else {
+              statusBadge = `<span class="badge" style="background:rgba(245,158,11,0.15); color:#f59e0b; border:1px solid rgba(245,158,11,0.3);">🟠 Hidden (Admin Only)</span>`;
+            }
+
+            const fileSizeFormatted = c.file_size ? formatBytes(c.file_size) : "";
+
+            return `
+              <div class="detail-card" style="margin-bottom:0; border-color:${c.is_public && hasFile && !isExpired ? 'rgba(34,197,94,0.35)' : 'var(--admin-border)'};">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+                  <div>
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                      <span style="font-size:18px;">${isPdf ? '📄' : (hasFile ? '🖼️' : '📜')}</span>
+                      <h4 style="margin:0; font-size:16px; font-weight:700; color:#fff; font-family:'Space Grotesk',sans-serif;">
+                        ${escapeHtml(c.title || c.doc_type || 'Certificate')}
+                      </h4>
+                      <span class="badge" style="background:rgba(232,99,10,0.15); color:var(--admin-primary); border:1px solid rgba(232,99,10,0.3); font-size:10.5px;">
+                        ${escapeHtml(c.doc_type || 'Registration')}
+                      </span>
+                    </div>
+                    ${c.cert_number ? `<div style="font-size:12px; color:var(--admin-primary); font-weight:600;">Reg/Cert No: <span style="color:#fff; font-family:monospace;">${escapeHtml(c.cert_number)}</span></div>` : ''}
+                  </div>
+                  <div>${statusBadge}</div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:12px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:12px; margin-bottom:12px;">
+                  <div>
+                    <div style="font-size:11px; color:var(--admin-text-muted); text-transform:uppercase; font-weight:600; margin-bottom:4px;">Current File</div>
+                    ${hasFile ? `
+                      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                        <span style="font-size:12px; color:#fff; font-weight:500; word-break:break-all;">${escapeHtml(c.file_name || 'document')}</span>
+                        ${fileSizeFormatted ? `<span style="font-size:10.5px; color:var(--admin-text-muted);">(${fileSizeFormatted})</span>` : ''}
+                        <a href="${c.file_url}" target="_blank" rel="noopener" class="btn-admin btn-admin-outline" style="padding:2px 8px; font-size:11px;">View ↗</a>
+                      </div>
+                    ` : `<span style="font-size:12px; color:var(--admin-text-muted); font-style:italic;">No file uploaded yet</span>`}
+                  </div>
+
+                  <div>
+                    <div style="font-size:11px; color:var(--admin-text-muted); text-transform:uppercase; font-weight:600; margin-bottom:4px;">Issue Date</div>
+                    <div style="font-size:12.5px; color:#fff;">${escapeHtml(c.issue_date || '—')}</div>
+                  </div>
+
+                  <div>
+                    <div style="font-size:11px; color:var(--admin-text-muted); text-transform:uppercase; font-weight:600; margin-bottom:4px;">Expiry / Validity Date</div>
+                    <div style="font-size:12.5px; color:${isExpired ? '#ef4444' : '#fff'}; font-weight:${isExpired ? '700' : 'normal'};">
+                      ${escapeHtml(c.expiry_date || 'Lifetime / No Expiry')} ${isExpired ? '<span style="font-size:10.5px;">(EXPIRED)</span>' : ''}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style="font-size:11px; color:var(--admin-text-muted); text-transform:uppercase; font-weight:600; margin-bottom:4px;">Public Visibility</div>
+                    <div style="font-size:12.5px; color:${c.is_public ? '#22c55e' : '#f59e0b'}; font-weight:600;">
+                      ${c.is_public ? 'Public (Visible on site)' : 'Hidden (Internal only)'}
+                    </div>
+                  </div>
+                </div>
+
+                ${c.description ? `<div style="font-size:12.5px; color:var(--admin-text-muted); margin-bottom:10px; line-height:1.5;">${escapeHtml(c.description)}</div>` : ''}
+
+                ${c.notes ? `
+                  <div style="font-size:11.5px; color:#fbbf24; background:rgba(245,158,11,0.08); border-left:3px solid #f59e0b; padding:6px 10px; border-radius:4px; margin-bottom:12px;">
+                    <strong>Internal Note:</strong> ${escapeHtml(c.notes)}
+                  </div>
+                ` : ''}
+
+                <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.06); padding-top:12px;">
+                  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="btn-admin btn-admin-primary" style="padding:6px 12px; font-size:12px;" onclick="triggerDirectUpload('${c.id}')">
+                      ${hasFile ? 'Replace Document' : 'Upload Document'}
+                    </button>
+                    <button class="btn-admin btn-admin-outline" style="padding:6px 12px; font-size:12px;" onclick='openEditCertificateModal(${JSON.stringify(c)})'>
+                      Edit Details
+                    </button>
+                    <button class="btn-admin ${c.is_public ? 'btn-admin-warning' : 'btn-admin-outline'}" style="padding:6px 12px; font-size:12px;" onclick="toggleCertStatus('${c.id}')">
+                      ${c.is_public ? 'Hide from Public' : 'Make Public Live'}
+                    </button>
+                    ${hasFile ? `
+                      <button class="btn-admin btn-admin-danger" style="padding:6px 12px; font-size:12px;" onclick="removeCertFile('${c.id}')">
+                        Remove File
+                      </button>
+                    ` : ''}
+                  </div>
+                  <button class="btn-admin btn-admin-danger" style="padding:6px 10px; font-size:11px;" onclick="deleteCertSlot('${c.id}')" title="Delete this slot">
+                    Delete Slot
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join("");
+        } catch(e) {
+          list.innerHTML = `<div style="color:var(--admin-danger); padding:16px;">Error loading certificates: ${e.message}</div>`;
+        }
+      };
+
+      function formatBytes(bytes) {
+        if (!bytes || isNaN(bytes)) return "";
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+      }
+
+      window.openAddCertificateModal = function() {
+        openEditCertificateModal(null);
+      };
+
+      window.openEditCertificateModal = function(cert) {
+        const isNew = !cert;
+        document.getElementById("cert-modal-title").textContent = isNew ? "Add Certificate / Registration" : "Edit Certificate / Registration";
+        document.getElementById("cert-edit-id").value = cert ? cert.id : "";
+        document.getElementById("cert-edit-doc-type").value = cert ? (cert.doc_type || "ISO 9001:2015") : "ISO 9001:2015";
+        document.getElementById("cert-edit-title").value = cert ? (cert.title || "") : "";
+        document.getElementById("cert-edit-number").value = cert ? (cert.cert_number || "") : "";
+        document.getElementById("cert-edit-issue-date").value = cert ? (cert.issue_date || "") : "";
+        document.getElementById("cert-edit-expiry-date").value = cert ? (cert.expiry_date || "") : "";
+        const noExpBox = document.getElementById("cert-edit-no-expiry");
+        noExpBox.checked = !!(cert && !cert.expiry_date && cert.id);
+        document.getElementById("cert-edit-expiry-date").disabled = noExpBox.checked;
+        document.getElementById("cert-edit-description").value = cert ? (cert.description || "") : "";
+        document.getElementById("cert-edit-notes").value = cert ? (cert.notes || "") : "";
+        document.getElementById("cert-edit-public").checked = !!(cert && cert.is_public);
+        document.getElementById("cert-edit-file").value = "";
+
+        const fileInfo = document.getElementById("cert-current-file-info");
+        if (cert && cert.file_url) {
+          fileInfo.innerHTML = `Current file: <strong>${escapeHtml(cert.file_name || 'Uploaded Document')}</strong> (${formatBytes(cert.file_size)}) — <a href="${cert.file_url}" target="_blank" style="color:var(--admin-primary); text-decoration:underline;">View File</a>`;
+        } else {
+          fileInfo.innerHTML = `<em>No file currently uploaded.</em>`;
+        }
+
+        document.getElementById("certificate-modal").style.display = "flex";
+      };
+
+      window.closeCertificateModal = function() {
+        document.getElementById("certificate-modal").style.display = "none";
+      };
+
+      document.getElementById("cert-edit-no-expiry").addEventListener("change", (e) => {
+        const expInput = document.getElementById("cert-edit-expiry-date");
+        if (e.target.checked) {
+          expInput.value = "";
+          expInput.disabled = true;
+        } else {
+          expInput.disabled = false;
+        }
+      });
+
+      // Handle certificate modal submission (with optional inline file upload)
+      document.getElementById("cert-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById("cert-submit-btn");
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Saving...";
+
+        const id = document.getElementById("cert-edit-id").value || `cert_${Date.now()}`;
+        const docType = document.getElementById("cert-edit-doc-type").value;
+        const title = document.getElementById("cert-edit-title").value.trim();
+        const certNumber = document.getElementById("cert-edit-number").value.trim();
+        const issueDate = document.getElementById("cert-edit-issue-date").value;
+        const noExpiry = document.getElementById("cert-edit-no-expiry").checked;
+        const expiryDate = noExpiry ? "" : document.getElementById("cert-edit-expiry-date").value;
+        const description = document.getElementById("cert-edit-description").value.trim();
+        const notes = document.getElementById("cert-edit-notes").value.trim();
+        const isPublic = document.getElementById("cert-edit-public").checked;
+        const fileInput = document.getElementById("cert-edit-file");
+
+        try {
+          if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            if (file.size > 15 * 1024 * 1024) {
+              alert("File exceeds maximum allowed size of 15MB");
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Save Certificate";
+              return;
+            }
+
+            const base64Data = await readFileAsBase64(file);
+            const upRes = await fetch(`${API_BASE}/api/admin/certificates/upload`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + getToken()
+              },
+              body: JSON.stringify({
+                cert_id: id,
+                file_name: file.name,
+                file_data: base64Data
+              })
+            });
+            if (!upRes.ok) {
+              const errJson = await upRes.json();
+              throw new Error(errJson.error || "File upload failed");
+            }
+          }
+
+          const payload = {
+            doc_type: docType,
+            title: title,
+            cert_number: certNumber,
+            issue_date: issueDate,
+            expiry_date: expiryDate,
+            description: description,
+            notes: notes,
+            is_public: isPublic,
+            status: isPublic ? "public" : "hidden"
+          };
+
+          const isExisting = activeCertificates.some(c => c.id === id);
+          const endpoint = isExisting ? `${API_BASE}/api/admin/content/certificates/${id}` : `${API_BASE}/api/admin/content/certificates`;
+          const method = isExisting ? "PUT" : "POST";
+
+          if (!isExisting) {
+            payload.id = id;
+            payload.file_url = "";
+            payload.file_name = "";
+            payload.file_size = 0;
+            payload.file_type = "";
+          }
+
+          const res = await fetch(endpoint, {
+            method: method,
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + getToken()
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (res.ok) {
+            showToast("Certificate saved successfully!");
+            closeCertificateModal();
+            loadCertificates();
+          } else {
+            const errJson = await res.json();
+            showToast(errJson.error || "Failed to save certificate", true);
+          }
+        } catch(err) {
+          showToast("Error: " + err.message, true);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Save Certificate";
+        }
+      });
+
+      // Direct upload trigger from card
+      window.triggerDirectUpload = function(certId) {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".pdf,image/png,image/jpeg,image/webp";
+        input.onchange = async (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+
+          if (file.size > 15 * 1024 * 1024) {
+            alert("File size exceeds 15 MB limit.");
+            return;
+          }
+
+          showToast("Uploading document...");
+          try {
+            const base64Data = await readFileAsBase64(file);
+            const res = await fetch(`${API_BASE}/api/admin/certificates/upload`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + getToken()
+              },
+              body: JSON.stringify({
+                cert_id: certId,
+                file_name: file.name,
+                file_data: base64Data
+              })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              showToast("Document uploaded! Update details and mark Public when renewed.");
+              loadCertificates();
+            } else {
+              showToast(data.error || "Upload failed", true);
+            }
+          } catch(err) {
+            showToast("Upload network error: " + err.message, true);
+          }
+        };
+        input.click();
+      };
+
+      // Toggle public status
+      window.toggleCertStatus = async function(certId) {
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/certificates/toggle-status`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + getToken()
+            },
+            body: JSON.stringify({ cert_id: certId })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast(data.is_public ? "Certificate marked Public Live" : "Certificate marked Hidden");
+            loadCertificates();
+          } else {
+            showToast(data.error || "Failed to toggle status", true);
+          }
+        } catch(e) {
+          showToast("Network error toggling status", true);
+        }
+      };
+
+      // Remove file from certificate
+      window.removeCertFile = async function(certId) {
+        if (!confirm("Are you sure you want to remove this uploaded document file? The certificate record will remain.")) return;
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/certificates/remove-file`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + getToken()
+            },
+            body: JSON.stringify({ cert_id: certId })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast("Document file removed");
+            loadCertificates();
+          } else {
+            showToast(data.error || "Failed to remove file", true);
+          }
+        } catch(e) {
+          showToast("Network error removing file", true);
+        }
+      };
+
+      // Delete certificate slot entirely
+      window.deleteCertSlot = async function(certId) {
+        if (!confirm("Are you sure you want to delete this certificate slot completely?")) return;
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/content/certificates/${certId}`, {
+            method: "DELETE",
+            headers: { "Authorization": "Bearer " + getToken() }
+          });
+          if (res.ok) {
+            showToast("Certificate slot deleted");
+            loadCertificates();
+          } else {
+            showToast("Failed to delete certificate", true);
+          }
+        } catch(e) {
+          showToast("Network error deleting certificate", true);
+        }
+      };
+
+      function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
+
+      document.getElementById("add-product-btn").addEventListener("click", () => openEditCmsItem("products", null));
+      document.getElementById("add-service-btn").addEventListener("click", () => openEditCmsItem("services", null));
+      document.getElementById("add-gallery-btn").addEventListener("click", () => openEditCmsItem("gallery", null));
+      document.getElementById("add-project-btn").addEventListener("click", () => openEditCmsItem("projects", null));
+      document.getElementById("add-pin-btn").addEventListener("click", () => openEditCmsItem("map_pins", null));
+      document.getElementById("add-blog-btn").addEventListener("click", () => openEditCmsItem("blog", null));
+
+      function showToast(msg, isError = false) {
+        const toast = document.getElementById("toast");
+        toast.textContent = msg;
+        toast.style.borderColor = isError ? "var(--admin-danger)" : "var(--admin-success)";
+        toast.style.display = "block";
+        setTimeout(() => { toast.style.display = "none"; }, 3500);
+      }
+
+      function debounce(fn, delay) {
+        let t;
+        return function(...args) {
+          clearTimeout(t);
+          t = setTimeout(() => fn.apply(this, args), delay);
+        };
+      }
+
+      function escapeHtml(str) {
+        if (!str) return "";
+        return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/`/g, "&#96;");
+      }
+
+      function formatPhoneForWa(phone) {
+        let p = String(phone).replace(/[^0-9]/g, "");
+        if (p.length === 10) p = "91" + p;
+        return p;
+      }
+    });
+  </script>
+</body>
+</html>

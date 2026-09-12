@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You — VS Infra & Cranes</title>
+  <meta name="robots" content="noindex, follow"/>
+  <link rel="icon" type="image/png" href="assets/images/logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/design-system.css"/>
+  <style>
+    .thank-you-section { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; padding: var(--space-12); background: linear-gradient(135deg, #1A1A2E, #0f0f1a); color: white; }
+    .thank-you-pattern { position: absolute; inset: 0; opacity: 0.05; background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(232,99,10,0.15) 35px, rgba(232,99,10,0.15) 36px); z-index: 0; }
+    .thank-you-content { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; background: rgba(26,26,46,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); padding: var(--space-12); border-radius: var(--radius-2xl); box-shadow: var(--shadow-2xl); }
+    
+    .icon-wrapper { width: 80px; height: 80px; background: rgba(232,99,10,0.1); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-6); border: 2px solid var(--color-primary); }
+    .icon-wrapper svg { width: 40px; height: 40px; }
+    .title { font-size: var(--text-3xl); font-family: 'Space Grotesk', sans-serif; margin-bottom: var(--space-4); }
+    .desc { font-size: var(--text-lg); color: rgba(255,255,255,0.7); margin-bottom: var(--space-8); line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="thank-you-section">
+    <div class="thank-you-pattern"></div>
+    <div class="thank-you-content reveal">
+      <div class="icon-wrapper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h1 class="title">Request Received!</h1>
+      <p class="desc">Thank you for reaching out to VS Infra & Cranes. Your inquiry has been successfully submitted to our engineering team. We will review your requirements and get back to you within 24 hours.</p>
+      <div style="display:flex;gap:var(--space-4);justify-content:center;">
+        <a href="index.html" class="btn btn-primary">Return to Home</a>
+        <a href="products.html" class="btn btn-outline">Explore Products</a>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/motion-engine.js"></script>
+</body>
+</html>

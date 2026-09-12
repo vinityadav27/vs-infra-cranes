@@ -1,0 +1,458 @@
+{
+  "contact": {
+    "company_name": "VS Infra & Cranes",
+    "phone": "+91 99901 91859",
+    "email": "vsinfracranes@gmail.com",
+    "address": "Bhankri Industrial Area, Faridabad, Haryana \u2013 121005, India",
+    "business_hours": "Monday \u2013 Saturday: 9:00 AM \u2013 6:00 PM (24/7 Breakdown Support)",
+    "whatsapp_number": "919990191859",
+    "tagline": "Lifting Today, Building Tomorrow",
+    "founded_year": 2021
+  },
+  "products": [
+    {
+      "id": "prod_single_girder_eot",
+      "name": "Single Girder EOT Crane",
+      "category": "EOT Cranes",
+      "capacity": "1 \u2013 20 Ton",
+      "span": "Up to 25 meters",
+      "lift_height": "Up to 18 meters",
+      "duty_class": "IS:3177 Class II / III (M5)",
+      "description": "Cost-effective overhead crane for light to medium duty industrial applications, workshops, and assembly lines.",
+      "image": "assets/images/products/single-girder-eot-crane.jpg",
+      "link": "products/single-girder-eot-crane.html"
+    },
+    {
+      "id": "prod_double_girder_eot",
+      "name": "Double Girder EOT Crane",
+      "category": "EOT Cranes",
+      "capacity": "5 \u2013 50 Ton",
+      "span": "Up to 35 meters",
+      "lift_height": "Up to 24 meters",
+      "duty_class": "IS:3177 Class III / IV (M7/M8)",
+      "description": "Flagship heavy-duty overhead crane engineered for severe continuous duty in steel mills, foundries, and heavy manufacturing.",
+      "image": "assets/images/products/double-girder-eot-crane.jpg",
+      "link": "products/double-girder-eot-crane.html"
+    },
+    {
+      "id": "prod_gantry_crane",
+      "name": "Gantry Crane",
+      "category": "Gantry Cranes",
+      "capacity": "5 \u2013 50 Ton",
+      "span": "Up to 30 meters",
+      "lift_height": "Up to 15 meters",
+      "duty_class": "IS:807 Class II / III",
+      "description": "Freestanding crane running on ground rails, ideal for outdoor storage yards, rail yards, and ports.",
+      "image": "assets/images/products/gantry-crane.jpg",
+      "video": "assets/videos/gantry-crane.mp4",
+      "link": "products/gantry-crane.html"
+    },
+    {
+      "id": "prod_goliath_crane",
+      "name": "Goliath Crane",
+      "category": "Gantry Cranes",
+      "capacity": "10 \u2013 50 Ton",
+      "span": "Up to 40 meters",
+      "lift_height": "Up to 20 meters",
+      "duty_class": "IS:807 Heavy Duty Class IV",
+      "description": "Extra heavy-duty outdoor gantry crane built for precast concrete yards, shipyards, and mega infrastructure projects.",
+      "image": "assets/images/products/goliath-crane.jpg",
+      "link": "products/goliath-crane.html"
+    },
+    {
+      "id": "prod_semi_gantry",
+      "name": "Semi-Gantry Crane",
+      "category": "Gantry Cranes",
+      "capacity": "5 \u2013 30 Ton",
+      "span": "Up to 20 meters",
+      "lift_height": "Up to 12 meters",
+      "duty_class": "IS:807 Class II / III",
+      "description": "Space-saving combination crane with one runway elevated on building columns and the other running on ground rail.",
+      "image": "assets/images/products/semi-gantry-crane.jpg",
+      "link": "products/semi-gantry-crane.html"
+    },
+    {
+      "id": "prod_electric_wire_rope_hoist",
+      "name": "Electric Wire Rope Hoist",
+      "category": "Hoists",
+      "capacity": "1 \u2013 20 Ton",
+      "span": "N/A",
+      "lift_height": "Up to 30 meters",
+      "duty_class": "IS:3938 Class II / III / IV",
+      "description": "Precision-engineered lifting hoist with hardened helical gearboxes and electro-hydraulic thruster brakes.",
+      "image": "assets/images/products/electric-wire-rope-hoist.jpg",
+      "video": "assets/videos/electric-wire-rope-hoist.mp4",
+      "link": "products/electric-wire-rope-hoist.html"
+    },
+    {
+      "id": "prod_chain_hoist",
+      "name": "Chain Hoist",
+      "category": "Hoists",
+      "capacity": "0.5 \u2013 5 Ton",
+      "span": "N/A",
+      "lift_height": "Up to 12 meters",
+      "duty_class": "IS:3938 Class II / III",
+      "description": "Compact and portable lifting equipment. Available in electric and manual variants for smaller maintenance tasks.",
+      "image": "assets/images/products/chain-hoist.jpg",
+      "video": "assets/videos/chain-hoist.mp4",
+      "link": "products/chain-hoist.html"
+    },
+    {
+      "id": "prod_jib_crane",
+      "name": "Jib Crane",
+      "category": "Jib Cranes",
+      "capacity": "0.5 \u2013 10 Ton",
+      "span": "Up to 6m Radius",
+      "lift_height": "Up to 8 meters",
+      "duty_class": "IS:807 Class I / II",
+      "description": "Versatile workstation crane offering up to 360\u00b0 rotation. Excellent for localized loading and unloading operations.",
+      "image": "assets/images/products/jib-crane.jpg",
+      "link": "products/jib-crane.html"
+    }
+  ],
+  "services": [
+    {
+      "id": "srv_manufacturing",
+      "name": "Custom Crane Manufacturing",
+      "description": "Turnkey design, fabrication, CNC machining, and shop-assembly of industrial cranes to customized span and duty specifications.",
+      "image": "assets/images/services/01-manufacturing.jpg",
+      "benefits": [
+        "Custom Engineering",
+        "IS Standards Compliant",
+        "100% Tested"
+      ]
+    },
+    {
+      "id": "srv_installation",
+      "name": "Installation & Commissioning",
+      "description": "Complete on-site crane erection, laser runway alignment, electrical bussing, and full load deflection testing.",
+      "image": "assets/images/services/02-installation.jpg",
+      "benefits": [
+        "Certified Riggers",
+        "Zero-Accident Safety",
+        "Fast Turnaround"
+      ]
+    },
+    {
+      "id": "srv_amc",
+      "name": "Annual Maintenance Contracts (AMC)",
+      "description": "Scheduled preventive inspections, lubrication, brake adjustments, and emergency breakdown coverage to ensure 99%+ uptime.",
+      "image": "assets/images/services/03-amc.jpg",
+      "benefits": [
+        "200+ Active Contracts",
+        "4-Hour Response",
+        "Parts Discount"
+      ]
+    },
+    {
+      "id": "srv_breakdown",
+      "name": "24/7 Breakdown & Rapid Repair",
+      "description": "Round-the-clock emergency technical team on-call for mechanical, electrical, and structural crane repairs across Delhi NCR & North India.",
+      "image": "assets/images/services/04-breakdown.jpg",
+      "benefits": [
+        "24/7 Available",
+        "Trained Specialists",
+        "Minimal Downtime"
+      ]
+    },
+    {
+      "id": "srv_modernization",
+      "name": "Crane Modernization & Upgrades",
+      "description": "Retrofitting VFD drives, radio remote controls, wireless anti-collision sensors, and higher-capacity hoists to extend equipment life.",
+      "image": "assets/images/services/05-modernization.jpg",
+      "benefits": [
+        "Cost Savings",
+        "Modern Safety",
+        "Extended Lifespan"
+      ]
+    },
+    {
+      "id": "srv_spares",
+      "name": "Genuine Spare Parts Supply",
+      "description": "Extensive inventory of rope drums, forged hooks, wire ropes, brake thrusters, master switches, and DSL busbar systems.",
+      "image": "assets/images/services/08-spare-parts.jpg",
+      "benefits": [
+        "OEM Quality",
+        "Immediate Dispatch",
+        "Full Warranty"
+      ]
+    }
+  ],
+  "gallery": [
+    {
+      "id": "gal_1",
+      "title": "Steel Plant Installation",
+      "category": "EOT Cranes",
+      "image": "assets/images/gallery/gallery-1.jpg",
+      "description": "Heavy-duty 30T Double Girder EOT crane operating inside high-temperature steel rolling bay."
+    },
+    {
+      "id": "gal_2",
+      "title": "Heavy Load Testing",
+      "category": "Testing",
+      "image": "assets/images/gallery/gallery-2.jpg",
+      "description": "Statutory 125% proof load testing and deflection verification prior to client handover."
+    },
+    {
+      "id": "gal_3",
+      "title": "Precision Assembly",
+      "category": "Manufacturing",
+      "image": "assets/images/gallery/gallery-3.jpg",
+      "description": "End carriage align-boring and structural girder fabrication inside Faridabad works."
+    },
+    {
+      "id": "gal_4",
+      "title": "Goliath Crane Erection",
+      "category": "Gantry Cranes",
+      "image": "assets/images/gallery/gallery-4.jpg",
+      "description": "Outdoor 40-meter span goliath crane assembly for precast concrete yard."
+    },
+    {
+      "id": "gal_5",
+      "title": "Jib Cranes Delivery",
+      "category": "Jib Cranes",
+      "image": "assets/images/gallery/gallery-5.jpg",
+      "description": "Pillar mounted 360-degree slew jib cranes dispatched for automotive assembly stations."
+    },
+    {
+      "id": "gal_6",
+      "title": "Control Panels & Automation",
+      "category": "Electrical",
+      "image": "assets/images/gallery/gallery-6.jpg",
+      "description": "Custom VFD control panels with soft start-stop logic and wireless remote transceivers."
+    }
+  ],
+  "projects": [
+    {
+      "id": "south-africa",
+      "title": "Industrial Facility, South Africa",
+      "category": "Export Project",
+      "locationName": "South Africa",
+      "craneType": "Double Girder EOT Crane",
+      "capacity": "30 Ton",
+      "industry": "Mining & Infrastructure",
+      "description": "Heavy-duty Double Girder EOT crane engineered and commissioned for demanding international mining operations.",
+      "image": "assets/images/crane/08-project-install.jpg",
+      "lat": -28.4792,
+      "lng": 24.6727
+    },
+    {
+      "id": "odisha",
+      "title": "Heavy Industries, Odisha",
+      "category": "Heavy Engineering",
+      "locationName": "Odisha, India",
+      "craneType": "Double Girder EOT Crane",
+      "capacity": "50 Ton",
+      "industry": "Steel & Metallurgy",
+      "description": "50-ton heavy industrial crane with electro-hydraulic thruster brakes and continuous M8 duty rating.",
+      "image": "assets/images/crane/03-product-side.jpg",
+      "lat": 20.9516,
+      "lng": 85.0985
+    },
+    {
+      "id": "raipur",
+      "title": "Manufacturing Plant, Raipur",
+      "category": "Manufacturing",
+      "locationName": "Raipur, Chhattisgarh",
+      "craneType": "Electric Wire Rope Hoist System",
+      "capacity": "5 Ton",
+      "industry": "Fabrication & Metal Works",
+      "description": "Continuous high-speed wire rope hoists installed for round-the-clock structural fabrication line.",
+      "image": "assets/images/crane/07-product-site.jpg",
+      "lat": 21.2513,
+      "lng": 81.6296
+    },
+    {
+      "id": "indore",
+      "title": "Automotive Parts, Indore",
+      "category": "Automotive",
+      "locationName": "Indore, Madhya Pradesh",
+      "craneType": "Double Girder EOT Crane",
+      "capacity": "20 Ton",
+      "industry": "Automotive Tier-1",
+      "description": "Precision die-handling EOT crane equipped with dual-speed inching control and anti-sway software.",
+      "image": "assets/images/crane/06-product-panel.jpg",
+      "lat": 22.7195,
+      "lng": 75.8577
+    },
+    {
+      "id": "pali",
+      "title": "Workshop Facility, Pali",
+      "category": "Workshop",
+      "locationName": "Pali, Rajasthan",
+      "craneType": "Single Girder EOT Crane",
+      "capacity": "10 Ton",
+      "industry": "Textile Machinery",
+      "description": "Cost-effective 10-ton single girder crane optimizing hook approach across 18-meter workshop bay.",
+      "image": "assets/images/crane/04-product-angle.jpg",
+      "lat": 25.7713,
+      "lng": 73.3234
+    },
+    {
+      "id": "rohtak",
+      "title": "Assembly Unit, Rohtak",
+      "category": "Assembly",
+      "locationName": "Rohtak, Haryana",
+      "craneType": "Electric Hoist System",
+      "capacity": "3 Ton",
+      "industry": "Precision Machinery",
+      "description": "Multiple modular electric hoists dedicated to component lifting and rapid assembly cells.",
+      "image": "assets/images/crane/05-product-hoist.jpg",
+      "lat": 28.8955,
+      "lng": 76.5891
+    }
+  ],
+  "map_pins": [
+    {
+      "id": "pin_1",
+      "title": "South Africa Export",
+      "locationName": "South Africa",
+      "lat": -28.4792,
+      "lng": 24.6727,
+      "craneType": "Double Girder EOT",
+      "capacity": "30 Ton"
+    },
+    {
+      "id": "pin_2",
+      "title": "Odisha Heavy Steel",
+      "locationName": "Odisha, India",
+      "lat": 20.9516,
+      "lng": 85.0985,
+      "craneType": "Double Girder EOT",
+      "capacity": "50 Ton"
+    },
+    {
+      "id": "pin_3",
+      "title": "Raipur Manufacturing",
+      "locationName": "Raipur, India",
+      "lat": 21.2513,
+      "lng": 81.6296,
+      "craneType": "Wire Rope Hoist",
+      "capacity": "5 Ton"
+    },
+    {
+      "id": "pin_4",
+      "title": "Indore Auto Unit",
+      "locationName": "Indore, India",
+      "lat": 22.7195,
+      "lng": 75.8577,
+      "craneType": "Double Girder EOT",
+      "capacity": "20 Ton"
+    },
+    {
+      "id": "pin_5",
+      "title": "Pali Workshop",
+      "locationName": "Pali, Rajasthan",
+      "lat": 25.7713,
+      "lng": 73.3234,
+      "craneType": "Single Girder EOT",
+      "capacity": "10 Ton"
+    },
+    {
+      "id": "pin_6",
+      "title": "Rohtak Assembly",
+      "locationName": "Rohtak, Haryana",
+      "lat": 28.8955,
+      "lng": 76.5891,
+      "craneType": "Electric Hoist",
+      "capacity": "3 Ton"
+    }
+  ],
+  "blog": [
+    {
+      "id": "blog_single_vs_double",
+      "title": "Single vs Double Girder EOT Cranes: Which Is Right for Your Factory?",
+      "category": "Crane Selection",
+      "date": "2026-08-15",
+      "image": "assets/images/crane/04-product-angle.jpg",
+      "excerpt": "A comprehensive engineering comparison of capital costs, hook approaches, duty cycles, and headroom considerations.",
+      "published": true
+    },
+    {
+      "id": "blog_crane_safety_maintenance",
+      "title": "Essential Crane Safety: 10 Maintenance Checks to Prevent Industrial Accidents",
+      "category": "Safety & AMC",
+      "date": "2026-08-10",
+      "image": "assets/images/services/03-amc.jpg",
+      "excerpt": "Daily pre-operational checklists and statutory quarterly inspection standards to maintain 100% OSHA and Indian factory compliance.",
+      "published": true
+    },
+    {
+      "id": "blog_crane_modernization",
+      "title": "When to Modernize vs Replace an Old Overhead Crane",
+      "category": "Modernization",
+      "date": "2026-08-05",
+      "image": "assets/images/services/05-modernization.jpg",
+      "excerpt": "How retrofitting modern VFD drives and wireless remote controls can extend crane life by 15+ years at 40% of the cost.",
+      "published": true
+    }
+  ],
+  "catalog": {
+    "title": "Official Corporate Product & Technical Catalog",
+    "subtitle": "Interactive 3D Digital Edition \u2014 Heavy-Duty Industrial Cranes & Material Handling Systems",
+    "version": "2026.1",
+    "standards": [
+      "IS:3177",
+      "IS:807",
+      "IS:3938",
+      "ISO 9001:2015"
+    ],
+    "download_url": "catalog.html",
+    "highlights": [
+      "Complete Technical Specifications (1T to 50T)",
+      "Turnkey Manufacturing & Commissioning Overview",
+      "Nationwide AMC & Rapid Breakdown SLA Guarantee",
+      "Direct Factory Contact & Engineering Support"
+    ]
+  },
+  "certificates": [
+    {
+      "id": "cert_iso_9001",
+      "doc_type": "ISO 9001:2015",
+      "title": "ISO 9001:2015 Quality Management System",
+      "cert_number": "",
+      "issue_date": "",
+      "expiry_date": "",
+      "description": "Certified Quality Management System for design, manufacturing, and servicing of industrial overhead cranes and hoists.",
+      "file_url": "",
+      "file_name": "",
+      "file_type": "",
+      "file_size": 0,
+      "status": "hidden",
+      "is_public": false,
+      "notes": "Pending certificate renewal."
+    },
+    {
+      "id": "cert_udyam",
+      "doc_type": "Udyam Registration Certificate",
+      "title": "Udyam Registration Certificate (MSME)",
+      "cert_number": "",
+      "issue_date": "",
+      "expiry_date": "",
+      "description": "Ministry of Micro, Small and Medium Enterprises (MSME) Government of India enterprise registration certificate.",
+      "file_url": "",
+      "file_name": "",
+      "file_type": "",
+      "file_size": 0,
+      "status": "hidden",
+      "is_public": false,
+      "notes": "Pending renewal."
+    },
+    {
+      "id": "cert_gst",
+      "doc_type": "GST Registration Certificate",
+      "title": "GST Registration Certificate",
+      "cert_number": "",
+      "issue_date": "",
+      "expiry_date": "",
+      "description": "Goods and Services Tax registration certificate issued by the Government of India.",
+      "file_url": "",
+      "file_name": "",
+      "file_type": "",
+      "file_size": 0,
+      "status": "hidden",
+      "is_public": false,
+      "notes": "Pending renewal."
+    }
+  ]
+}

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us — VS Infra & Cranes | Industrial Crane Manufacturer & Heavy Engineering</title>
+  <meta name="description" content="Learn about VS Infra & Cranes — premier manufacturer of heavy-duty EOT cranes, gantry systems, and industrial hoists. Serving infrastructure, manufacturing, and global export markets."/>
+  <link rel="canonical" href="https://vsinfracranes.com/about.html"/>
+  <link rel="icon" type="image/png" href="assets/images/logo.png"/>
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="About VS Infra & Cranes | Industrial Crane Manufacturer & Heavy Engineering"/>
+  <meta property="og:description" content="Premier manufacturer of heavy-duty EOT cranes, gantry systems, and industrial hoists built to IS:3177 and IS:807 standards. Delivering worldwide."/>
+  <meta property="og:url" content="https://vsinfracranes.com/about.html"/>
+  <meta property="og:site_name" content="VS Infra & Cranes"/>
+  <meta property="og:image" content="https://vsinfracranes.com/assets/images/logo.png"/>
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="About VS Infra & Cranes | Industrial Crane Manufacturer & Heavy Engineering"/>
+  <meta name="twitter:description" content="Premier manufacturer of heavy-duty EOT cranes, gantry systems, and industrial hoists built to IS:3177 and IS:807 standards. Delivering worldwide."/>
+  <meta name="twitter:image" content="https://vsinfracranes.com/assets/images/logo.png"/>
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "AboutPage",
+        "@id": "https://vsinfracranes.com/about.html",
+        "url": "https://vsinfracranes.com/about.html",
+        "name": "About VS Infra & Cranes",
+        "description": "Learn about VS Infra & Cranes, manufacturer of heavy-duty overhead EOT cranes, gantry cranes, and industrial lifting equipment.",
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://vsinfracranes.com/#website",
+          "url": "https://vsinfracranes.com/",
+          "name": "VS Infra & Cranes"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://vsinfracranes.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "About Us",
+            "item": "https://vsinfracranes.com/about.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/design-system.css"/>
+  <style>
+    .page-hero{min-height:50vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:calc(var(--header-height) + var(--space-8));}
+    .page-hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#1A1A2E 0%,#0f0f1a 100%);z-index:0;}
+    .page-hero-pattern{position:absolute;inset:0;opacity:.05;background-image:repeating-linear-gradient(45deg,transparent,transparent 35px,rgba(232,99,10,.15) 35px,rgba(232,99,10,.15) 36px);}
+    .page-hero-content{position:relative;z-index:2;}
+    .breadcrumb{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:rgba(255,255,255,.5);margin-bottom:var(--space-6);}
+    .breadcrumb a{color:rgba(255,255,255,.5);transition:color var(--transition-fast);}
+    .breadcrumb a:hover{color:var(--color-primary);}
+    .breadcrumb-sep{margin:0 var(--space-1);}
+    .page-hero h1{color:white;font-size:clamp(2.5rem,5vw,3.75rem);margin-bottom:var(--space-4);}
+    .page-hero p{color:rgba(255,255,255,.6);font-size:var(--text-xl);max-width:650px;}
+
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-12);align-items:center;}
+    .img-placeholder{border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;}
+    .img-placeholder svg{width:100px;height:100px;opacity:.15;color:white;}
+
+    /* Mission/Vision Cards */
+    .mv-card{padding:var(--space-10);background:var(--color-bg-elevated);border:1px solid var(--color-border);border-radius:var(--radius-lg);text-align:center;transition:all var(--transition-base);}
+    .mv-card:hover{border-color:var(--color-primary);box-shadow:var(--shadow-glow);transform:translateY(-4px);}
+    .mv-icon{width:64px;height:64px;border-radius:50%;background:var(--color-primary-light);display:flex;align-items:center;justify-content:center;color:var(--color-primary);margin:0 auto var(--space-5);}
+    .mv-icon svg{width:30px;height:30px;}
+
+    /* Timeline */
+    .timeline{position:relative;padding:var(--space-8) 0;}
+    .timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:3px;background:var(--color-border);transform:translateX(-50%);}
+    .timeline-item{display:flex;width:100%;margin-bottom:var(--space-10);position:relative;}
+    .timeline-item:nth-child(odd){justify-content:flex-start;padding-right:calc(50% + 30px);}
+    .timeline-item:nth-child(even){justify-content:flex-end;padding-left:calc(50% + 30px);}
+    .timeline-dot{position:absolute;left:50%;top:20px;width:20px;height:20px;background:var(--color-primary);border:4px solid var(--color-bg);border-radius:50%;transform:translateX(-50%);z-index:2;box-shadow:0 0 0 4px var(--color-primary-light);}
+    .timeline-content{background:var(--color-bg-elevated);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-6);transition:all var(--transition-base);max-width:100%;}
+    .timeline-content:hover{border-color:var(--color-primary);box-shadow:var(--shadow-md);}
+    .timeline-year{font-family:'Space Grotesk',sans-serif;font-size:var(--text-sm);font-weight:700;color:var(--color-primary);text-transform:uppercase;letter-spacing:.1em;margin-bottom:var(--space-1);}
+    .timeline-content h4{margin-bottom:var(--space-2);}
+
+    /* Value cards */
+    .value-card{padding:var(--space-8);background:var(--color-bg-elevated);border:1px solid var(--color-border);border-radius:var(--radius-lg);transition:all var(--transition-base);}
+    .value-card:hover{transform:translateY(-4px);border-color:var(--color-primary);box-shadow:var(--shadow-card-hover);}
+    .value-icon{width:56px;height:56px;border-radius:var(--radius-md);background:var(--color-primary-light);display:flex;align-items:center;justify-content:center;color:var(--color-primary);margin-bottom:var(--space-5);}
+
+    /* Director Message */
+    .director-section{background:var(--color-bg-alt);border-radius:var(--radius-xl);padding:var(--space-16) var(--space-12);text-align:center;position:relative;}
+    .director-quote-mark{font-size:8rem;font-family:Georgia,serif;color:var(--color-primary);opacity:.2;line-height:.8;position:absolute;top:var(--space-8);left:var(--space-12);}
+    .director-text{font-size:var(--text-xl);color:var(--color-text-secondary);line-height:1.8;font-style:italic;max-width:800px;margin:0 auto var(--space-8);position:relative;}
+    .director-name{font-weight:700;font-size:var(--text-lg);color:var(--color-text);}
+    .director-title{color:var(--color-primary);font-size:var(--text-sm);font-weight:600;}
+
+    /* Cert badges */
+    .cert-badge{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-6);background:var(--color-bg-elevated);border:1px solid var(--color-border);border-radius:var(--radius-lg);transition:all var(--transition-base);}
+    .cert-badge:hover{border-color:var(--color-primary);}
+    .cert-icon{width:56px;height:56px;border-radius:var(--radius-md);background:var(--color-primary-light);display:flex;align-items:center;justify-content:center;color:var(--color-primary);flex-shrink:0;}
+
+    @media(max-width:768px){
+      .two-col{grid-template-columns:1fr;gap:var(--space-8);}
+      .timeline::before{left:20px;}
+      .timeline-item{padding-right:0!important;padding-left:50px!important;justify-content:flex-start!important;}
+      .timeline-dot{left:20px!important;}
+      .director-section{padding:var(--space-10) var(--space-6);}
+      .director-quote-mark{font-size:4rem;left:var(--space-4);top:var(--space-4);}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header"><div class="header-inner">
+    <a href="index.html"><img src="assets/images/logo.png" alt="VS Infra & Cranes" class="logo"/></a>
+    <nav class="nav-desktop">
+      <a href="index.html" class="nav-link">Home</a><a href="about.html" class="nav-link active">About</a><a href="products.html" class="nav-link">Products</a><a href="services.html" class="nav-link">Services</a><a href="projects.html" class="nav-link">Projects</a><a href="gallery.html" class="nav-link">Gallery</a><a href="blog.html" class="nav-link">Blog</a><a href="contact.html" class="nav-link">Contact</a>
+    </nav>
+    <div class="nav-actions">
+<a href="admin.html" class="admin-link" aria-label="Admin Panel" title="Admin Panel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></a>
+<button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme"></button><a href="request-quote.html" class="btn btn-primary btn-sm">Request Quote</a></div>
+    <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div></header>
+  <div class="mobile-nav-overlay"></div>
+  <nav class="mobile-nav"><a href="index.html" class="mobile-nav-link">Home</a><a href="about.html" class="mobile-nav-link active">About</a><a href="products.html" class="mobile-nav-link">Products</a>
+    <a href="catalog.html" class="mobile-nav-link">3D Catalog</a><a href="services.html" class="mobile-nav-link">Services</a><a href="projects.html" class="mobile-nav-link">Projects</a><a href="gallery.html" class="mobile-nav-link">Gallery</a><a href="blog.html" class="mobile-nav-link">Blog</a><a href="contact.html" class="mobile-nav-link">Contact</a><a href="admin.html" class="mobile-nav-link" style="color:var(--color-primary); font-weight:600;">🔒 Admin Panel</a>
+    <div style="padding-top:var(--space-6);"><a href="request-quote.html" class="btn btn-primary" style="width:100%;">Request Quote</a></div></nav>
+
+  <main>
+    <!-- Hero -->
+    <section class="page-hero">
+      <div class="page-hero-bg"><div class="page-hero-pattern"></div></div>
+      <div class="container page-hero-content">
+        <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">›</span><span style="color:rgba(255,255,255,.8);">About Us</span></div>
+        <h1>About VS Infra &amp; Cranes</h1>
+        <p>A legacy of engineering excellence in industrial crane manufacturing since 2021.</p>
+      </div>
+    </section>
+
+    <!-- Company Story -->
+    <section class="section" id="story">
+      <div class="container">
+        <div class="two-col">
+          <div class="reveal">
+            <div class="section-label">Our Story</div>
+            <h2 class="section-title">From Humble Beginnings to Industry Leaders</h2>
+            <p style="margin-bottom:var(--space-4);">Founded in 2021 in Faridabad, Haryana, VS Infra & Cranes was born from a vision to provide world-class crane solutions to Indian industries. What began as a small workshop with a team of dedicated engineers has grown into one of the region's most trusted names in industrial crane manufacturing.</p>
+            <p style="margin-bottom:var(--space-4);">Over the years, we expanded our manufacturing facility to a modern, 50,000 sq. ft. plant equipped with CNC machines, precision welding stations, and an in-house testing laboratory. Every crane that leaves our facility undergoes rigorous quality checks and load testing.</p>
+            <p>Today, with 500+ successful installations across diverse industries and 200+ satisfied clients, we continue to push the boundaries of crane engineering — delivering solutions that are safer, more efficient, and built to last.</p>
+          </div>
+          <div class="reveal-right">
+            <div class="img-placeholder">
+              <img src="assets/images/crane/02-about-factory.jpg" alt="VS Infra & Cranes Factory Floor" style="width:100%; height:100%; object-fit:cover; border-radius:var(--radius-lg);" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission & Vision -->
+    <section class="section section-alt" id="mission-vision">
+      <div class="container">
+        <div class="grid grid-2 stagger-children reveal">
+          <div class="mv-card">
+            <div class="mv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="30" height="30"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+            <h3 style="margin-bottom:var(--space-4);">Our Mission</h3>
+            <p>To deliver reliable, safe, and efficient crane and material handling solutions that empower industries to operate at their full potential — backed by engineering expertise and unwavering service commitment.</p>
+          </div>
+          <div class="mv-card">
+            <div class="mv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="30" height="30"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <h3 style="margin-bottom:var(--space-4);">Our Vision</h3>
+            <p>To be India's most trusted name in industrial crane manufacturing, known for engineering excellence, innovation, and an unwavering commitment to safety and long-term customer partnership.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="section" id="timeline">
+      <div class="container">
+        <div class="text-center reveal" style="margin-bottom:var(--space-12);">
+          <div class="section-label" style="justify-content:center;">Our Journey</div>
+          <h2 class="section-title">Growing Stronger Every Year</h2>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item reveal-left"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-year">2021</div><h4>Company Founded</h4><p class="card-text">Started operations in Faridabad with a small, dedicated team of engineers and a vision to transform Indian crane manufacturing.</p></div></div>
+          <div class="timeline-item reveal-right"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-year">2022</div><h4>First Major Project & Facility Expansion</h4><p class="card-text">Delivered our first major crane and moved to a modern manufacturing plant with CNC machines and an in-house testing lab.</p></div></div>
+          <div class="timeline-item reveal-left"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-year">2023</div><h4>ISO Certification</h4><p class="card-text">Achieved ISO quality management certification and celebrated 100 successful crane installations across multiple industries.</p></div></div>
+          <div class="timeline-item reveal-right"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-year">2024</div><h4>AMC Division Launched</h4><p class="card-text">Launched a dedicated Annual Maintenance Contract division, providing comprehensive lifecycle support to our clients.</p></div></div>
+          <div class="timeline-item reveal-left"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-year">2025</div><h4>300th Installation & Export Ready</h4><p class="card-text">Expanded our service network with 300+ successful installations and prepared infrastructure for international export markets.</p></div></div>
+          <div class="timeline-item reveal-right"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-year">2026</div><h4>Innovation Hub</h4><p class="card-text">Established R&D center focusing on smart crane technology, IoT integration, and next-generation material handling solutions.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Values -->
+    <section class="section section-alt" id="values">
+      <div class="container">
+        <div class="text-center reveal" style="margin-bottom:var(--space-12);">
+          <div class="section-label" style="justify-content:center;">Our Values</div>
+          <h2 class="section-title">What Drives Us Every Day</h2>
+        </div>
+        <div class="grid grid-3 stagger-children reveal">
+          <div class="value-card">
+            <div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+            <h4>Engineering Excellence</h4>
+            <p class="card-text">Precision in every weld, bolt, and design decision. We treat each crane as a testament to our engineering capability.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <h4>Safety First</h4>
+            <p class="card-text">Zero-compromise approach to workplace and crane safety. IS standards compliance is non-negotiable.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <h4>Customer Partnership</h4>
+            <p class="card-text">We build long-term relationships grounded in trust, transparency, and consistent after-sales support.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg></div>
+            <h4>Innovation</h4>
+            <p class="card-text">Continuous improvement in design, manufacturing processes, and technology adoption for better solutions.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <h4>Integrity</h4>
+            <p class="card-text">Honest business practices, transparent pricing, and no shortcuts in materials or manufacturing processes.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+            <h4>Quality Assurance</h4>
+            <p class="card-text">Rigorous testing at every production stage — from raw material inspection to final load testing and commissioning.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Director's Message -->
+    <section class="section" id="director">
+      <div class="container">
+        <div class="director-section reveal">
+          <div class="director-quote-mark">"</div>
+          <p class="director-text">Our commitment goes beyond manufacturing cranes — we engineer trust. Every crane we build carries our reputation, and we ensure it operates safely, reliably, and efficiently for decades. When a client chooses VS Infra & Cranes, they're choosing a long-term partner in their industrial growth.</p>
+          <div class="director-name">Founder &amp; Director</div>
+          <div class="director-title">VS Infra &amp; Cranes</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Engineering & Innovation -->
+    <section class="section section-alt" id="engineering" style="position:relative; overflow:hidden;">
+      <div class="blueprint-bg" style="position:absolute;inset:0;opacity:0.1;background-image:linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px);background-size:40px 40px;transform:perspective(500px) rotateX(60deg) scale(2);transform-origin:top;animation:panGrid 20s linear infinite;"></div>
+      <style>@keyframes panGrid { 0% { background-position: 0 0; } 100% { background-position: 0 40px; } }</style>
+      
+      <div class="container" style="position:relative; z-index:2;">
+        <div class="text-center reveal" style="margin-bottom:var(--space-12);">
+          <div class="section-label" style="justify-content:center;">Design & Innovation</div>
+          <h2 class="section-title">Engineered with Precision</h2>
+          <p class="section-subtitle" style="margin:0 auto; max-width:800px;">Our lifting solutions are designed using advanced CAD software and structural analysis to ensure maximum safety, efficiency, and durability before a single piece of steel is cut.</p>
+        </div>
+        
+        <div class="grid grid-3 stagger-children reveal" style="gap:var(--space-8);">
+          <div style="background:var(--color-surface); padding:var(--space-8); border-radius:var(--radius-lg); border:1px solid rgba(232,99,10,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align:center; position:relative; overflow:hidden;">
+            <div style="position:absolute; top:0; left:0; width:100%; height:4px; background:var(--color-primary);"></div>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="1.5" style="margin-bottom:20px;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <h3 style="margin-bottom:10px;">3D CAD Modeling</h3>
+            <p style="color:var(--color-text-secondary);font-size:14px;line-height:1.6;">Every crane is meticulously modeled in 3D to optimize weight distribution, clearances, and structural integrity.</p>
+          </div>
+          <div style="background:var(--color-surface); padding:var(--space-8); border-radius:var(--radius-lg); border:1px solid rgba(232,99,10,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align:center; position:relative; overflow:hidden; transform:translateY(-15px);">
+            <div style="position:absolute; top:0; left:0; width:100%; height:4px; background:var(--color-primary);"></div>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="1.5" style="margin-bottom:20px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <h3 style="margin-bottom:10px;">FEA Analysis</h3>
+            <p style="color:var(--color-text-secondary);font-size:14px;line-height:1.6;">Finite Element Analysis ensures our girders can withstand peak loads without failure or excessive deflection over time.</p>
+          </div>
+          <div style="background:var(--color-surface); padding:var(--space-8); border-radius:var(--radius-lg); border:1px solid rgba(232,99,10,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align:center; position:relative; overflow:hidden;">
+            <div style="position:absolute; top:0; left:0; width:100%; height:4px; background:var(--color-primary);"></div>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="1.5" style="margin-bottom:20px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <h3 style="margin-bottom:10px;">Safety Factors</h3>
+            <p style="color:var(--color-text-secondary);font-size:14px;line-height:1.6;">We engineer with high safety factors, exceeding standard IS codes to provide absolute peace of mind for heavy lifting.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certifications -->
+    <section class="section" id="certifications">
+      <div class="container">
+        <div class="text-center reveal" style="margin-bottom:var(--space-12);">
+          <div class="section-label" style="justify-content:center;">Certifications</div>
+          <h2 class="section-title">Certified &amp; Compliant</h2>
+        </div>
+        <div class="grid grid-4 stagger-children reveal">
+          <div class="cert-badge"><div class="cert-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div><strong>ISO Certified</strong><br/><small style="color:var(--color-text-tertiary)">Quality Management</small></div></div>
+          <div class="cert-badge"><div class="cert-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div><strong>MSME Registered</strong><br/><small style="color:var(--color-text-tertiary)">Govt. of India</small></div></div>
+          <div class="cert-badge"><div class="cert-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><strong>GST Registered</strong><br/><small style="color:var(--color-text-tertiary)">Tax Compliant</small></div></div>
+          <div class="cert-badge"><div class="cert-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><strong>IS Standards</strong><br/><small style="color:var(--color-text-tertiary)">IS:3177 &amp; IS:807</small></div></div>
+        </div>
+
+        <!-- Dynamic Official Documents & Registrations Container (Rendered dynamically; completely hidden when no valid renewed certificates exist) -->
+        <div id="verified-certificates-section" style="display:none; margin-top:var(--space-12);">
+          <div class="text-center" style="margin-bottom:var(--space-8);">
+            <div class="section-label" style="justify-content:center;">Official Documents</div>
+            <h3 style="font-size:var(--text-2xl); font-weight:700; color:#fff; margin-top:var(--space-2);">Official Certificates &amp; Registrations</h3>
+            <p style="color:var(--color-text-secondary); max-width:620px; margin:var(--space-2) auto 0; font-size:var(--text-sm);">Official verified government registrations and statutory quality compliance documentation.</p>
+          </div>
+          <div id="verified-certificates-grid" class="grid grid-3" style="gap:var(--space-6);"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section section-alt">
+      <div class="container text-center reveal">
+        <h2 class="section-title">Want to Know More?</h2>
+        <p class="section-subtitle" style="margin:0 auto var(--space-8);">Let's discuss how we can support your next project with the right crane solution.</p>
+        <div class="flex flex-center gap-4" style="flex-wrap:wrap;">
+          <a href="contact.html" class="btn btn-primary btn-lg">Contact Us</a>
+          <a href="catalog.html" class="btn btn-outline btn-lg">View Catalog</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div><img src="assets/images/logo.png" alt="VS Infra & Cranes" style="height:48px;margin-bottom:var(--space-2);"/><p class="footer-brand-desc">Leading manufacturer of industrial cranes and material handling equipment since 2021.</p><div class="footer-social"><a href="https://www.facebook.com/people/VS-Infra-Cranes/100085546544517/?name=xhp_nt__fb__action__open_user" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a><a href="https://wa.me/919990191859" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div></div>
+        <div><h6 class="footer-heading">Quick Links</h6><a href="about.html" class="footer-link">About Us</a><a href="products.html" class="footer-link">Products</a>
+    <a href="catalog.html" class="footer-link">3D Company Catalog</a><a href="services.html" class="footer-link">Services</a><a href="projects.html" class="footer-link">Projects</a><a href="gallery.html" class="footer-link">Gallery</a><a href="blog.html" class="footer-link">Blog</a></div>
+        <div><h6 class="footer-heading">Products</h6><a href="products/single-girder-eot-crane.html" class="footer-link">Single Girder EOT</a><a href="products/double-girder-eot-crane.html" class="footer-link">Double Girder EOT</a><a href="products/gantry-crane.html" class="footer-link">Gantry Crane</a><a href="products/goliath-crane.html" class="footer-link">Goliath Crane</a><a href="products/jib-crane.html" class="footer-link">Jib Crane</a><a href="products/electric-wire-rope-hoist.html" class="footer-link">Wire Rope Hoist</a></div>
+        <div><h6 class="footer-heading">Contact</h6><a href="#" class="footer-link">📍 Bhankri Industrial Area, Faridabad, Haryana – 121005</a><a href="tel:+919990191859" class="footer-link">📞 +91 99901 91859</a><a href="mailto:vsinfracranes@gmail.com" class="footer-link">✉️ vsinfracranes@gmail.com</a><a href="#" class="footer-link">🕐 Mon–Sat, 9AM – 6PM</a></div>
+      </div>
+      <div class="footer-bottom"><p class="footer-copyright">© 2026 VS Infra & Cranes. All rights reserved.</p>
+        <p class="footer-credit" style="font-size: var(--text-xs); color: rgba(255,255,255,0.3); margin-top: var(--space-2);">Made by <a href="https://wa.me/917042271859" target="_blank" style="color: inherit; text-decoration: underline;">Vinit Yadav</a></p><div style="display:flex;gap:var(--space-4);"><a href="privacy-policy.html" class="footer-link">Privacy Policy</a><a href="#" class="footer-link">Terms</a></div></div>
+    </div>
+  </footer>
+
+  <!-- Floating CTA -->
+  <div class="floating-cta">
+    <a href="https://wa.me/919990191859" target="_blank" class="floating-btn floating-whatsapp" aria-label="WhatsApp"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+    <a href="tel:+919990191859" class="floating-btn floating-phone" aria-label="Call"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+    <button class="floating-btn floating-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Top"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+  </div>
+
+  <!-- Certificate Document Viewer Modal -->
+  <div id="cert-viewer-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(10px); z-index:99999; align-items:center; justify-content:center; padding:16px;">
+    <div style="background:#151525; border:1.5px solid rgba(232,99,10,0.5); border-radius:16px; width:min(900px, 95vw); max-height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.85);">
+      <div style="padding:14px 20px; background:#1e1e34; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:20px;" id="cert-viewer-icon">📄</span>
+          <div>
+            <h4 id="cert-viewer-title" style="margin:0; font-size:15px; color:#fff; font-family:'Space Grotesk',sans-serif;">Document Viewer</h4>
+            <div id="cert-viewer-meta" style="font-size:11px; color:rgba(255,255,255,0.6);">Official Certificate</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <a id="cert-viewer-download" href="#" target="_blank" download class="btn btn-outline btn-sm" style="padding:4px 10px; font-size:12px;">Open Full ↗</a>
+          <button id="cert-viewer-close" type="button" style="background:rgba(255,255,255,0.1); border:none; color:#fff; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center;">&times;</button>
+        </div>
+      </div>
+      <div id="cert-viewer-body" style="flex:1; overflow:auto; padding:16px; display:flex; align-items:center; justify-content:center; background:#0c0c16; min-height:320px;">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/ai-consultant.js"></script>
+  <script>
+    (function() {
+      async function loadPublicCertificates() {
+        try {
+          const res = await fetch('/api/content/certificates');
+          if (!res.ok) return;
+          const json = await res.json();
+          const certs = json.data || [];
+          const today = new Date().toISOString().split('T')[0];
+
+          // Strict filter: only public, has uploaded file, and unexpired
+          const validCerts = certs.filter(c => {
+            if (!c.is_public || c.status !== 'public' || !c.file_url) return false;
+            if (c.expiry_date && c.expiry_date < today) return false;
+            return true;
+          });
+
+          const container = document.getElementById('verified-certificates-section');
+          const grid = document.getElementById('verified-certificates-grid');
+          if (!container || !grid) return;
+
+          // If no valid renewed certificates, keep section completely hidden
+          if (validCerts.length === 0) {
+            container.style.display = 'none';
+            return;
+          }
+
+          container.style.display = 'block';
+          grid.innerHTML = validCerts.map(c => {
+            const isPdf = (c.file_url || '').toLowerCase().endsWith('.pdf') || c.file_type === 'pdf';
+            const dates = [];
+            if (c.issue_date) dates.push(`Issued: ${c.issue_date}`);
+            if (c.expiry_date) dates.push(`Valid Thru: ${c.expiry_date}`);
+            else dates.push('Lifetime Validity');
+
+            return `
+              <div class="card" style="background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:var(--space-6); display:flex; flex-direction:column; justify-content:space-between; transition:transform 0.2s ease, border-color 0.2s ease;">
+                <div>
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:var(--space-3); gap:8px;">
+                    <span class="badge" style="background:rgba(34,197,94,0.15); color:#22c55e; border:1px solid rgba(34,197,94,0.3); font-size:11px; font-weight:600;">✓ Verified</span>
+                    <span style="font-size:11px; color:var(--color-text-tertiary); font-weight:600;">${escapeHtml(c.doc_type || 'Registration')}</span>
+                  </div>
+                  <h4 style="font-size:var(--text-lg); font-weight:700; color:#fff; margin-bottom:var(--space-2);">${escapeHtml(c.title)}</h4>
+                  ${c.cert_number ? `<div style="font-size:12px; color:var(--color-primary); font-weight:600; margin-bottom:var(--space-2);">Reg/Cert No: <span style="font-family:monospace; color:#fff;">${escapeHtml(c.cert_number)}</span></div>` : ''}
+                  <p style="font-size:var(--text-sm); color:var(--color-text-secondary); line-height:1.5; margin-bottom:var(--space-4);">${escapeHtml(c.description || '')}</p>
+                </div>
+                <div>
+                  <div style="font-size:11.5px; color:var(--color-text-tertiary); margin-bottom:var(--space-4); border-top:1px solid rgba(255,255,255,0.06); padding-top:var(--space-3);">
+                    ${dates.join(' • ')}
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm" style="width:100%; text-align:center; justify-content:center; display:flex; gap:6px; align-items:center;" onclick='openCertViewer(${JSON.stringify(c)})'>
+                    ${isPdf ? '📄 View Certificate PDF' : '🔍 View Certificate Image'}
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } catch(e) {
+          // Fail silently, keep section hidden
+        }
+      }
+
+      window.openCertViewer = function(c) {
+        const modal = document.getElementById('cert-viewer-modal');
+        const title = document.getElementById('cert-viewer-title');
+        const meta = document.getElementById('cert-viewer-meta');
+        const icon = document.getElementById('cert-viewer-icon');
+        const download = document.getElementById('cert-viewer-download');
+        const body = document.getElementById('cert-viewer-body');
+        if (!modal || !body) return;
+
+        const isPdf = (c.file_url || '').toLowerCase().endsWith('.pdf') || c.file_type === 'pdf';
+        title.textContent = c.title || c.doc_type || 'Certificate';
+        meta.textContent = c.cert_number ? `Reg: ${c.cert_number}` : (c.doc_type || '');
+        icon.textContent = isPdf ? '📄' : '🖼️';
+        download.href = c.file_url;
+
+        if (isPdf) {
+          body.innerHTML = `
+            <iframe src="${c.file_url}" style="width:100%; height:75vh; border:none; border-radius:8px; background:#fff;"></iframe>
+          `;
+        } else {
+          body.innerHTML = `
+            <img src="${c.file_url}" alt="${escapeHtml(c.title)}" style="max-width:100%; max-height:75vh; object-fit:contain; border-radius:8px; box-shadow:0 8px 30px rgba(0,0,0,0.5);">
+          `;
+        }
+        modal.style.display = 'flex';
+      };
+
+      document.getElementById('cert-viewer-close')?.addEventListener('click', () => {
+        const modal = document.getElementById('cert-viewer-modal');
+        if (modal) modal.style.display = 'none';
+      });
+
+      document.getElementById('cert-viewer-modal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'cert-viewer-modal') {
+          e.target.style.display = 'none';
+        }
+      });
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadPublicCertificates);
+      } else {
+        loadPublicCertificates();
+      }
+    })();
+  </script>
+</body>
+</html>
