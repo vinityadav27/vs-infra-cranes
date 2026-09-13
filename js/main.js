@@ -948,6 +948,189 @@ const ProductBrochureManager = {
   }
 };
 
+// ---- Mobile Experience Tip Popup ----
+const MobileExperienceTip = {
+  storageKey: 'vs_desktop_tip_dismissed',
+  delayMs: 12000,
+
+  init() {
+    // Never show on admin panel or thank-you page
+    const p = window.location.pathname.toLowerCase();
+    if (p.includes('admin') || p.includes('thank-you')) {
+      return;
+    }
+
+    // Check session dismissal
+    try {
+      if (sessionStorage.getItem(this.storageKey)) {
+        return;
+      }
+    } catch (_) {}
+
+    // Screen check: Mobile & tablet only (<= 768px)
+    if (!this.isMobileScreen()) {
+      return;
+    }
+
+    let hasEngaged = false;
+    const markEngaged = () => {
+      hasEngaged = true;
+      window.removeEventListener('scroll', markEngaged, { passive: true });
+      window.removeEventListener('touchstart', markEngaged, { passive: true });
+      window.removeEventListener('click', markEngaged, { passive: true });
+    };
+
+    window.addEventListener('scroll', markEngaged, { passive: true });
+    window.addEventListener('touchstart', markEngaged, { passive: true });
+    window.addEventListener('click', markEngaged, { passive: true });
+
+    setTimeout(() => {
+      try {
+        if (sessionStorage.getItem(this.storageKey)) return;
+      } catch (_) {}
+
+      if (!this.isMobileScreen()) return;
+
+      if (hasEngaged) {
+        this.show();
+      } else {
+        const showOnFirstTouch = () => {
+          this.show();
+          window.removeEventListener('touchstart', showOnFirstTouch, { passive: true });
+          window.removeEventListener('scroll', showOnFirstTouch, { passive: true });
+        };
+        window.addEventListener('touchstart', showOnFirstTouch, { passive: true });
+        window.addEventListener('scroll', showOnFirstTouch, { passive: true });
+      }
+    }, this.delayMs);
+  },
+
+  isMobileScreen() {
+    return window.innerWidth <= 768 || (window.matchMedia && window.matchMedia('(max-width: 768px)').matches);
+  },
+
+  show() {
+    if (document.getElementById('vs-desktop-tip')) return;
+    if (!this.isMobileScreen()) return;
+
+    try {
+      if (sessionStorage.getItem(this.storageKey)) return;
+    } catch (_) {}
+
+    const tip = document.createElement('aside');
+    tip.id = 'vs-desktop-tip';
+    tip.className = 'vs-desktop-tip';
+    tip.setAttribute('role', 'complementary');
+    tip.setAttribute('aria-label', 'Desktop Experience Tip');
+
+    tip.innerHTML = `
+      <div class="vs-desktop-tip-card">
+        <button type="button" class="vs-desktop-tip-close" id="vs-desktop-tip-close" aria-label="Dismiss tip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <div class="vs-desktop-tip-header">
+          <span class="vs-desktop-tip-icon" aria-hidden="true">💡</span>
+          <span class="vs-desktop-tip-badge">Experience Tip</span>
+        </div>
+        <p class="vs-desktop-tip-text">
+          <strong>Explore the full VS Infra &amp; Cranes experience on a desktop or laptop.</strong>
+          Our website includes interactive 3D crane models, detailed product views, interactive catalog features and other advanced experiences that are easier to explore on a larger screen.
+        </p>
+        <div class="vs-desktop-tip-actions">
+          <button type="button" class="vs-desktop-tip-cta" id="vs-desktop-tip-cta">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>Explore on Desktop</span>
+          </button>
+          <button type="button" class="vs-desktop-tip-dismiss" id="vs-desktop-tip-dismiss">Got it</button>
+        </div>
+        <div class="vs-desktop-tip-feedback" id="vs-desktop-tip-feedback" style="display:none;" aria-live="polite"></div>
+      </div>
+    `;
+
+    document.body.appendChild(tip);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        tip.classList.add('vs-tip-visible');
+      });
+    });
+
+    const closeBtn = document.getElementById('vs-desktop-tip-close');
+    const dismissBtn = document.getElementById('vs-desktop-tip-dismiss');
+    const ctaBtn = document.getElementById('vs-desktop-tip-cta');
+    const feedbackEl = document.getElementById('vs-desktop-tip-feedback');
+
+    const handleDismiss = () => this.dismiss(tip);
+
+    if (closeBtn) closeBtn.addEventListener('click', handleDismiss);
+    if (dismissBtn) dismissBtn.addEventListener('click', handleDismiss);
+
+    if (ctaBtn) {
+      ctaBtn.addEventListener('click', async () => {
+        const shareUrl = window.location.href;
+        const shareTitle = document.title || 'VS Infra & Cranes';
+
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: shareTitle,
+              text: 'Explore interactive 3D crane models and the catalog on desktop:',
+              url: shareUrl
+            });
+            handleDismiss();
+            return;
+          } catch (err) {
+            if (err.name === 'AbortError') return;
+          }
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try {
+            await navigator.clipboard.writeText(shareUrl);
+            if (feedbackEl) {
+              feedbackEl.textContent = '✓ Link copied! Paste on your desktop.';
+              feedbackEl.style.display = 'block';
+              ctaBtn.style.display = 'none';
+              dismissBtn.style.display = 'none';
+              setTimeout(() => handleDismiss(), 2500);
+              return;
+            }
+          } catch (_) {}
+        }
+
+        if (feedbackEl) {
+          feedbackEl.textContent = 'Visit ' + window.location.host + ' on your computer.';
+          feedbackEl.style.display = 'block';
+          setTimeout(() => handleDismiss(), 2500);
+        } else {
+          handleDismiss();
+        }
+      });
+    }
+
+    const onResize = () => {
+      if (!this.isMobileScreen()) {
+        handleDismiss();
+        window.removeEventListener('resize', onResize);
+      }
+    };
+    window.addEventListener('resize', onResize, { passive: true });
+  },
+
+  dismiss(tip) {
+    try {
+      sessionStorage.setItem(this.storageKey, '1');
+    } catch (_) {}
+
+    if (tip) {
+      tip.classList.remove('vs-tip-visible');
+      setTimeout(() => {
+        if (tip.parentElement) tip.parentElement.removeChild(tip);
+      }, 350);
+    }
+  }
+};
+
 // ---- Initialize Everything ----
 document.addEventListener('DOMContentLoaded', () => {
   VSAnalytics.init();
@@ -963,4 +1146,6 @@ document.addEventListener('DOMContentLoaded', () => {
   FormHandler.init();
   Lightbox.init();
   ProductBrochureManager.init();
+  MobileExperienceTip.init();
 });
+

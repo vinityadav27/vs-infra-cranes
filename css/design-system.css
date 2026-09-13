@@ -1657,3 +1657,201 @@ img[src*="logo.png"] {
   }
 }
 
+/* ---------- MOBILE EXPERIENCE TIP POPUP ---------- */
+/* Strict desktop concealment: NEVER visible on desktop/laptop (>768px) */
+@media (min-width: 769px) {
+  .vs-desktop-tip {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
+/* Mobile & Tablet floating presentation (<=768px) */
+@media (max-width: 768px) {
+  .vs-desktop-tip {
+    position: fixed;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    left: 12px;
+    z-index: 998;
+    max-width: min(340px, calc(100vw - 84px));
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .vs-desktop-tip.vs-tip-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .vs-desktop-tip-card {
+    pointer-events: auto;
+    position: relative;
+    background: var(--color-bg-elevated, #ffffff);
+    color: var(--color-text, #1e293b);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-left: 3.5px solid var(--color-primary, #E8630A);
+    border-radius: var(--radius-lg, 12px);
+    box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.22), 0 4px 12px -2px rgba(0, 0, 0, 0.1);
+    padding: 12px 14px 12px 12px;
+    font-family: inherit;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .vs-desktop-tip-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--color-text-tertiary, #94a3b8);
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .vs-desktop-tip-close:hover,
+  .vs-desktop-tip-close:active {
+    background: rgba(0, 0, 0, 0.08);
+    color: var(--color-text, #0f172a);
+  }
+
+  [data-theme="dark"] .vs-desktop-tip-close:hover,
+  [data-theme="dark"] .vs-desktop-tip-close:active {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+  }
+
+  .vs-desktop-tip-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    padding-right: 24px;
+  }
+
+  .vs-desktop-tip-icon {
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .vs-desktop-tip-badge {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-primary, #E8630A);
+    background: var(--color-primary-light, rgba(232, 99, 10, 0.1));
+    padding: 2px 7px;
+    border-radius: 9999px;
+  }
+
+  .vs-desktop-tip-text {
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--color-text-secondary, #475569);
+    margin: 0 0 10px 0;
+  }
+
+  .vs-desktop-tip-text strong {
+    display: block;
+    color: var(--color-text, #0f172a);
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  [data-theme="dark"] .vs-desktop-tip-text strong {
+    color: #ffffff;
+  }
+
+  [data-theme="dark"] .vs-desktop-tip-text {
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .vs-desktop-tip-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .vs-desktop-tip-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--color-primary, #E8630A);
+    color: #ffffff !important;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(232, 99, 10, 0.35);
+    transition: transform 0.15s ease, background 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .vs-desktop-tip-cta:active {
+    transform: scale(0.97);
+  }
+
+  .vs-desktop-tip-dismiss {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-secondary, #64748b);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 6px;
+    transition: color 0.15s ease;
+  }
+
+  [data-theme="dark"] .vs-desktop-tip-dismiss {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .vs-desktop-tip-feedback {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-primary, #E8630A);
+    background: var(--color-primary-light, rgba(232, 99, 10, 0.1));
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-align: center;
+    margin-top: 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .vs-desktop-tip {
+    left: 8px;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    max-width: calc(100vw - 72px);
+  }
+  .vs-desktop-tip-card {
+    padding: 10px 12px 10px 10px;
+  }
+  .vs-desktop-tip-text {
+    font-size: 11.5px;
+  }
+  .vs-desktop-tip-text strong {
+    font-size: 12px;
+  }
+  .vs-desktop-tip-cta {
+    font-size: 11.5px;
+    padding: 5px 10px;
+  }
+}
+
