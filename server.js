@@ -201,8 +201,11 @@ app.use('/api', analyticsRoutes);
 app.use('/api', alertsRoutes);
 
 // 8. Static File Serving
-// Root index.html
+// Root index.html (always fresh, no stale cache)
 app.get('/', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.sendFile(path.join(ROOT_DIR, 'index.html'));
 });
 
@@ -211,7 +214,15 @@ app.use(
   express.static(ROOT_DIR, {
     dotfiles: 'deny',
     index: false,
-    maxAge: '1h'
+    maxAge: '1h',
+    setHeaders: (res, filePath) => {
+      // Never cache HTML files so updates take effect immediately
+      if (filePath.endsWith('.html')) {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+      }
+    }
   })
 );
 

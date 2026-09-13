@@ -539,20 +539,17 @@ const SmoothScroll = {
   }
 };
 
-// ---- Preloader ----
+// ---- Preloader Suppression ----
 const Preloader = {
   init() {
     const preloader = document.querySelector('.preloader');
-    if (!preloader) return;
-
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        preloader.classList.add('loaded');
-        setTimeout(() => preloader.remove(), 600);
-      }, 800);
-    });
+    if (preloader) preloader.remove();
   }
 };
+try {
+  const p = document.querySelector('.preloader');
+  if (p) p.remove();
+} catch (_) {}
 
 // ---- Scroll to Top ----
 const ScrollToTop = {
