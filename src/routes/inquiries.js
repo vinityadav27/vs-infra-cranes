@@ -70,7 +70,7 @@ router.post('/inquiries', async (req, res) => {
   recordInquiryAttempt(clientIp);
 
   // Enrich with request context if missing
-  const geo = resolveApproxGeo(req);
+  const geo = await resolveApproxGeo(req, clientIp);
   const ua = parseUserAgent(req.headers['user-agent']);
   payload.approx_country = payload.approx_country || geo.country;
   payload.approx_city = payload.approx_city || geo.city;

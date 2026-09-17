@@ -123,28 +123,57 @@ function sanitizeText(val) {
 }
 
 function parseUserAgent(ua) {
-  if (!ua) return { device: 'Unknown', browser: 'Unknown', os: 'Unknown' };
+  if (!ua || typeof ua !== 'string' || !ua.trim()) {
+    return { device: 'Unknown', browser: 'Unknown', os: 'Unknown' };
+  }
   const u = ua.toLowerCase();
+
+  // 1. Device detection (Desktop, Mobile, Tablet, or Unknown)
   let device = 'Desktop';
-  if (/mobile|iphone|android.*mobile|blackberry|phone/i.test(u)) {
-    device = 'Mobile';
-  } else if (/ipad|tablet|android(?!.*mobile)/i.test(u)) {
+  const isTablet = /ipad|tablet|(android(?!.*mobile))|silk|playbook|kindle/i.test(u);
+  const isMobile = /mobile|iphone|ipod|blackberry|phone|iemobile|opera mini|android.*mobile/i.test(u);
+
+  if (isTablet) {
     device = 'Tablet';
+  } else if (isMobile) {
+    device = 'Mobile';
+  } else if (/windows|macintosh|linux|cros|x11/i.test(u)) {
+    device = 'Desktop';
+  } else {
+    device = 'Desktop';
   }
 
-  let browser = 'Other';
-  if (/edg\//i.test(u)) browser = 'Edge';
-  else if (/chrome\//i.test(u) && !/edg\//i.test(u)) browser = 'Chrome';
-  else if (/safari\//i.test(u) && !/chrome\//i.test(u)) browser = 'Safari';
-  else if (/firefox\//i.test(u)) browser = 'Firefox';
-  else if (/msie|trident/i.test(u)) browser = 'Internet Explorer';
-
+  // 2. OS detection (macOS, Windows, Android, iOS, Linux, Other, Unknown)
   let os = 'Other';
-  if (/windows/i.test(u)) os = 'Windows';
-  else if (/macintosh|mac os x/i.test(u) && !/iphone|ipad/i.test(u)) os = 'macOS';
-  else if (/iphone|ipad|ipod/i.test(u)) os = 'iOS';
-  else if (/android/i.test(u)) os = 'Android';
-  else if (/linux/i.test(u)) os = 'Linux';
+  if (/windows nt|windows/i.test(u)) {
+    os = 'Windows';
+  } else if (/iphone|ipad|ipod/i.test(u)) {
+    os = 'iOS';
+  } else if (/android/i.test(u)) {
+    os = 'Android';
+  } else if (/macintosh|mac os x/i.test(u)) {
+    os = 'macOS';
+  } else if (/cros/i.test(u)) {
+    os = 'ChromeOS';
+  } else if (/linux|x11/i.test(u)) {
+    os = 'Linux';
+  }
+
+  // 3. Browser detection (Chrome, Safari, Firefox, Edge, Opera, Internet Explorer, Other, Unknown)
+  let browser = 'Other';
+  if (/edg\/|edge\/|edgios\/|edga\//i.test(u)) {
+    browser = 'Edge';
+  } else if (/opr\/|opera/i.test(u)) {
+    browser = 'Opera';
+  } else if (/chrome\/|crios\/|crmo\//i.test(u)) {
+    browser = 'Chrome';
+  } else if (/firefox\/|fxios\//i.test(u)) {
+    browser = 'Firefox';
+  } else if (/safari\//i.test(u) && !/chrome\/|crios\/|edg\/|opr\//i.test(u)) {
+    browser = 'Safari';
+  } else if (/msie|trident/i.test(u)) {
+    browser = 'Internet Explorer';
+  }
 
   return { device, browser, os };
 }
@@ -171,31 +200,131 @@ function categorizeLeadSource({ referrer = '', utm_source = '', utm_medium = '' 
   return 'Direct Traffic';
 }
 
-function resolveApproxGeo(req) {
-  if (!req) return { country: 'Unknown / Not Available', city: 'Unknown / Not Available', region: 'Unknown / Not Available' };
-  const country =
-    req.headers['cf-ipcountry'] ||
-    req.headers['x-vercel-ip-country'] ||
-    req.headers['x-country-code'] ||
-    '';
-  const city =
-    req.headers['cf-ipcity'] ||
-    req.headers['x-vercel-ip-city'] ||
-    '';
-  const region =
-    req.headers['cf-ipregion'] ||
-    req.headers['x-vercel-ip-country-region'] ||
-    '';
+const GEO_CACHE = new Map();
+const MAX_GEO_CACHE = 5000;
 
-  const cleanCountry = country.trim();
-  const cleanCity = city.trim();
-  const cleanRegion = region.trim();
+function cacheGeoResult(ip, result) {
+  if (!ip) return;
+  if (GEO_CACHE.size >= MAX_GEO_CACHE) {
+    const firstKey = GEO_CACHE.keys().next().value;
+    GEO_CACHE.delete(firstKey);
+  }
+  GEO_CACHE.set(ip, result);
+}
 
-  return {
-    country: cleanCountry || 'Unknown / Not Available',
-    city: cleanCity || 'Unknown / Not Available',
-    region: cleanRegion || 'Unknown / Not Available'
+async function resolveApproxGeo(req, clientIp = '') {
+  if (!req && !clientIp) {
+    return { country: 'Unknown / Not Available', city: 'Unknown / Not Available', region: 'Unknown / Not Available' };
+  }
+
+  const rawIp = String(clientIp || (req && req.ip) || '').replace(/^::ffff:/, '').trim();
+  if (!rawIp) {
+    return { country: 'Unknown / Not Available', city: 'Unknown / Not Available', region: 'Unknown / Not Available' };
+  }
+
+  if (GEO_CACHE.has(rawIp)) {
+    return GEO_CACHE.get(rawIp);
+  }
+
+  // 1. Private / Loopback IPs: Never query external provider
+  const isPrivate =
+    ['127.0.0.1', '::1', '0.0.0.0', 'localhost'].includes(rawIp) ||
+    rawIp.startsWith('10.') ||
+    rawIp.startsWith('192.168.') ||
+    /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(rawIp) ||
+    rawIp.startsWith('169.254.') ||
+    rawIp.startsWith('fc') ||
+    rawIp.startsWith('fe80');
+
+  if (isPrivate) {
+    const loopResult = {
+      country: 'Unknown / Not Available',
+      city: 'Unknown / Not Available',
+      region: 'Unknown / Not Available'
+    };
+    cacheGeoResult(rawIp, loopResult);
+    return loopResult;
+  }
+
+  // 2. Upstream Proxy Geolocation Headers (if present)
+  const headerCountry = req && req.headers ? (req.headers['cf-ipcountry'] || req.headers['x-vercel-ip-country'] || '') : '';
+  const headerCity = req && req.headers ? (req.headers['cf-ipcity'] || req.headers['x-vercel-ip-city'] || '') : '';
+  const headerRegion = req && req.headers ? (req.headers['cf-ipregion'] || req.headers['x-vercel-ip-country-region'] || '') : '';
+
+  if (headerCountry && headerCountry.trim() && headerCountry.trim() !== 'XX' && headerCountry.trim() !== 'T1') {
+    const result = {
+      country: headerCountry.trim(),
+      city: headerCity.trim() || 'Unknown / Not Available',
+      region: headerRegion.trim() || 'Unknown / Not Available'
+    };
+    cacheGeoResult(rawIp, result);
+    return result;
+  }
+
+  // 3. MilesWeb Server-Side Geolocation Lookup
+  // Uses server-side HTTPS lookup without any client-side exposure.
+  // Supports optional process.env.GEOLOCATION_API_KEY / process.env.IPINFO_TOKEN,
+  // or falls back to keyless HTTPS IP geolocation (ipwho.is).
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2500);
+
+    let apiUrl = '';
+    const apiKey = process.env.GEOLOCATION_API_KEY || process.env.IPINFO_TOKEN || '';
+    if (apiKey) {
+      apiUrl = `https://ipinfo.io/${encodeURIComponent(rawIp)}?token=${encodeURIComponent(apiKey)}`;
+    } else {
+      apiUrl = `https://ipwho.is/${encodeURIComponent(rawIp)}`;
+    }
+
+    const res = await fetch(apiUrl, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (res.ok) {
+      const data = await res.json();
+      let country = '';
+      let city = '';
+      let region = '';
+
+      if (apiKey && data.country) {
+        country = data.country || '';
+        city = data.city || '';
+        region = data.region || '';
+      } else if (data && data.success) {
+        country = data.country || '';
+        city = data.city || '';
+        region = data.region || '';
+      }
+
+      const cleanCountry = country.trim();
+      const cleanCity = city.trim();
+      const cleanRegion = region.trim();
+
+      if (cleanCountry && cleanCountry !== 'Unknown') {
+        const result = {
+          country: cleanCountry,
+          city: cleanCity || 'Unknown / Not Available',
+          region: cleanRegion || 'Unknown / Not Available'
+        };
+        cacheGeoResult(rawIp, result);
+        return result;
+      }
+    }
+  } catch (err) {
+    // Network isolation, provider timeout, or connection error safely handled
+  }
+
+  const fallbackResult = {
+    country: 'Unknown / Not Available',
+    city: 'Unknown / Not Available',
+    region: 'Unknown / Not Available'
   };
+  cacheGeoResult(rawIp, fallbackResult);
+  return fallbackResult;
 }
 
 module.exports = {

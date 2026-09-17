@@ -794,31 +794,42 @@ class DatabaseManager {
       const isLoopback = ['127.0.0.1', '::1', '0.0.0.0', 'localhost'].includes(cleanIp);
       const uaLower = ua.toLowerCase();
 
+      const BOT_REGEX = /bot|crawl|spider|slurp|mediapartners|googlebot|bingbot|yandex|duckduckbot|baiduspider|sogou|ahrefs|semrush|dotbot|mj12bot|screaming frog|petalbot|curl|wget|python|httpie|node-fetch|axios|go-http-client|postman|headlesschrome|phantomjs|selenium|puppeteer|lighthouse|uptime|pingdom|freshping|uptimerobot|statuscake/i;
+
       if (isLoopback) {
         sourceTag = sourceTag || 'dev_local';
       } else if (pathUrl === '/admin.html' || pathUrl.startsWith('/admin')) {
         sourceTag = 'admin';
-      } else if (!ua || uaLower.includes('bot') || uaLower.includes('crawl') || uaLower.includes('spider') || uaLower.includes('curl') || uaLower.includes('wget') || uaLower.includes('python') || uaLower.includes('httpie')) {
+      } else if (!ua || BOT_REGEX.test(uaLower)) {
         sourceTag = 'bot';
       }
 
       const metaVal = typeof eventData.meta === 'object' ? JSON.stringify(eventData.meta) : String(eventData.meta || '');
 
       const { device, browser, os } = parseUserAgent(ua);
+      const rawVisitorId = String(eventData.visitor_id || '').trim().slice(0, 64);
       const ipHash = crypto.createHash('sha256').update(clientIp + SECRET_KEY).digest('hex').slice(0, 16);
+      const visitorId = rawVisitorId || ipHash;
       const nowIso = new Date().toISOString();
       const nowEpoch = Date.now();
 
-      if (sessionId) {
-        ACTIVE_SESSIONS.set(sessionId, nowEpoch);
-      } else {
-        ACTIVE_SESSIONS.set(ipHash, nowEpoch);
+      // Prune inactive sessions older than 5 minutes (300,000 ms)
+      const fiveMinAgoEpoch = nowEpoch - 5 * 60 * 1000;
+      for (const [key, lastSeen] of ACTIVE_SESSIONS.entries()) {
+        if (lastSeen < fiveMinAgoEpoch) {
+          ACTIVE_SESSIONS.delete(key);
+        }
+      }
+      const internalSources = ['dev_local', 'admin', 'bot', 'test', 'health_check'];
+      if (!internalSources.includes(sourceTag)) {
+        ACTIVE_SESSIONS.set(visitorId, nowEpoch);
       }
 
       const record = {
         timestamp: nowIso,
         created_at: nowIso,
         path: pathUrl,
+        visitor_id: visitorId,
         ip_hash: ipHash,
         device,
         browser,
@@ -868,22 +879,23 @@ class DatabaseManager {
     }
   }
 
-  recordPageView(pathUrl, clientIp, userAgent, referrer, req) {
+  async recordPageView(pathUrl, clientIp, userAgent, referrer, req) {
     let sourceTag = '';
     const uaLower = (userAgent || '').toLowerCase();
     const cleanIp = (clientIp || '').replace(/^::ffff:/, '');
     const isLoopback = ['127.0.0.1', '::1', '0.0.0.0', 'localhost'].includes(cleanIp);
+    const BOT_REGEX = /bot|crawl|spider|slurp|mediapartners|googlebot|bingbot|yandex|duckduckbot|baiduspider|sogou|ahrefs|semrush|dotbot|mj12bot|screaming frog|petalbot|curl|wget|python|httpie|node-fetch|axios|go-http-client|postman|headlesschrome|phantomjs|selenium|puppeteer|lighthouse|uptime|pingdom|freshping|uptimerobot|statuscake/i;
 
     if (isLoopback) {
       sourceTag = 'dev_local';
     } else if (pathUrl === '/admin.html' || pathUrl.startsWith('/admin')) {
       sourceTag = 'admin';
-    } else if (!userAgent || uaLower.includes('python') || uaLower.includes('curl') || uaLower.includes('httpie') || uaLower.includes('wget') || uaLower.includes('bot')) {
+    } else if (!userAgent || BOT_REGEX.test(uaLower)) {
       sourceTag = 'bot';
     }
 
-    const geo = resolveApproxGeo(req);
-    this.recordAnalyticsEvent({
+    const geo = await resolveApproxGeo(req, clientIp);
+    await this.recordAnalyticsEvent({
       path: pathUrl === '/' || !pathUrl ? '/index.html' : pathUrl,
       event_type: 'page_view',
       client_ip: clientIp,
@@ -901,13 +913,20 @@ class DatabaseManager {
     }
 
     let cutoffIso = '';
-    const now = new Date();
+    const nowUtc = Date.now();
     if (period === 'today') {
-      cutoffIso = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+      // Asia/Kolkata is UTC+05:30 (fixed offset, no DST)
+      const IST_OFFSET_MS = (5 * 60 + 30) * 60 * 1000;
+      const istTime = new Date(nowUtc + IST_OFFSET_MS);
+      const y = istTime.getUTCFullYear();
+      const m = istTime.getUTCMonth();
+      const d = istTime.getUTCDate();
+      const istMidnightEpoch = Date.UTC(y, m, d) - IST_OFFSET_MS;
+      cutoffIso = new Date(istMidnightEpoch).toISOString();
     } else if (period === '7d') {
-      cutoffIso = new Date(Date.now() - 7 * 86400000).toISOString();
+      cutoffIso = new Date(nowUtc - 7 * 86400000).toISOString();
     } else if (period === '30d') {
-      cutoffIso = new Date(Date.now() - 30 * 86400000).toISOString();
+      cutoffIso = new Date(nowUtc - 30 * 86400000).toISOString();
     }
 
     // Filter out internal / dev / bot / test traffic from normal visitor metrics
@@ -968,29 +987,61 @@ class DatabaseManager {
       }
     }
 
-    const totalViews = allEvents.length;
-    const uniqueIps = new Set(allEvents.map(e => e.ip_hash || e.session_id).filter(Boolean));
-    const uniqueVisitors = uniqueIps.size;
+    // Strict Page View Events (exclude clicks, downloads, viewer opens, and form focus events)
+    const pageViewEvents = allEvents.filter(e => e.event_type === 'page_view');
+    const totalViews = pageViewEvents.length;
 
-    // Active visitors in last 15 mins
-    const fifteenMinAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString();
-    const activeIps = new Set(
-      allEvents
-        .filter(e => (e.timestamp || '') >= fifteenMinAgo)
-        .map(e => e.ip_hash || e.session_id)
-        .filter(Boolean)
-    );
-    const activeVisitors = activeIps.size;
-
-    // Bounce Rate: sessions with only 1 event / total sessions
-    const sessionEventCounts = {};
-    for (const ev of allEvents) {
-      const sId = ev.session_id || ev.ip_hash;
-      if (sId) {
-        sessionEventCounts[sId] = (sessionEventCounts[sId] || 0) + 1;
+    // Unique Visitors: Distinct visitors with at least 1 page view in the period
+    const visitorMap = new Map(); // visitorId -> { device, os, browser }
+    for (const ev of pageViewEvents) {
+      const vId = ev.visitor_id || ev.ip_hash || ev.session_id;
+      if (!vId) continue;
+      if (!visitorMap.has(vId)) {
+        const uaInfo = ev.user_agent ? parseUserAgent(ev.user_agent) : { device: ev.device || 'Desktop', os: ev.os || 'Other', browser: ev.browser || 'Other' };
+        visitorMap.set(vId, {
+          device: uaInfo.device || ev.device || 'Desktop',
+          os: uaInfo.os || ev.os || 'Other',
+          browser: uaInfo.browser || ev.browser || 'Other'
+        });
       }
     }
-    const sessionValues = Object.values(sessionEventCounts);
+    const uniqueVisitors = visitorMap.size;
+
+    // Live Active Visitors: Distinct human visitors active in the last 5 minutes
+    const fiveMinAgoIso = new Date(nowUtc - 5 * 60 * 1000).toISOString();
+    const fiveMinAgoEpoch = nowUtc - 5 * 60 * 1000;
+    const activeVisitorIds = new Set();
+
+    for (const ev of allEvents) {
+      if ((ev.timestamp || '') >= fiveMinAgoIso) {
+        const vId = ev.visitor_id || ev.ip_hash || ev.session_id;
+        if (vId) activeVisitorIds.add(vId);
+      }
+    }
+
+    for (const [vId, lastSeen] of ACTIVE_SESSIONS.entries()) {
+      if (lastSeen >= fiveMinAgoEpoch) {
+        activeVisitorIds.add(vId);
+      }
+    }
+
+    // Invariant: Live users right now cannot exceed unique visitors for the selected period
+    let activeVisitors = activeVisitorIds.size;
+    if (uniqueVisitors > 0 && activeVisitors > uniqueVisitors) {
+      activeVisitors = uniqueVisitors;
+    } else if (uniqueVisitors === 0 && totalViews === 0) {
+      activeVisitors = 0;
+    }
+
+    // Bounce Rate: Sessions with exactly 1 page view / total sessions with page views
+    const sessionPageViewCounts = {};
+    for (const ev of pageViewEvents) {
+      const sId = ev.session_id || ev.visitor_id || ev.ip_hash;
+      if (sId) {
+        sessionPageViewCounts[sId] = (sessionPageViewCounts[sId] || 0) + 1;
+      }
+    }
+    const sessionValues = Object.values(sessionPageViewCounts);
     const totalSessions = sessionValues.length;
     const singleEventSessions = sessionValues.filter(c => c === 1).length;
     const bounceRatePct = totalSessions > 0 ? Math.round((singleEventSessions / totalSessions) * 1000) / 10 : 0.0;
@@ -999,25 +1050,63 @@ class DatabaseManager {
     const periodInquiries = inquiries.length;
     const conversionRatePct = uniqueVisitors > 0 ? Math.round((periodInquiries / uniqueVisitors) * 1000) / 10 : 0.0;
 
-    // Breakdowns
-    const pageCounts = {};
-    const deviceCounts = {};
-    const browserCounts = {};
+    // Canonical Path Helper
+    function canonicalizePath(p) {
+      if (!p) return '/index.html';
+      let clean = String(p).trim().split('?')[0].split('#')[0];
+      if (clean === '' || clean === '/') return '/index.html';
+      if (clean.endsWith('/') && clean.length > 1) clean = clean.slice(0, -1);
+      return clean;
+    }
+
+    // Top Pages (Strictly page_view events, with both Views and Unique Visitors)
+    const pageStats = {};
+    for (const ev of pageViewEvents) {
+      const p = canonicalizePath(ev.path);
+      if (!pageStats[p]) {
+        pageStats[p] = { views: 0, visitors: new Set() };
+      }
+      pageStats[p].views += 1;
+      const vId = ev.visitor_id || ev.ip_hash || ev.session_id;
+      if (vId) pageStats[p].visitors.add(vId);
+    }
+
+    const topPages = Object.entries(pageStats)
+      .map(([path, stats]) => ({
+        path,
+        page: path,
+        views: stats.views,
+        count: stats.views,
+        unique_visitors: stats.visitors.size,
+        visitors: stats.visitors.size
+      }))
+      .sort((a, b) => b.views - a.views)
+      .slice(0, 10);
+
+    // Devices, Browsers, and OS (Based on unique visitor population)
+    const deviceCounts = { 'Desktop': 0, 'Mobile': 0, 'Tablet': 0 };
     const osCounts = {};
+    const browserCounts = {};
+
+    for (const info of visitorMap.values()) {
+      const dev = ['Desktop', 'Mobile', 'Tablet'].includes(info.device) ? info.device : 'Desktop';
+      deviceCounts[dev] = (deviceCounts[dev] || 0) + 1;
+
+      const os = info.os || 'Other';
+      osCounts[os] = (osCounts[os] || 0) + 1;
+
+      const br = info.browser || 'Other';
+      browserCounts[br] = (browserCounts[br] || 0) + 1;
+    }
+
+    // Approx Geo from page_view events
     const geoCounts = {};
-
-    for (const ev of allEvents) {
-      if (ev.path) pageCounts[ev.path] = (pageCounts[ev.path] || 0) + 1;
-      if (ev.device) deviceCounts[ev.device] = (deviceCounts[ev.device] || 0) + 1;
-      if (ev.browser) browserCounts[ev.browser] = (browserCounts[ev.browser] || 0) + 1;
-      if (ev.os) osCounts[ev.os] = (osCounts[ev.os] || 0) + 1;
-
-      // Approx Geo: format as "City, Country" or "Country", or "Unknown / Not Available"
+    for (const ev of pageViewEvents) {
       let loc = 'Unknown / Not Available';
       const c = (ev.country || '').trim();
       const ci = (ev.city || '').trim();
-      if (c && c !== 'Unknown' && c !== 'Unknown / Not Available' && c !== 'India') {
-        if (ci && ci !== 'Unknown' && ci !== 'Unknown / Not Available' && ci !== 'Faridabad') {
+      if (c && c !== 'Unknown' && c !== 'Unknown / Not Available') {
+        if (ci && ci !== 'Unknown' && ci !== 'Unknown / Not Available') {
           loc = `${ci}, ${c}`;
         } else {
           loc = c;
@@ -1026,13 +1115,6 @@ class DatabaseManager {
       geoCounts[loc] = (geoCounts[loc] || 0) + 1;
     }
 
-    // Top Pages
-    const topPages = Object.entries(pageCounts)
-      .map(([path, views]) => ({ path, page: path, views, count: views }))
-      .sort((a, b) => b.views - a.views)
-      .slice(0, 10);
-
-    // Approx Geo list
     const approxGeo = Object.entries(geoCounts)
       .map(([location, views]) => ({
         location,
@@ -1245,6 +1327,7 @@ class DatabaseManager {
       total_page_views: totalViews,
       unique_visitors: uniqueVisitors,
       active_visitors: activeVisitors,
+      active_visitors_5m: activeVisitors,
       active_visitors_15m: activeVisitors,
       bounce_rate_pct: bounceRatePct,
       bounce_rate: bounceRatePct,
@@ -1255,6 +1338,7 @@ class DatabaseManager {
         total_views: totalViews,
         unique_visitors: uniqueVisitors,
         active_visitors: activeVisitors,
+        active_visitors_5m: activeVisitors,
         active_visitors_15m: activeVisitors,
         unique_sessions: totalSessions || uniqueVisitors
       },

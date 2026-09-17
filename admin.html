@@ -735,7 +735,7 @@
             <div class="stat-card">
               <div class="stat-label">Live Active Visitors (Now)</div>
               <div class="stat-val" id="analytics-active-visitors" style="color:var(--admin-success);">0</div>
-              <div style="font-size:11px; color:var(--admin-text-muted); margin-top:4px;">Active in last 15 minutes</div>
+              <div style="font-size:11px; color:var(--admin-text-muted); margin-top:4px;">Active in last 5 minutes</div>
             </div>
             <div class="stat-card">
               <div class="stat-label">Estimated Bounce Rate</div>
@@ -1639,7 +1639,7 @@
 
             if (elTotal) elTotal.textContent = data.total_views ?? data.metrics?.total_page_views ?? data.total_page_views ?? 0;
             if (elUniq) elUniq.textContent = data.unique_visitors ?? data.metrics?.unique_visitors ?? 0;
-            if (elActive) elActive.textContent = data.active_visitors_15m ?? data.active_visitors ?? data.metrics?.active_visitors ?? 0;
+            if (elActive) elActive.textContent = data.active_visitors_5m ?? data.active_visitors ?? data.active_visitors_15m ?? data.metrics?.active_visitors ?? 0;
             if (elBounce) elBounce.textContent = (data.bounce_rate_pct ?? data.bounce_rate ?? 0) + "%";
 
             // Top Pages
@@ -1651,10 +1651,12 @@
                 elPages.innerHTML = pages.map(p => {
                   const pPath = p.path || p.page || p.url || "/";
                   const pViews = p.views != null ? p.views : (p.count != null ? p.count : (p.hits != null ? p.hits : 0));
+                  const pUniq = p.unique_visitors != null ? p.unique_visitors : (p.visitors != null ? p.visitors : 0);
+                  const badgeText = pUniq > 0 ? `${pViews} views • ${pUniq} visitors` : `${pViews} views`;
                   return `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 10px; background:rgba(255,255,255,0.03); border-radius:6px;">
                       <span style="color:#fff; font-family:monospace; font-size:12px;">${escapeHtml(pPath)}</span>
-                      <span class="badge" style="background:rgba(232,99,10,0.15); color:var(--admin-primary);">${pViews} views</span>
+                      <span class="badge" style="background:rgba(232,99,10,0.15); color:var(--admin-primary);">${escapeHtml(badgeText)}</span>
                     </div>
                   `;
                 }).join("");

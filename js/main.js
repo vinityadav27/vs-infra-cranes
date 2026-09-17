@@ -21,6 +21,7 @@ window.getVsApiBase = getVsApiBase;
 
 // ---- Lead Intelligence & Engagement Analytics (Privacy-First) ----
 const VSAnalytics = {
+  visitorId: '',
   sessionId: '',
   landingPage: '',
   initialReferrer: '',
@@ -36,12 +37,37 @@ const VSAnalytics = {
       const hostname = window.location.hostname;
       this._isDev = (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '0.0.0.0' || hostname === '[::1]' || window.location.protocol === 'file:');
 
-      // 1. Anonymous Session ID (sessionStorage only, no tracking cookies)
-      let sId = sessionStorage.getItem('vs_session_id');
-      if (!sId) {
-        sId = 'sess_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
-        sessionStorage.setItem('vs_session_id', sId);
+      // 1. Persistent Anonymous Visitor ID (localStorage with fallback)
+      let vId = null;
+      try {
+        vId = localStorage.getItem('vs_visitor_id');
+        if (!vId) {
+          vId = 'vis_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+          localStorage.setItem('vs_visitor_id', vId);
+        }
+      } catch (e) {
+        vId = vId || ('vis_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36));
       }
+      this.visitorId = vId;
+
+      // 2. Anonymous Session ID (30-minute inactivity rollover)
+      const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
+      const nowEpoch = Date.now();
+      let sId = null;
+      let lastActive = 0;
+      try {
+        sId = localStorage.getItem('vs_session_id') || sessionStorage.getItem('vs_session_id');
+        lastActive = parseInt(localStorage.getItem('vs_last_active') || sessionStorage.getItem('vs_last_active') || '0', 10);
+      } catch (e) {}
+
+      if (!sId || (nowEpoch - lastActive) > SESSION_TIMEOUT_MS) {
+        sId = 'sess_' + Math.random().toString(36).substring(2, 10) + nowEpoch.toString(36);
+      }
+      try {
+        localStorage.setItem('vs_session_id', sId);
+        localStorage.setItem('vs_last_active', String(nowEpoch));
+        sessionStorage.setItem('vs_session_id', sId);
+      } catch (e) {}
       this.sessionId = sId;
 
       // 2. Landing Page
@@ -151,9 +177,14 @@ const VSAnalytics = {
 
   trackEvent(eventType, data = {}) {
     try {
+      try {
+        localStorage.setItem('vs_last_active', String(Date.now()));
+      } catch (e) {}
+
       const apiBase = typeof getVsApiBase === 'function' ? getVsApiBase() : '';
       const payload = {
         event_type: eventType,
+        visitor_id: this.visitorId,
         session_id: this.sessionId,
         path: window.location.pathname || '/index.html',
         landing_page: this.landingPage,

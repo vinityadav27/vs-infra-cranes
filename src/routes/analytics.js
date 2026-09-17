@@ -24,32 +24,30 @@ router.post('/analytics/event', async (req, res) => {
       payload = {};
     }
 
-    const clientIp =
-      req.headers['cf-connecting-ip'] ||
-      (req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',')[0].trim() : '') ||
-      req.ip ||
-      req.connection?.remoteAddress ||
-      '127.0.0.1';
+    // Secure Client IP extraction: Use Express req.ip with configured trust proxy (1 hop for MilesWeb reverse proxy)
+    const clientIp = req.ip || req.socket?.remoteAddress || '127.0.0.1';
 
     if (isAnalyticsRateLimited(clientIp)) {
       return res.status(429).json({ success: false, error: 'Analytics rate limit exceeded' });
     }
 
-    const geo = resolveApproxGeo(req);
+    const geo = await resolveApproxGeo(req, clientIp);
     const uaRaw = String(req.headers['user-agent'] || '');
     const uaLower = uaRaw.toLowerCase();
     const pathStr = String(payload.path || '/index.html').trim();
 
-    // Determine internal/test traffic sources
+    // Determine internal/test/bot traffic sources
     let sourceTag = String(payload.source || '').trim();
     const cleanIp = clientIp.replace(/^::ffff:/, '');
     const isLoopback = ['127.0.0.1', '::1', '0.0.0.0', 'localhost'].includes(cleanIp);
+
+    const BOT_REGEX = /bot|crawl|spider|slurp|mediapartners|googlebot|bingbot|yandex|duckduckbot|baiduspider|sogou|ahrefs|semrush|dotbot|mj12bot|screaming frog|petalbot|curl|wget|python|httpie|node-fetch|axios|go-http-client|postman|headlesschrome|phantomjs|selenium|puppeteer|lighthouse|uptime|pingdom|freshping|uptimerobot|statuscake/i;
 
     if (isLoopback) {
       sourceTag = sourceTag || 'dev_local';
     } else if (pathStr === '/admin.html' || pathStr.startsWith('/admin')) {
       sourceTag = 'admin';
-    } else if (uaLower.includes('bot') || uaLower.includes('crawl') || uaLower.includes('spider') || uaLower.includes('curl') || uaLower.includes('wget') || uaLower.includes('python') || uaLower.includes('httpie')) {
+    } else if (BOT_REGEX.test(uaLower)) {
       sourceTag = 'bot';
     } else if (req.headers['x-test-mode'] || sourceTag === 'test') {
       sourceTag = 'test';
@@ -57,19 +55,14 @@ router.post('/analytics/event', async (req, res) => {
       sourceTag = 'health_check';
     }
 
-    // Ensure approximate location never uses fake data
-    let country = String(payload.country || '').trim();
-    let city = String(payload.city || '').trim();
-    if (!country || country === 'Unknown' || country === 'India') {
-      country = geo.country;
-    }
-    if (!city || city === 'Unknown' || city === 'Faridabad') {
-      city = geo.city;
-    }
+    // Geolocation is resolved server-side from proxy headers, never guessed or hardcoded
+    const country = geo.country || 'Unknown / Not Available';
+    const city = geo.city || 'Unknown / Not Available';
 
     const eventData = {
       path: pathStr || '/index.html',
       event_type: String(payload.event_type || payload.event || 'page_view').trim().slice(0, 50),
+      visitor_id: String(payload.visitor_id || '').trim().slice(0, 64),
       client_ip: clientIp,
       user_agent: uaRaw.slice(0, 300),
       referrer: String(payload.referrer || req.headers.referer || '').trim().slice(0, 300),
@@ -82,8 +75,8 @@ router.post('/analytics/event', async (req, res) => {
       utm_source: String(payload.utm_source || '').trim().slice(0, 60),
       utm_medium: String(payload.utm_medium || '').trim().slice(0, 60),
       utm_campaign: String(payload.utm_campaign || '').trim().slice(0, 60),
-      country: country || 'Unknown / Not Available',
-      city: city || 'Unknown / Not Available',
+      country: country,
+      city: city,
       source: sourceTag,
       meta: payload.meta || payload.data || {}
     };

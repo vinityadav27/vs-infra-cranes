@@ -52,18 +52,7 @@ app.use((req, res, next) => {
     const latencyMs = Date.now() - start;
     recordHttpMetric(res.statusCode, req.path, latencyMs);
 
-    // Track HTML page views in analytics
-    if (
-      req.method === 'GET' &&
-      !req.path.startsWith('/api/') &&
-      (req.path === '/' || req.path.endsWith('.html') || !path.extname(req.path))
-    ) {
-      const clientIp = req.ip || req.connection.remoteAddress || '127.0.0.1';
-      const ua = req.headers['user-agent'] || '';
-      const ref = req.headers.referer || '';
-      dbManager.recordPageView(req.path, clientIp, ua, ref, req);
-    }
-
+    // Page views are tracked by client-side VSAnalytics to ensure accurate session/visitor identity without double-counting.
     return originalEnd.apply(this, args);
   };
   next();
