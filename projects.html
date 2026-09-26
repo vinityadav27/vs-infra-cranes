@@ -11,7 +11,7 @@
   gtag('config', 'G-GR8HV7TXF5');
 </script>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Industrial Crane Installations & Projects — VS Infra & Cranes</title>
   <meta name="description" content="Explore heavy-duty crane installations and engineering case studies by VS Infra & Cranes across India and global industrial sectors including steel, manufacturing, power, and precast yards."/>
   <link rel="canonical" href="https://vsinfracranes.com/projects.html"/>
@@ -461,6 +461,7 @@
       .project-detail-panel {
         min-height: auto;
       }
+      #projects-card-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 576px) {
@@ -488,6 +489,8 @@
         font-size: 11px;
         padding: 4px 10px;
       }
+      #projects-card-grid { grid-template-columns: 1fr; }
+      .map-overlay-bar { flex-wrap: wrap; gap: 6px; }
     }
   </style>
 </head>
@@ -503,6 +506,23 @@
     </div>
     <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
   </div></header>
+  <!-- Mobile Nav -->
+  <div class="mobile-nav-overlay"></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mobile-nav-link">Home</a>
+    <a href="about.html" class="mobile-nav-link">About</a>
+    <a href="products.html" class="mobile-nav-link">Products</a>
+    <a href="catalog.html" class="mobile-nav-link">3D Catalog</a>
+    <a href="services.html" class="mobile-nav-link">Services</a>
+    <a href="projects.html" class="mobile-nav-link">Projects</a>
+    <a href="gallery.html" class="mobile-nav-link">Gallery</a>
+    <a href="blog.html" class="mobile-nav-link">Blog</a>
+    <a href="contact.html" class="mobile-nav-link">Contact</a>
+    <a href="admin.html" class="mobile-nav-link" style="color:var(--color-primary); font-weight:600;">🔒 Admin Panel</a>
+    <div style="padding-top:var(--space-6);">
+      <a href="request-quote.html" class="btn btn-primary" style="width:100%;">Request Quote</a>
+    </div>
+  </nav>
   
   <main>
     <!-- Hero Section -->
@@ -744,6 +764,20 @@
             </div>
           </div>
 
+        </div>
+
+        <div class="related-links-section" style="margin-top: var(--space-10);">
+          <h4>Explore Equipment Featured in Our Projects</h4>
+          <div class="related-links-grid">
+            <a href="products/double-girder-eot-crane.html" class="related-link-chip">Double Girder EOT Cranes (5T–50T)</a>
+            <a href="products/single-girder-eot-crane.html" class="related-link-chip">Single Girder EOT Cranes (1T–20T)</a>
+            <a href="products/electric-wire-rope-hoist.html" class="related-link-chip">Electric Wire Rope Hoists</a>
+            <a href="products/gantry-crane.html" class="related-link-chip">Gantry Cranes</a>
+            <a href="products/goliath-crane.html" class="related-link-chip">Goliath Cranes</a>
+            <a href="products/jib-crane.html" class="related-link-chip">Jib Cranes</a>
+            <a href="services.html" class="related-link-chip">Turnkey Erection, Load Testing &amp; AMC</a>
+            <a href="gallery.html" class="related-link-chip">Manufacturing &amp; Site Photo Gallery</a>
+          </div>
         </div>
 
       </div>

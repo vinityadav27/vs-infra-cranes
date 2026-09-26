@@ -11,7 +11,7 @@
   gtag('config', 'G-GR8HV7TXF5');
 </script>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Crane Services, Installation, AMC & Modernization — VS Infra & Cranes</title>
   <meta name="description" content="Comprehensive industrial crane services by VS Infra & Cranes: custom manufacturing, turnkey installation & commissioning, AMC contracts, 24/7 breakdown repair, modernization, and load testing across India and export destinations."/>
   <link rel="canonical" href="https://vsinfracranes.com/services.html"/>
@@ -38,8 +38,16 @@
         "@id": "https://vsinfracranes.com/services.html#service",
         "name": "Industrial Crane Lifecycle Services",
         "serviceType": "Crane Engineering, Manufacturing, Installation, AMC & Modernization",
+        "areaServed": [
+          {
+            "@type": "Country",
+            "name": "India"
+          },
+          "International"
+        ],
         "provider": {
           "@type": "Organization",
+          "@id": "https://vsinfracranes.com/#organization",
           "name": "VS Infra & Cranes",
           "url": "https://vsinfracranes.com/"
         },
@@ -112,6 +120,7 @@
     .cta-banner h2,.cta-banner p{color:white;}
     .cta-banner p{color:rgba(255,255,255,.7);}
 
+    @media(max-width:992px){ .service-row{grid-template-columns:1fr;gap:var(--space-6);} .service-row.reverse .service-visual{order:0;} .process-steps{grid-template-columns:repeat(2,1fr);} .process-steps::before{display:none;} }
     @media(max-width:768px){
       .service-row{grid-template-columns:1fr;gap:var(--space-6);}
       .service-row.reverse .service-visual{order:0;}
@@ -284,6 +293,53 @@
       </div>
     </section>
 
+    <!-- Equipment We Manufacture, Install & Maintain -->
+    <section class="section" id="supported-equipment" style="padding-top:0;">
+      <div class="container">
+        <div class="related-links-section reveal" style="margin-top:0;">
+          <div class="section-label">Equipment Coverage</div>
+          <h2 style="font-size:var(--text-3xl);margin-bottom:var(--space-2);">Cranes &amp; Hoists We Manufacture, Install &amp; Maintain</h2>
+          <p style="color:var(--color-text-secondary);max-width:680px;">Explore technical specifications for our complete range of IS:3177 and IS:807 compliant overhead cranes, gantry systems, and hoists.</p>
+          <div class="related-links-grid">
+            <a href="products/double-girder-eot-crane.html" class="related-link-card">
+              <div>
+                <h4>Double Girder EOT Crane (5–50 Ton)</h4>
+                <p>Heavy-duty box-girder overhead cranes for steel mills, foundries, and continuous industrial duty.</p>
+              </div>
+              <span class="related-link-cta">View Double Girder Specs &rarr;</span>
+            </a>
+            <a href="products/single-girder-eot-crane.html" class="related-link-card">
+              <div>
+                <h4>Single Girder EOT Crane (1–20 Ton)</h4>
+                <p>Cost-effective overhead bridge cranes for workshops, fabrication bays, and warehouses.</p>
+              </div>
+              <span class="related-link-cta">View Single Girder Specs &rarr;</span>
+            </a>
+            <a href="products/gantry-crane.html" class="related-link-card">
+              <div>
+                <h4>Gantry &amp; Goliath Cranes (5–50 Ton)</h4>
+                <p>Freestanding rail-mounted outdoor and indoor gantry systems for stockyards and precast yards.</p>
+              </div>
+              <span class="related-link-cta">View Gantry Crane Specs &rarr;</span>
+            </a>
+            <a href="products/electric-wire-rope-hoist.html" class="related-link-card">
+              <div>
+                <h4>Wire Rope &amp; Chain Hoists (0.5–20 Ton)</h4>
+                <p>Precision vertical lifting units with fail-safe braking, limit switches, and VFD options.</p>
+              </div>
+              <span class="related-link-cta">View Hoist Specifications &rarr;</span>
+            </a>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-6);">
+            <a href="products/goliath-crane.html" class="badge badge-primary" style="padding:var(--space-2) var(--space-4);font-size:var(--text-xs);text-decoration:none;">Goliath Crane (10–50 Ton) &rarr;</a>
+            <a href="products/semi-gantry-crane.html" class="badge badge-primary" style="padding:var(--space-2) var(--space-4);font-size:var(--text-xs);text-decoration:none;">Semi-Gantry Crane (5–30 Ton) &rarr;</a>
+            <a href="products/jib-crane.html" class="badge badge-primary" style="padding:var(--space-2) var(--space-4);font-size:var(--text-xs);text-decoration:none;">Industrial Jib Crane (0.5–10 Ton) &rarr;</a>
+            <a href="products/chain-hoist.html" class="badge badge-primary" style="padding:var(--space-2) var(--space-4);font-size:var(--text-xs);text-decoration:none;">Electric &amp; Manual Chain Hoist (0.5–10 Ton) &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA -->
     <section class="section section-alt">
       <div class="container">
@@ -291,7 +347,8 @@
           <h2 style="font-size:var(--text-5xl);margin-bottom:var(--space-4);">Need Crane Services?</h2>
           <p style="font-size:var(--text-xl);max-width:550px;margin:0 auto var(--space-10);">From installation to lifelong maintenance — our team is here to help.</p>
           <div class="flex flex-center gap-4" style="flex-wrap:wrap;">
-            <a href="contact.html" class="btn btn-primary btn-lg">Request Service</a>
+            <a href="request-quote.html" class="btn btn-primary btn-lg">Request a Quote</a>
+            <a href="contact.html" class="btn btn-lg" style="background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2);">Schedule Service</a>
             <a href="tel:+919990191859" class="btn btn-lg" style="background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2);">Call Now</a>
           </div>
         </div>
@@ -303,7 +360,7 @@
     <div><img src="assets/images/logo.png" alt="VS Infra & Cranes" style="height:48px;margin-bottom:var(--space-2);"/><p class="footer-brand-desc">Leading manufacturer of industrial cranes and material handling equipment since 2021.</p><div class="footer-social"><a href="https://www.facebook.com/people/VS-Infra-Cranes/100085546544517/?name=xhp_nt__fb__action__open_user" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a><a href="https://wa.me/919990191859" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div></div>
     <div><h6 class="footer-heading">Quick Links</h6><a href="about.html" class="footer-link">About</a><a href="products.html" class="footer-link">Products</a>
     <a href="catalog.html" class="footer-link">3D Company Catalog</a><a href="services.html" class="footer-link">Services</a><a href="projects.html" class="footer-link">Projects</a><a href="contact.html" class="footer-link">Contact</a></div>
-    <div><h6 class="footer-heading">Products</h6><a href="products/single-girder-eot-crane.html" class="footer-link">Single Girder EOT</a><a href="products/double-girder-eot-crane.html" class="footer-link">Double Girder EOT</a><a href="products/gantry-crane.html" class="footer-link">Gantry Crane</a><a href="products/goliath-crane.html" class="footer-link">Goliath Crane</a><a href="products/jib-crane.html" class="footer-link">Jib Crane</a></div>
+    <div><h6 class="footer-heading">Products</h6><a href="products/single-girder-eot-crane.html" class="footer-link">Single Girder EOT</a><a href="products/double-girder-eot-crane.html" class="footer-link">Double Girder EOT</a><a href="products/gantry-crane.html" class="footer-link">Gantry Crane</a><a href="products/goliath-crane.html" class="footer-link">Goliath Crane</a><a href="products/semi-gantry-crane.html" class="footer-link">Semi-Gantry Crane</a><a href="products/jib-crane.html" class="footer-link">Jib Crane</a><a href="products/electric-wire-rope-hoist.html" class="footer-link">Wire Rope Hoist</a><a href="products/chain-hoist.html" class="footer-link">Chain Hoist</a></div>
     <div><h6 class="footer-heading">Contact</h6><a href="contact.html" class="footer-link">📍 Bhankri Industrial Area, Faridabad, Haryana – 121005</a><a href="tel:+919990191859" class="footer-link">📞 +91 99901 91859</a><a href="mailto:vsinfracranes@gmail.com" class="footer-link">✉️ vsinfracranes@gmail.com</a></div>
   </div><div class="footer-bottom"><p class="footer-copyright">© 2026 VS Infra & Cranes. All rights reserved.</p>
         <p class="footer-credit" style="font-size: var(--text-xs); color: rgba(255,255,255,0.3); margin-top: var(--space-2);">Made by <a href="https://wa.me/917042271859" target="_blank" style="color: inherit; text-decoration: underline;">Vinit Yadav</a></p><div style="display:flex;gap:var(--space-4);"><a href="privacy-policy.html" class="footer-link">Privacy Policy</a><a href="terms.html" class="footer-link">Terms of Service</a></div></div></div></footer>

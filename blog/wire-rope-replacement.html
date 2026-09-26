@@ -11,7 +11,7 @@
   gtag('config', 'G-GR8HV7TXF5');
 </script>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>When to Replace Wire Rope on Your Hoist — VS Infra & Cranes</title>
   <meta name="description" content="Critical indicators for replacing electric hoist wire rope on industrial cranes: broken wires, diameter reduction, corrosion, kinking, and IS/ISO retirement standards."/>
   <link rel="canonical" href="https://vsinfracranes.com/blog/wire-rope-replacement.html"/>
@@ -98,6 +98,13 @@
     .article-body h3 { margin-top: var(--space-8); margin-bottom: var(--space-4); font-size: 1.5rem; }
     .article-body p { margin-bottom: var(--space-4); font-size: 1.1rem; line-height: 1.8; color: var(--color-text); opacity: 0.9; }
     .article-body ul { margin-bottom: var(--space-4); padding-left: var(--space-6); font-size: 1.1rem; line-height: 1.8; }
+    @media (max-width: 768px) {
+      .article-body h3 { font-size: 1.25rem; margin-top: var(--space-6); }
+      .article-body p, .article-body ul { font-size: 1rem; line-height: 1.7; }
+    }
+    @media (max-width: 480px) {
+      .article-body ul { padding-left: var(--space-4); }
+    }
   </style>
 </head>
 <body>
@@ -109,6 +116,23 @@
 <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme"></button><a href="../request-quote.html" class="btn btn-primary btn-sm">Request Quote</a></div>
     <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
   </div></header>
+  <!-- Mobile Nav -->
+  <div class="mobile-nav-overlay"></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <a href="../index.html" class="mobile-nav-link">Home</a>
+    <a href="../about.html" class="mobile-nav-link">About</a>
+    <a href="../products.html" class="mobile-nav-link">Products</a>
+    <a href="../catalog.html" class="mobile-nav-link">3D Catalog</a>
+    <a href="../services.html" class="mobile-nav-link">Services</a>
+    <a href="../projects.html" class="mobile-nav-link">Projects</a>
+    <a href="../gallery.html" class="mobile-nav-link">Gallery</a>
+    <a href="../blog.html" class="mobile-nav-link active">Blog</a>
+    <a href="../contact.html" class="mobile-nav-link">Contact</a>
+    <a href="../admin.html" class="mobile-nav-link" style="color:var(--color-primary); font-weight:600;">🔒 Admin Panel</a>
+    <div style="padding-top:var(--space-6);">
+      <a href="../request-quote.html" class="btn btn-primary" style="width:100%;">Request Quote</a>
+    </div>
+  </nav>
 
   <main>
     <section class="page-hero">
@@ -125,7 +149,7 @@
 
     <section class="section">
       <div class="container" style="max-width: 800px; margin: 0 auto;">
-        <img src="../assets/images/crane/05-product-hoist.jpg" alt="When to Replace Wire Rope on Your Hoist" style="width: 100%; height: 400px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: var(--space-8); box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+        <img src="../assets/images/crane/05-product-hoist.jpg" alt="When to Replace Wire Rope on Your Hoist" style="width: 100%; height: auto; aspect-ratio: 16/9; max-height: 400px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: var(--space-8); box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
         
         <div class="article-body">
             <p style="font-size: 1.25rem; font-weight: 500; border-left: 4px solid var(--color-primary); padding-left: var(--space-4); margin-bottom: var(--space-8);">Wire rope failure can be catastrophic. Learn the visible signs of wear, broken wires, and diameter reduction that indicate it's time for an immediate replacement per IS standards.</p>
@@ -144,8 +168,12 @@
         </div>
         
         <div style="margin-top: var(--space-12); padding-top: var(--space-8); border-top: 1px solid var(--color-border); text-align: center;">
-            <h4 style="margin-bottom: var(--space-4);">Need Expert Crane Assistance?</h4>
-            <a href="../contact.html" class="btn btn-primary">Contact Our Engineers</a>
+            <h4 style="margin-bottom: var(--space-3);">Related Equipment &amp; Engineering Support</h4>
+            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:var(--space-2);margin-bottom:var(--space-6);"><a href="../products/electric-wire-rope-hoist.html" class="badge badge-primary" style="padding:var(--space-2) var(--space-4);font-size:var(--text-xs);text-decoration:none;">Electric Wire Rope Hoists &rarr;</a> <a href="../products/chain-hoist.html" class="badge badge-primary" style="padding:var(--space-2) var(--space-4);font-size:var(--text-xs);text-decoration:none;">Industrial Chain Hoists &rarr;</a> <a href="../services.html" class="badge badge-primary" style="padding:var(--space-2) var(--space-4);font-size:var(--text-xs);text-decoration:none;">Preventive Maintenance & Genuine Spare Parts &rarr;</a></div>
+            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:var(--space-4);">
+              <a href="../request-quote.html" class="btn btn-primary">Request a Custom Quote</a>
+              <a href="../contact.html" class="btn btn-outline">Contact Our Engineers</a>
+            </div>
         </div>
       </div>
     </section>

@@ -11,7 +11,7 @@
   gtag('config', 'G-GR8HV7TXF5');
 </script>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Industrial Cranes & Material Handling Equipment — VS Infra & Cranes</title>
   <meta name="description" content="Explore heavy-duty industrial cranes by VS Infra & Cranes. Single & double girder EOT cranes, gantry cranes, Goliath cranes, jib cranes, and wire rope hoists built to IS:3177/IS:807 standards."/>
   <link rel="canonical" href="https://vsinfracranes.com/products.html"/>
@@ -132,9 +132,21 @@
     .featured-product::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(232,99,10,0.05) 0%, transparent 50%); pointer-events: none; }
     .featured-badge { position: absolute; top: 0; right: 40px; background: var(--color-primary); color: white; padding: 8px 16px; border-radius: 0 0 8px 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
     
-    @media (max-width: 768px) {
+    .project-specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin: var(--space-6) 0; padding: var(--space-4); background: var(--color-surface); border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+    .spec-item { text-align: center; }
+    .spec-label { font-size: var(--text-xs); color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 2px; }
+    .spec-value { font-size: var(--text-base); font-weight: 700; color: var(--color-primary); font-family: 'Space Grotesk', sans-serif; }
+
+    @media (max-width: 992px) {
       .featured-product { grid-template-columns: 1fr; padding: var(--space-6); }
       .featured-badge { right: 20px; }
+    }
+    @media (max-width: 768px) {
+      .project-specs { grid-template-columns: repeat(3, 1fr); gap: var(--space-2); padding: var(--space-3); }
+    }
+    @media (max-width: 480px) {
+      .project-specs { grid-template-columns: 1fr; }
+      .featured-product a.btn { width: 100%; justify-content: center; margin-left: 0 !important; margin-bottom: var(--space-2); }
     }
   </style>
 </head>
@@ -351,7 +363,7 @@
           <div class="cta-banner-content">
             <h2>Not Sure Which Crane You Need?</h2>
             <p>Our engineering team can evaluate your facility requirements and recommend the optimal lifting solution.</p>
-            <div style="display:flex;gap:var(--space-4);justify-content:center;margin-top:var(--space-6);">
+            <div style="display:flex;gap:var(--space-4);justify-content:center;margin-top:var(--space-6);flex-wrap:wrap;">
               <a href="request-quote.html" class="btn btn-primary btn-lg">Get Free Recommendation</a>
               <a href="contact.html" class="btn btn-secondary btn-lg">Talk to an Engineer</a>
             </div>

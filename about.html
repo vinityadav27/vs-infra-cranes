@@ -11,7 +11,7 @@
   gtag('config', 'G-GR8HV7TXF5');
 </script>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>About Us — VS Infra & Cranes | Industrial Crane Manufacturer & Heavy Engineering</title>
   <meta name="description" content="Learn about VS Infra & Cranes — premier manufacturer of heavy-duty EOT cranes, gantry systems, and industrial hoists. Serving infrastructure, manufacturing, and global export markets."/>
   <link rel="canonical" href="https://vsinfracranes.com/about.html"/>
@@ -125,6 +125,7 @@
     .cert-icon{width:56px;height:56px;border-radius:var(--radius-md);background:var(--color-primary-light);display:flex;align-items:center;justify-content:center;color:var(--color-primary);flex-shrink:0;}
 
     @media(max-width:992px), (orientation: portrait) and (max-width: 1024px){
+      .two-col { grid-template-columns: 1fr; gap: var(--space-8); }
       .timeline::before{left:20px!important;}
       .timeline-item{padding-right:0!important;padding-left:50px!important;justify-content:flex-start!important;width:100%!important;}
       .timeline-dot{left:20px!important;}
@@ -132,11 +133,19 @@
 
     @media(max-width:768px){
       .two-col{grid-template-columns:1fr;gap:var(--space-8);}
+      #engineering .grid-3 > div { transform: none !important; }
       .timeline::before{left:20px!important;}
       .timeline-item{padding-right:0!important;padding-left:50px!important;justify-content:flex-start!important;width:100%!important;}
       .timeline-dot{left:20px!important;}
       .director-section{padding:var(--space-10) var(--space-6);}
       .director-quote-mark{font-size:4rem;left:var(--space-4);top:var(--space-4);}
+    }
+    @media(max-width:480px){
+      .director-section{padding:var(--space-8) var(--space-4);}
+      .director-quote-mark{font-size:2.5rem;left:var(--space-3);top:var(--space-2);}
+    }
+    @media(max-height:600px){
+      #cert-modal iframe{height:55vh!important;}
     }
   </style>
 </head>
@@ -343,10 +352,13 @@
     <section class="section section-alt">
       <div class="container text-center reveal">
         <h2 class="section-title">Want to Know More?</h2>
-        <p class="section-subtitle" style="margin:0 auto var(--space-8);">Let's discuss how we can support your next project with the right crane solution.</p>
+        <p class="section-subtitle" style="margin:0 auto var(--space-8);">Manufactured at our Bhankri Industrial Area facility in Faridabad, Haryana, our cranes are delivered, installed, and supported for industrial plants across India and international export markets.</p>
         <div class="flex flex-center gap-4" style="flex-wrap:wrap;">
-          <a href="contact.html" class="btn btn-primary btn-lg">Contact Us</a>
-          <a href="catalog.html" class="btn btn-outline btn-lg">View Catalog</a>
+          <a href="request-quote.html" class="btn btn-primary btn-lg">Request a Quote</a>
+          <a href="products.html" class="btn btn-outline btn-lg">Explore Crane Range</a>
+          <a href="services.html" class="btn btn-outline btn-lg">Installation &amp; AMC Services</a>
+          <a href="projects.html" class="btn btn-outline btn-lg">Completed Projects</a>
+          <a href="contact.html" class="btn btn-outline btn-lg">Contact Us</a>
         </div>
       </div>
     </section>

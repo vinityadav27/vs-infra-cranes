@@ -11,7 +11,7 @@
   gtag('config', 'G-GR8HV7TXF5');
 </script>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Contact Us — VS Infra & Cranes | Crane Inquiries & Global Quotations</title>
   <meta name="description" content="Contact VS Infra & Cranes for overhead crane specifications, international orders, factory visits, and maintenance support. Headquartered in Faridabad, Haryana, serving clients worldwide."/>
   <link rel="canonical" href="https://vsinfracranes.com/contact.html"/>
@@ -47,25 +47,29 @@
         }
       },
       {
-        "@type": "LocalBusiness",
-        "@id": "https://vsinfracranes.com/#localbusiness",
+        "@type": ["Organization", "LocalBusiness"],
+        "@id": "https://vsinfracranes.com/#organization",
         "name": "VS Infra & Cranes",
+        "url": "https://vsinfracranes.com/",
+        "logo": "https://vsinfracranes.com/assets/images/logo.png",
         "image": "https://vsinfracranes.com/assets/images/logo.png",
         "description": "VS Infra & Cranes — crane manufacturer based in Faridabad, Haryana, serving customers across India and internationally.",
         "telephone": "+919990191859",
         "email": "vsinfracranes@gmail.com",
+        "areaServed": [
+          {
+            "@type": "Country",
+            "name": "India"
+          },
+          "International"
+        ],
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "Plot No. 12, Gali No. 2, Bhankri Industrial Area",
+          "streetAddress": "Bhankri Industrial Area",
           "addressLocality": "Faridabad",
           "addressRegion": "Haryana",
           "postalCode": "121005",
           "addressCountry": "IN"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": "28.3752",
-          "longitude": "77.2917"
         },
         "openingHoursSpecification": {
           "@type": "OpeningHoursSpecification",
@@ -130,9 +134,15 @@
 
     .dn{display:none!important;}
 
-    @media(max-width:768px){
+    @media(max-width:992px){
       .contact-grid{grid-template-columns:1fr;}
+    }
+    @media(max-width:768px){
       .quick-actions{grid-template-columns:1fr;}
+    }
+    @media(max-width:480px){
+      .contact-form-wrapper{padding:var(--space-6) var(--space-4);}
+      .contact-info-card{padding:var(--space-6) var(--space-4);}
     }
   </style>
 </head>

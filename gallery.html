@@ -11,7 +11,7 @@
   gtag('config', 'G-GR8HV7TXF5');
 </script>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Crane Gallery & Manufacturing Showcase — VS Infra & Cranes</title>
   <meta name="description" content="Explore the official photo gallery of VS Infra & Cranes: heavy-duty EOT cranes, gantry systems, overhead installations, manufacturing facility, and proof load testing."/>
   <link rel="canonical" href="https://vsinfracranes.com/gallery.html"/>
@@ -390,6 +390,17 @@
     }
     .gallery-modal-prev { left: 16px; }
     .gallery-modal-next { right: 16px; }
+
+    @media (max-width: 768px) {
+      .gallery-modal { padding: var(--space-2); }
+      .gallery-modal-dialog { max-height: 95vh; overflow-y: auto; }
+      .gallery-modal-img-wrap { height: 40vh; min-height: 200px; }
+      .gallery-modal-body { padding: var(--space-4); overflow-y: auto; }
+      .gallery-modal-nav { width: 36px; height: 36px; top: 35%; }
+      .gallery-modal-prev { left: 8px; }
+      .gallery-modal-next { right: 8px; }
+      .gallery-modal-close { top: 8px; right: 8px; width: 34px; height: 34px; }
+    }
   </style>
 </head>
 <body>
@@ -402,6 +413,23 @@
 <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme"></button><a href="request-quote.html" class="btn btn-primary btn-sm">Request Quote</a></div>
     <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
   </div></header>
+  <!-- Mobile Nav -->
+  <div class="mobile-nav-overlay"></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mobile-nav-link">Home</a>
+    <a href="about.html" class="mobile-nav-link">About</a>
+    <a href="products.html" class="mobile-nav-link">Products</a>
+    <a href="catalog.html" class="mobile-nav-link">3D Catalog</a>
+    <a href="services.html" class="mobile-nav-link">Services</a>
+    <a href="projects.html" class="mobile-nav-link">Projects</a>
+    <a href="gallery.html" class="mobile-nav-link">Gallery</a>
+    <a href="blog.html" class="mobile-nav-link">Blog</a>
+    <a href="contact.html" class="mobile-nav-link">Contact</a>
+    <a href="admin.html" class="mobile-nav-link" style="color:var(--color-primary); font-weight:600;">🔒 Admin Panel</a>
+    <div style="padding-top:var(--space-6);">
+      <a href="request-quote.html" class="btn btn-primary" style="width:100%;">Request Quote</a>
+    </div>
+  </nav>
 
   <main>
     <section class="page-hero">
@@ -504,6 +532,22 @@
             </div>
           </div>
 
+        </div>
+
+        <div class="related-links-section" style="margin-top: var(--space-8);">
+          <h4>Explore Featured Cranes, Services &amp; Project Installations</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-4);">All equipment photographed above is fabricated and load-tested by VS Infra &amp; Cranes in Faridabad, Haryana for industrial plants across India:</p>
+          <div class="related-links-grid">
+            <a href="products/double-girder-eot-crane.html" class="related-link-chip">Double Girder EOT Cranes</a>
+            <a href="products/single-girder-eot-crane.html" class="related-link-chip">Single Girder EOT Cranes</a>
+            <a href="products/goliath-crane.html" class="related-link-chip">Goliath Cranes</a>
+            <a href="products/gantry-crane.html" class="related-link-chip">Gantry Cranes</a>
+            <a href="products/jib-crane.html" class="related-link-chip">Jib Cranes</a>
+            <a href="products/electric-wire-rope-hoist.html" class="related-link-chip">Electric Wire Rope Hoists</a>
+            <a href="services.html" class="related-link-chip">Load Testing, Installation &amp; AMC</a>
+            <a href="projects.html" class="related-link-chip">Pan-India &amp; Export Projects</a>
+            <a href="request-quote.html" class="related-link-chip">Request Custom Crane Quote</a>
+          </div>
         </div>
       </div>
     </section>

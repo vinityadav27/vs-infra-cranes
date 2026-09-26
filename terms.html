@@ -11,7 +11,7 @@
   gtag('config', 'G-GR8HV7TXF5');
 </script>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Terms of Service — VS Infra & Cranes</title>
   <meta name="description" content="Terms of Service for VS Infra & Cranes. Outlining terms, equipment warranties, quotes, and commercial conditions."/>
   <link rel="canonical" href="https://vsinfracranes.com/terms.html"/>
@@ -79,6 +79,7 @@
     
     .legal-content { max-width: 800px; margin: 0 auto; background: var(--color-bg-elevated); padding: var(--space-12); border-radius: var(--radius-xl); border: 1px solid var(--color-border); }
     @media(max-width: 768px) { .legal-content { padding: var(--space-6); } }
+    @media(max-width: 480px) { .legal-content { padding: var(--space-4); border-radius: var(--radius-lg); } }
     .legal-content h2 { font-size: var(--text-2xl); font-family: 'Space Grotesk', sans-serif; margin-top: var(--space-8); margin-bottom: var(--space-4); color: var(--color-text); }
     .legal-content p { color: var(--color-text-secondary); font-size: var(--text-base); line-height: 1.7; margin-bottom: var(--space-4); }
   </style>
@@ -93,13 +94,30 @@
 <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme"></button></div>
     <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
   </div></header>
+  <!-- Mobile Nav -->
+  <div class="mobile-nav-overlay"></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mobile-nav-link">Home</a>
+    <a href="about.html" class="mobile-nav-link">About</a>
+    <a href="products.html" class="mobile-nav-link">Products</a>
+    <a href="catalog.html" class="mobile-nav-link">3D Catalog</a>
+    <a href="services.html" class="mobile-nav-link">Services</a>
+    <a href="projects.html" class="mobile-nav-link">Projects</a>
+    <a href="gallery.html" class="mobile-nav-link">Gallery</a>
+    <a href="blog.html" class="mobile-nav-link">Blog</a>
+    <a href="contact.html" class="mobile-nav-link">Contact</a>
+    <a href="admin.html" class="mobile-nav-link" style="color:var(--color-primary); font-weight:600;">🔒 Admin Panel</a>
+    <div style="padding-top:var(--space-6);">
+      <a href="request-quote.html" class="btn btn-primary" style="width:100%;">Request Quote</a>
+    </div>
+  </nav>
 
   <main>
     <section class="page-hero">
       <div class="page-hero-bg"><div class="page-hero-pattern"></div></div>
       <div class="container page-hero-content text-center">
         <h1>Terms of Service</h1>
-        <p style="color:rgba(255,255,255,0.6);">Last Updated: July 2024</p>
+        <p style="color:rgba(255,255,255,0.6);">Last Updated: September 2026</p>
       </div>
     </section>
 
@@ -111,11 +129,13 @@
           
           <h2>2. Use License</h2>
           <p>Permission is granted to temporarily download one copy of the materials on VS Infra & Cranes's Website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:</p>
-          <p>- modify or copy the materials;<br>
-          - use the materials for any commercial purpose or for any public display;<br>
-          - attempt to reverse engineer any software contained on VS Infra & Cranes's Website;<br>
-          - remove any copyright or other proprietary notations from the materials; or<br>
-          - transferring the materials to another person or "mirror" the materials on any other server.</p>
+          <ul style="padding-left:var(--space-6);margin-bottom:var(--space-4);color:var(--color-text-secondary);line-height:1.7;">
+            <li>modify or copy the materials;</li>
+            <li>use the materials for any commercial purpose or for any public display;</li>
+            <li>attempt to reverse engineer any software contained on VS Infra &amp; Cranes's Website;</li>
+            <li>remove any copyright or other proprietary notations from the materials; or</li>
+            <li>transfer the materials to another person or "mirror" the materials on any other server.</li>
+          </ul>
           
           <h2>3. Disclaimer</h2>
           <p>All the materials on VS Infra & Cranes's Website are provided "as is". VS Infra & Cranes makes no warranties, may it be expressed or implied, therefore negates all other warranties. Furthermore, VS Infra & Cranes does not make any representations concerning the accuracy or reliability of the use of the materials on its Website or otherwise relating to such materials or any sites linked to this Website.</p>

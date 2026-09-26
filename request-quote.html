@@ -11,7 +11,7 @@
   gtag('config', 'G-GR8HV7TXF5');
 </script>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Request a Crane Quote — Custom Engineering & Pricing | VS Infra & Cranes</title>
   <meta name="description" content="Request an engineered quotation for overhead EOT cranes, gantry systems, hoists, and AMC services from VS Infra & Cranes. Fast quotes with capacity-specific recommendations."/>
   <link rel="canonical" href="https://vsinfracranes.com/request-quote.html"/>
@@ -132,7 +132,7 @@
     .rec-match{font-size:var(--text-xs);font-weight:700;color:var(--color-primary);white-space:nowrap;}
 
     /* Nav buttons */
-    .form-nav{display:flex;gap:var(--space-4);justify-content:space-between;margin-top:var(--space-8);padding-top:var(--space-6);border-top:1px solid var(--color-border);}
+    .form-nav{display:flex;flex-wrap:wrap;gap:var(--space-3);justify-content:space-between;margin-top:var(--space-8);padding-top:var(--space-6);border-top:1px solid var(--color-border);}
 
     .success-view{display:none;text-align:center;padding:var(--space-16) var(--space-8);}
     .success-view.show{display:block;}
@@ -140,13 +140,13 @@
 
     @media(max-width:768px){
       .quote-form-card{padding:var(--space-6);}
-      .option-grid{grid-template-columns:1fr 1fr;}
+      .option-grid{grid-template-columns:1fr 1fr !important;}
       .stepper-label{display:none;}
       .stepper-step{min-width:auto; flex:1;}
       .stepper-dot{width:36px; height:36px; font-size:12px;}
     }
     @media(max-width:480px){
-      .option-grid{grid-template-columns:1fr;}
+      .option-grid{grid-template-columns:1fr !important;}
       .stepper-dot{width:30px; height:30px; font-size:11px;}
     }
   </style>
@@ -372,6 +372,21 @@
               <a href="index.html" class="btn btn-primary">Back to Home</a>
               <a href="products.html" class="btn btn-outline">View Products</a>
             </div>
+          </div>
+        </div>
+
+        <div class="related-links-section" style="max-width:800px;margin:var(--space-8) auto 0;">
+          <h4>Compare Crane Specifications &amp; Turnkey Services</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-4);">Manufactured at our facility in Bhankri Industrial Area, Faridabad, Haryana, with pan-India delivery, erection, load testing, and AMC support:</p>
+          <div class="related-links-grid">
+            <a href="products/single-girder-eot-crane.html" class="related-link-chip">Single Girder EOT Cranes (1T–20T)</a>
+            <a href="products/double-girder-eot-crane.html" class="related-link-chip">Double Girder EOT Cranes (5T–50T)</a>
+            <a href="products/gantry-crane.html" class="related-link-chip">Outdoor &amp; Shop Gantry Cranes</a>
+            <a href="products/goliath-crane.html" class="related-link-chip">Heavy-Duty Goliath Cranes</a>
+            <a href="products/jib-crane.html" class="related-link-chip">Pillar &amp; Wall Jib Cranes</a>
+            <a href="products/electric-wire-rope-hoist.html" class="related-link-chip">Electric Wire Rope Hoists</a>
+            <a href="services.html" class="related-link-chip">Installation, Load Testing &amp; AMC</a>
+            <a href="projects.html" class="related-link-chip">Pan-India &amp; Export Projects</a>
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@
   gtag('config', 'G-GR8HV7TXF5');
 </script>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <meta name="google-site-verification" content="8i8Z5D0KZuOnHpK3dX7G750PBjaE3uH292aNZnvfYbo" />
   <title>VS Infra & Cranes — Industrial Crane & Material Handling Manufacturer</title>
   <meta name="description" content="VS Infra & Cranes is a premier industrial crane manufacturer in India, engineering heavy-duty EOT cranes, gantry cranes, Goliath cranes, hoists, and material handling systems for global and nationwide industrial operations."/>
@@ -49,7 +49,13 @@
         "telephone": "+919990191859",
         "email": "vsinfracranes@gmail.com",
         "foundingDate": "2021",
-        "areaServed": "Worldwide",
+        "areaServed": [
+          {
+            "@type": "Country",
+            "name": "India"
+          },
+          "International"
+        ],
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Bhankri Industrial Area",
@@ -57,11 +63,6 @@
           "addressRegion": "Haryana",
           "postalCode": "121005",
           "addressCountry": "IN"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": 28.38,
-          "longitude": 77.29
         },
         "knowsAbout": [
           "Industrial Cranes",
@@ -163,6 +164,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="preload" as="image" href="assets/images/crane/01-hero.jpg"/>
+  <link rel="preload" as="image" href="assets/images/crane/hero-sequence/ezgif-frame-001.jpg" media="(min-width: 600px) and (min-height: 600px) and (min-aspect-ratio: 13/20)"/>
   <link rel="stylesheet" href="css/design-system.css"/>
   <style>
     /* ---- Hero Patterns ---- */
@@ -232,8 +234,10 @@
       .process-step-desc{max-width:100%;margin:0 auto;}
       .gallery-masonry{grid-template-columns:repeat(2,1fr);}
       .gallery-masonry .gallery-item:nth-child(1){grid-row:span 1;}
+      .gallery-masonry .gallery-item:first-child img, .gallery-masonry .gallery-item:first-child .gallery-placeholder { min-height: 240px !important; }
       .cta-banner{padding:var(--space-12) var(--space-6);}
       .hero-stats{flex-wrap:wrap;gap:var(--space-6);}
+      .footer-bottom > div { justify-content: center; }
     }
     @media(max-width:480px){
       .gallery-masonry{grid-template-columns:1fr;}
@@ -308,9 +312,13 @@
 
   <main>
     <!-- ==================== HERO ==================== -->
+    <div class="hero-scroll-track" id="hero-scroll-track">
     <section class="hero" id="hero">
-      <!-- Parallax crane photo background -->
-      <div class="hero-image-parallax" id="hero-parallax" style="background-image: url('assets/images/crane/01-hero.jpg');"></div>
+      <!-- Adaptive dual-mode hero media container: Mode A (100-frame scroll canvas) + Mode B (slow 0.5x looping MP4 video) -->
+      <div class="hero-image-parallax" id="hero-parallax" style="background-image: url('assets/images/crane/01-hero.jpg');">
+        <canvas id="hero-frame-canvas" class="hero-frame-canvas" aria-hidden="true"></canvas>
+        <video id="hero-video" class="hero-video" muted defaultMuted playsinline webkit-playsinline loop preload="none" poster="assets/images/crane/01-hero.jpg" aria-hidden="true" style="display:none;"></video>
+      </div>
       <!-- Orange industrial glow behind crane -->
       <div class="hero-orange-glow"></div>
       <!-- Subtle grid pattern overlay -->
@@ -368,22 +376,448 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
       </div>
     </section>
+    </div>
 
-    <!-- Hero parallax mouse-follow script -->
+    <!-- Adaptive Hero Media Controller: Mode A (100-frame scroll-driven canvas) + Mode B (slow 0.5x looping MP4 video) -->
     <script>
     (function() {
-      const parallax = document.getElementById('hero-parallax');
-      if (!parallax || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const track = document.getElementById('hero-scroll-track');
       const hero = document.getElementById('hero');
-      hero.addEventListener('mousemove', function(e) {
+      const parallax = document.getElementById('hero-parallax');
+      const canvas = document.getElementById('hero-frame-canvas');
+      const video = document.getElementById('hero-video');
+      const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let reducedMotion = reducedMotionQuery.matches;
+
+      if (parallax && hero) {
+        hero.addEventListener('mousemove', function(e) {
+          if (reducedMotion) return;
+          const rect = hero.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          parallax.style.transform = `translate(${x * -12}px, ${y * -8}px)`;
+        });
+        hero.addEventListener('mouseleave', function() {
+          parallax.style.transform = 'translate(0, 0)';
+        });
+      }
+
+      if (!canvas || !hero) return;
+      const ctx = canvas.getContext('2d', { alpha: false });
+      if (!ctx) return;
+
+      const FRAME_DIR = 'assets/images/crane/hero-sequence/';
+      const VIDEO_SRC = 'assets/videos/hero-crane.mp4';
+      const TOTAL_FRAMES = 100;
+      const MAX_INDEX = TOTAL_FRAMES - 1; // 0 -> ezgif-frame-001.jpg, 99 -> ezgif-frame-100.jpg
+      // Active non-black horizontal inset for frames 1..7 (4:3 -> 16:9 transition)
+      const PILLARBOX_INSET_X = [240, 176, 144, 110, 78, 48, 22];
+
+      const MIN_SCROLL_WIDTH = 600;
+      const MIN_SCROLL_HEIGHT = 600;
+      const MIN_SCROLL_ASPECT = 0.65;
+
+      const frames = new Array(TOTAL_FRAMES);
+      const loaded = new Array(TOTAL_FRAMES).fill(false);
+      const loading = new Array(TOTAL_FRAMES).fill(false);
+
+      let activeMode = null; // 'scroll' | 'video' | 'static'
+      let loadGeneration = 0;
+      let targetFrameFloat = 0;
+      let currentFrameFloat = 0;
+      let lastRenderedIndex = -1;
+      let lastCanvasW = 0;
+      let lastCanvasH = 0;
+      let rafPending = false;
+      let rafId = 0;
+
+      function getViewportMode() {
+        if (reducedMotion) return 'static';
+        const vw = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 0);
+        const vh = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 0);
+        const aspect = vw / vh;
+        if (vw >= MIN_SCROLL_WIDTH && vh >= MIN_SCROLL_HEIGHT && aspect >= MIN_SCROLL_ASPECT) {
+          return 'scroll';
+        }
+        return 'video';
+      }
+
+      function getFramePath(index0) {
+        const frameNum = Math.max(1, Math.min(TOTAL_FRAMES, index0 + 1));
+        const padded = String(frameNum).padStart(3, '0');
+        return FRAME_DIR + 'ezgif-frame-' + padded + '.jpg';
+      }
+
+      function computeScrollProgress() {
+        if (reducedMotion || activeMode !== 'scroll') return 0;
+        const scrollY = window.scrollY || window.pageYOffset || 0;
+        if (!track) {
+          const heroH = hero.offsetHeight || window.innerHeight || 800;
+          return Math.max(0, Math.min(1, scrollY / heroH));
+        }
+        const rect = track.getBoundingClientRect();
+        const trackTop = rect.top + scrollY;
+        const vh = window.innerHeight || document.documentElement.clientHeight || 800;
+        const scrollable = Math.max(1, track.offsetHeight - vh);
+        const raw = (scrollY - trackTop) / scrollable;
+        return Math.max(0, Math.min(1, raw));
+      }
+
+      function syncCanvasSize() {
+        if (activeMode !== 'scroll') return;
         const rect = hero.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        parallax.style.transform = `translate(${x * -15}px, ${y * -10}px)`;
-      });
-      hero.addEventListener('mouseleave', function() {
-        parallax.style.transform = 'translate(0, 0)';
-      });
+        const cssW = Math.max(1, Math.round(rect.width || window.innerWidth || 1920));
+        const cssH = Math.max(1, Math.round(rect.height || window.innerHeight || 1080));
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const targetW = Math.round(cssW * dpr);
+        const targetH = Math.round(cssH * dpr);
+        if (lastCanvasW !== targetW || lastCanvasH !== targetH) {
+          canvas.width = targetW;
+          canvas.height = targetH;
+          lastCanvasW = targetW;
+          lastCanvasH = targetH;
+          lastRenderedIndex = -1; // force redraw at new resolution
+        }
+      }
+
+      function findNearestLoadedIndex(desiredIndex) {
+        if (loaded[desiredIndex]) return desiredIndex;
+        for (let offset = 1; offset < TOTAL_FRAMES; offset++) {
+          const prev = desiredIndex - offset;
+          if (prev >= 0 && loaded[prev]) return prev;
+          const next = desiredIndex + offset;
+          if (next <= MAX_INDEX && loaded[next]) return next;
+        }
+        return -1;
+      }
+
+      function drawFrameIndex(desiredIndex) {
+        if (activeMode !== 'scroll') return;
+        syncCanvasSize();
+        const renderIdx = findNearestLoadedIndex(desiredIndex);
+        if (renderIdx < 0) return;
+        if (renderIdx === lastRenderedIndex && renderIdx === desiredIndex) return;
+
+        const img = frames[renderIdx];
+        if (!img) return;
+
+        const imgW = img.naturalWidth || img.width || 1920;
+        const imgH = img.naturalHeight || img.height || 1080;
+        const cw = canvas.width;
+        const ch = canvas.height;
+        if (!cw || !ch) return;
+
+        const insetX = renderIdx < PILLARBOX_INSET_X.length ? PILLARBOX_INSET_X[renderIdx] : 0;
+        const ax = insetX;
+        const ay = 0;
+        const aw = Math.max(1, imgW - insetX * 2);
+        const ah = imgH;
+
+        const canvasAspect = cw / ch;
+        const activeAspect = aw / ah;
+        let sx, sy, sw, sh;
+
+        if (canvasAspect > activeAspect) {
+          sw = aw;
+          sh = aw / canvasAspect;
+          sx = ax;
+          sy = ay + (ah - sh) * 0.5;
+        } else {
+          sh = ah;
+          sw = ah * canvasAspect;
+          sx = ax + (aw - sw) * 0.5;
+          sy = ay;
+        }
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
+        canvas.style.opacity = '1';
+        if (renderIdx === desiredIndex) {
+          lastRenderedIndex = desiredIndex;
+        }
+      }
+
+      function loadFrame(index0, onDone, gen) {
+        const currentGen = (typeof gen === 'number') ? gen : loadGeneration;
+        if (currentGen !== loadGeneration || activeMode !== 'scroll') {
+          return;
+        }
+        if (index0 < 0 || index0 > MAX_INDEX) {
+          if (onDone) onDone();
+          return;
+        }
+        if (loaded[index0]) {
+          if (onDone) onDone();
+          return;
+        }
+        if (loading[index0]) return;
+        loading[index0] = true;
+
+        const img = new Image();
+        img.decoding = 'async';
+        if (index0 === 0) {
+          img.fetchPriority = 'high';
+        }
+        img.onload = function() {
+          if (currentGen !== loadGeneration || activeMode !== 'scroll') {
+            img.onload = null;
+            img.onerror = null;
+            img.src = '';
+            return;
+          }
+          frames[index0] = img;
+          loaded[index0] = true;
+          loading[index0] = false;
+          const wanted = Math.max(0, Math.min(MAX_INDEX, Math.floor(currentFrameFloat + 1e-6)));
+          if (index0 === wanted || lastRenderedIndex < 0) {
+            drawFrameIndex(wanted);
+          }
+          if (onDone) onDone();
+        };
+        img.onerror = function() {
+          if (currentGen !== loadGeneration) return;
+          loading[index0] = false;
+          if (onDone) onDone();
+        };
+        img.src = getFramePath(index0);
+      }
+
+      function preloadAllFrames(gen) {
+        if (reducedMotion || activeMode !== 'scroll' || gen !== loadGeneration) return;
+        const queue = [];
+        const seen = new Set([0]);
+        // Prioritize key stride frames first so fast scrubbing has immediate coverage, then fill all 100 frames
+        [9, 16, 24, 32, 40, 49, 58, 66, 74, 82, 90, 99].forEach(function(idx) {
+          if (!seen.has(idx)) {
+            seen.add(idx);
+            queue.push(idx);
+          }
+        });
+        for (let i = 1; i <= MAX_INDEX; i++) {
+          if (!seen.has(i)) {
+            seen.add(i);
+            queue.push(i);
+          }
+        }
+
+        let cursor = 0;
+        const CONCURRENCY = 6;
+        function next() {
+          if (gen !== loadGeneration || activeMode !== 'scroll') return;
+          while (cursor < queue.length && (loaded[queue[cursor]] || loading[queue[cursor]])) {
+            cursor++;
+          }
+          if (cursor >= queue.length) return;
+          const idx = queue[cursor++];
+          loadFrame(idx, next, gen);
+        }
+        for (let c = 0; c < CONCURRENCY; c++) {
+          next();
+        }
+      }
+
+      function releaseScrollFrames() {
+        loadGeneration++;
+        if (rafId) {
+          window.cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+        rafPending = false;
+        for (let i = 0; i < TOTAL_FRAMES; i++) {
+          if (frames[i]) {
+            frames[i].onload = null;
+            frames[i].onerror = null;
+            frames[i].src = '';
+            frames[i] = null;
+          }
+          loaded[i] = false;
+          loading[i] = false;
+        }
+        canvas.style.display = 'none';
+        canvas.style.opacity = '0';
+        canvas.width = 1;
+        canvas.height = 1;
+        lastCanvasW = 1;
+        lastCanvasH = 1;
+        lastRenderedIndex = -1;
+      }
+
+      function enforceSlowVideoState() {
+        if (!video) return;
+        video.muted = true;
+        video.defaultMuted = true;
+        video.volume = 0;
+        video.loop = true;
+        video.playsInline = true;
+        video.controls = false;
+        if (video.defaultPlaybackRate !== 0.5) video.defaultPlaybackRate = 0.5;
+        if (video.playbackRate !== 0.5) video.playbackRate = 0.5;
+      }
+
+      function deactivateVideo() {
+        if (!video) return;
+        try {
+          video.pause();
+        } catch (e) {}
+        video.style.display = 'none';
+        if (video.getAttribute('src')) {
+          video.removeAttribute('src');
+          try {
+            video.load();
+          } catch (e) {}
+        }
+      }
+
+      if (video) {
+        ['loadedmetadata', 'loadeddata', 'canplay', 'play', 'playing', 'ratechange'].forEach(function(evtName) {
+          video.addEventListener(evtName, function() {
+            if (activeMode === 'video' && !reducedMotion) {
+              enforceSlowVideoState();
+            }
+          });
+        });
+      }
+
+      function tickScrub() {
+        rafPending = false;
+        rafId = 0;
+        if (activeMode !== 'scroll' || reducedMotion) {
+          return;
+        }
+
+        const diff = targetFrameFloat - currentFrameFloat;
+        if (Math.abs(diff) <= 1.25) {
+          currentFrameFloat = targetFrameFloat;
+        } else {
+          // Smooth continuous interpolation so wheel notches step through frames without jumping
+          const step = Math.sign(diff) * Math.max(1.0, Math.min(3.5, Math.abs(diff) * 0.35));
+          currentFrameFloat += step;
+          if ((diff > 0 && currentFrameFloat > targetFrameFloat) || (diff < 0 && currentFrameFloat < targetFrameFloat)) {
+            currentFrameFloat = targetFrameFloat;
+          }
+        }
+
+        const desiredIndex = Math.max(0, Math.min(MAX_INDEX, Math.floor(currentFrameFloat + 1e-6)));
+        if (!loaded[desiredIndex] && !loading[desiredIndex]) {
+          loadFrame(desiredIndex, null, loadGeneration);
+        }
+        drawFrameIndex(desiredIndex);
+
+        if (Math.abs(targetFrameFloat - currentFrameFloat) > 0.05) {
+          rafPending = true;
+          rafId = window.requestAnimationFrame(tickScrub);
+        }
+      }
+
+      function updateFromScroll(immediate) {
+        if (activeMode !== 'scroll' || reducedMotion) return;
+        const progress = computeScrollProgress();
+        targetFrameFloat = Math.max(0, Math.min(MAX_INDEX, progress * MAX_INDEX));
+        if (immediate) {
+          currentFrameFloat = targetFrameFloat;
+        }
+        if (!rafPending) {
+          rafPending = true;
+          rafId = window.requestAnimationFrame(tickScrub);
+        }
+      }
+
+      function applyHeroMode(nextMode) {
+        if (nextMode === activeMode) return;
+        const prevMode = activeMode;
+        const prevScrollY = window.scrollY || window.pageYOffset || 0;
+        const prevTrackH = track ? track.offsetHeight : 0;
+        const vh = window.innerHeight || document.documentElement.clientHeight || 800;
+
+        activeMode = nextMode;
+        if (track) track.setAttribute('data-hero-mode', nextMode);
+        hero.setAttribute('data-hero-mode', nextMode);
+
+        if (nextMode === 'video') {
+          releaseScrollFrames();
+          if (video) {
+            video.style.display = 'block';
+            enforceSlowVideoState();
+            if (video.getAttribute('src') !== VIDEO_SRC) {
+              video.preload = 'auto';
+              video.setAttribute('src', VIDEO_SRC);
+              try {
+                video.load();
+              } catch (e) {}
+            }
+            enforceSlowVideoState();
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+              playPromise.catch(function() {});
+            }
+          }
+          // Preserve visual scroll continuity when collapsing the 350vh pinned track
+          if (prevMode === 'scroll' && prevTrackH > vh && prevScrollY > 0) {
+            const newTrackH = track ? track.offsetHeight : vh;
+            if (prevScrollY <= prevTrackH - vh) {
+              window.scrollTo(0, 0);
+            } else {
+              const delta = Math.max(0, prevTrackH - newTrackH);
+              window.scrollTo(0, Math.max(0, prevScrollY - delta));
+            }
+          }
+        } else if (nextMode === 'scroll') {
+          deactivateVideo();
+          loadGeneration++;
+          const gen = loadGeneration;
+          canvas.style.display = 'block';
+          canvas.style.opacity = '0';
+          syncCanvasSize();
+          updateFromScroll(true);
+          const wanted = Math.max(0, Math.min(MAX_INDEX, Math.floor(currentFrameFloat + 1e-6)));
+          loadFrame(wanted, function() {
+            if (wanted !== 0) {
+              loadFrame(0, function() {
+                preloadAllFrames(gen);
+              }, gen);
+            } else {
+              preloadAllFrames(gen);
+            }
+          }, gen);
+        } else {
+          // 'static' mode for prefers-reduced-motion: reduce
+          deactivateVideo();
+          releaseScrollFrames();
+        }
+      }
+
+      function onViewportChange() {
+        const desiredMode = getViewportMode();
+        if (desiredMode !== activeMode) {
+          applyHeroMode(desiredMode);
+        } else if (activeMode === 'scroll') {
+          lastRenderedIndex = -1;
+          updateFromScroll(true);
+        } else if (activeMode === 'video') {
+          enforceSlowVideoState();
+        }
+      }
+
+      // Initialize appropriate mode immediately
+      applyHeroMode(getViewportMode());
+
+      window.addEventListener('scroll', function() {
+        if (activeMode !== 'scroll' || reducedMotion) return;
+        updateFromScroll(false);
+      }, { passive: true });
+      window.addEventListener('resize', onViewportChange, { passive: true });
+      window.addEventListener('orientationchange', onViewportChange, { passive: true });
+      if (window.visualViewport && typeof window.visualViewport.addEventListener === 'function') {
+        window.visualViewport.addEventListener('resize', onViewportChange, { passive: true });
+      }
+
+      if (typeof reducedMotionQuery.addEventListener === 'function') {
+        reducedMotionQuery.addEventListener('change', function(e) {
+          reducedMotion = e.matches;
+          onViewportChange();
+        });
+      }
     })();
     </script>
 
@@ -550,9 +984,13 @@
           </a>
         </div>
         <div class="text-center reveal" style="margin-top:var(--space-10);">
+          <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:var(--space-3);margin-bottom:var(--space-6);">
+            <a href="products/semi-gantry-crane.html" class="badge badge-primary" style="padding:var(--space-2) var(--space-4);font-size:var(--text-sm);text-decoration:none;">Semi-Gantry Crane (5–30 Ton) &rarr;</a>
+            <a href="products/chain-hoist.html" class="badge badge-primary" style="padding:var(--space-2) var(--space-4);font-size:var(--text-sm);text-decoration:none;">Electric &amp; Manual Chain Hoist (0.5–10 Ton) &rarr;</a>
+            <a href="services.html" class="badge badge-primary" style="padding:var(--space-2) var(--space-4);font-size:var(--text-sm);text-decoration:none;">Turnkey Installation &amp; AMC Services &rarr;</a>
+          </div>
           <a href="products.html" class="btn btn-outline btn-lg">
             View All Products
-            
           </a>
         </div>
       </div>
@@ -728,7 +1166,7 @@
     </section>
 
         <!-- ==================== COMPLETED PROJECTS ==================== -->
-    <section class="section section-alt" id="projects">
+    <section class="section section-alt" id="deliveries">
       <div class="container">
         <div class="text-center reveal" style="margin-bottom:var(--space-12);">
           <div class="section-label" style="justify-content:center;">Past Projects</div>
